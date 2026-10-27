@@ -1,13 +1,13 @@
 {
   "scriptVersion": 1,
   "id": "fridge-light-roommates",
-  "title": "冰箱裡的光",
-  "description": "房東突然賣房，讓大一時曾經同班、後來只在路上打招呼的黃冠亨，成為你的新室友。電影夜、DDL 夜宵，和凌晨兩點冰箱裡的光，最後停在一場沒有說出口的告別。",
-  "revision": 4,
+  "title": "冰箱里的光",
+  "description": "房东突然卖房，我通过 Yuki 联系上了大一同班的黄冠亨（Hendery）。旧日记里没写完的心事，后来变成了电影夜、两人份夜宵和凌晨两点的闲聊。半年后，我换城市继续读书，他准备回去。",
+  "revision": 5,
   "phone": {
     "owner": "你",
-    "date": "2027-04-12",
-    "time": "09:41",
+    "date": "2026-10-27",
+    "time": "17:42",
     "battery": 86,
     "network": "5G",
     "wallpaper": "sage"
@@ -27,8 +27,12 @@
     {
       "id": "yuki",
       "name": "Yuki",
-      "phone": "",
-      "bio": "你的朋友。房東突然賣房後，第一個想到幫你找住處的人。"
+      "bio": "朋友。帮我牵线找房，也记得一些我以为她早忘了的小事。"
+    },
+    {
+      "id": "hendery",
+      "name": "Hendery",
+      "bio": "黄冠亨。大一同过班，后来分班了。刚通过 Yuki 重新联系。"
     }
   ],
   "chats": [
@@ -42,30 +46,225 @@
       ],
       "messages": [
         {
+          "id": "yuki-archive-name",
+          "body": "你说的那个人叫黄冠亨 英文名Hendery",
+          "senderId": "yuki",
+          "time": "2023-09-19 18:20"
+        },
+        {
+          "id": "owner-archive-name",
+          "body": "哦哦 知道了",
+          "senderId": "owner",
+          "time": "2023-09-19 18:21"
+        },
+        {
+          "id": "yuki-archive-again",
+          "body": "你上次也问过我",
+          "senderId": "yuki",
+          "time": "2023-09-19 18:21"
+        },
+        {
+          "id": "owner-archive-dismiss",
+          "body": "我记性不好嘛",
+          "senderId": "owner",
+          "time": "2023-09-19 18:22"
+        },
+        {
+          "id": "owner-archive-class",
+          "body": "课表变了 我和他不一个班了",
+          "senderId": "owner",
+          "time": "2024-02-22 19:04"
+        },
+        {
+          "id": "yuki-archive-contact",
+          "body": "那你加他啊",
+          "senderId": "yuki",
+          "time": "2024-02-22 19:05"
+        },
+        {
+          "id": "owner-archive-no-contact",
+          "body": "算了 也没什么事好找他的",
+          "senderId": "owner",
+          "time": "2024-02-22 19:06"
+        },
+        {
+          "id": "yuki-rent-news-part-1",
+          "time": "2026-10-27 17:42",
+          "body": "你房东真把房子卖了？",
+          "senderId": "yuki"
+        },
+        {
           "id": "yuki-rent-news",
           "time": "2026-10-27 17:42",
-          "body": "你房東真的把房子賣掉了？也太突然了吧。",
+          "body": "好突然啊",
           "senderId": "yuki"
+        },
+        {
+          "id": "owner-rent-reply-part-1",
+          "time": "2026-10-27 17:46",
+          "body": "嗯",
+          "senderId": "owner",
+          "hidden": true
         },
         {
           "id": "owner-rent-reply",
           "time": "2026-10-27 17:46",
-          "body": "嗯，離畢業也沒剩多久了，得趕快找個地方住。我真的不想再開一次室友盲盒。",
+          "body": "还剩半年多 不想再开室友盲盒了",
           "senderId": "owner",
+          "hidden": true
+        },
+        {
+          "id": "yuki-hendery-intro-part-1",
+          "time": "2026-10-27 17:49",
+          "body": "等下",
+          "senderId": "yuki",
+          "hidden": true
+        },
+        {
+          "id": "yuki-hendery-intro-part-2",
+          "time": "2026-10-27 17:49",
+          "body": "我朋友的朋友那边好像有空房",
+          "senderId": "yuki",
+          "hidden": true
+        },
+        {
+          "id": "yuki-hendery-intro-part-3",
+          "time": "2026-10-27 17:49",
+          "body": "黄冠亨",
+          "senderId": "yuki",
           "hidden": true
         },
         {
           "id": "yuki-hendery-intro",
           "time": "2026-10-27 17:49",
-          "body": "我突然想到冠亨那邊好像有空房。你們以前大一同班對吧？我可以幫你們牽線。",
+          "body": "你们以前一个班的吧",
           "senderId": "yuki",
+          "hidden": true
+        },
+        {
+          "id": "yuki-intro-memory-part-1",
+          "body": "对 就是你以前问过我名字那个",
+          "senderId": "yuki",
+          "time": "2026-10-27 17:51",
+          "hidden": true
+        },
+        {
+          "id": "yuki-intro-memory",
+          "body": "我没跟他说别的 放心",
+          "senderId": "yuki",
+          "time": "2026-10-27 17:51",
           "hidden": true
         },
         {
           "id": "owner-yuki-thanks",
           "time": "2026-10-27 17:52",
-          "body": "好啊，麻煩你了。先看房再說。",
+          "body": "你把联系方式给他吧 我先去看看",
           "senderId": "owner",
+          "hidden": true
+        },
+        {
+          "id": "owner-yuki-recognize",
+          "body": "等等 是我们以前同班那个？",
+          "senderId": "owner",
+          "time": "2026-10-27 17:52",
+          "hidden": true
+        },
+        {
+          "id": "yuki-intro-confirm-part-1",
+          "body": "对啊 Hendery",
+          "senderId": "yuki",
+          "time": "2026-10-27 17:53",
+          "hidden": true
+        },
+        {
+          "id": "yuki-intro-confirm-part-2",
+          "body": "世界有时候真的很小",
+          "senderId": "yuki",
+          "time": "2026-10-27 17:53",
+          "hidden": true
+        },
+        {
+          "id": "yuki-intro-confirm",
+          "body": "联系方式给他了 他晚点找你",
+          "senderId": "yuki",
+          "time": "2026-10-27 17:53",
+          "hidden": true
+        },
+        {
+          "id": "yuki-intro-practical-part-1",
+          "body": "行 先看房",
+          "senderId": "yuki",
+          "time": "2026-10-27 17:53",
+          "hidden": true
+        },
+        {
+          "id": "yuki-intro-practical",
+          "body": "不合适就换 别因为认识不好意思",
+          "senderId": "yuki",
+          "time": "2026-10-27 17:53",
+          "hidden": true
+        },
+        {
+          "id": "yuki-film-check-part-1",
+          "body": "周五约饭吗",
+          "senderId": "yuki",
+          "time": "2026-11-20 18:18",
+          "hidden": true
+        },
+        {
+          "id": "yuki-film-check",
+          "body": "啊 你是不是又有电影要看",
+          "senderId": "yuki",
+          "time": "2026-11-20 18:18",
+          "hidden": true
+        },
+        {
+          "id": "yuki-ddl-check-part-1",
+          "body": "记得吃饭啊",
+          "senderId": "yuki",
+          "time": "2027-01-18 19:10",
+          "hidden": true
+        },
+        {
+          "id": "yuki-ddl-check",
+          "body": "别又靠咖啡续命",
+          "senderId": "yuki",
+          "time": "2027-01-18 19:10",
+          "hidden": true
+        },
+        {
+          "id": "yuki-later-check-part-1",
+          "body": "现在那个名字还需要我提醒吗",
+          "senderId": "yuki",
+          "time": "2027-02-18 20:09",
+          "hidden": true
+        },
+        {
+          "id": "yuki-later-check",
+          "body": "算了 看你最近没饿死 应该有人管饭",
+          "senderId": "yuki",
+          "time": "2027-02-18 20:09",
+          "hidden": true
+        },
+        {
+          "id": "yuki-moving-help-part-1",
+          "body": "几点来接你",
+          "senderId": "yuki",
+          "time": "2027-04-11 20:16",
+          "hidden": true
+        },
+        {
+          "id": "yuki-moving-help-part-2",
+          "body": "行李多不多",
+          "senderId": "yuki",
+          "time": "2027-04-11 20:16",
+          "hidden": true
+        },
+        {
+          "id": "yuki-moving-help",
+          "body": "我车后排可以放倒",
+          "senderId": "yuki",
+          "time": "2027-04-11 20:16",
           "hidden": true
         }
       ]
@@ -73,370 +272,459 @@
     {
       "id": "chat-hendery",
       "app": "messages",
-      "title": "黃冠亨",
+      "title": "Hendery",
       "participants": [
-        "owner"
+        "owner",
+        "hendery"
       ],
       "messages": [
         {
+          "id": "hendery-first-text-part-1",
+          "time": "2026-10-27 18:12",
+          "body": "嗨 我是 Hendery",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-first-text-part-2",
+          "time": "2026-10-27 18:12",
+          "body": "Yuki 說你在找房子",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
           "id": "hendery-first-text",
           "time": "2026-10-27 18:12",
-          "body": "Yuki 把你的聯絡方式給我了。剛看到名字還愣了一下——我們以前大一同班？",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "我們以前是不是同過班？",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
         },
         {
           "id": "owner-first-response-a",
           "time": "2026-10-27 18:15",
-          "body": "你還記得我啊。我以為重新分班之後，你早就忘了。",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "你还记得我啊",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
-        },
-        {
-          "id": "hendery-first-response-a",
-          "time": "2026-10-27 18:16",
-          "body": "我記性哪有那麼差。只是後來真的很少遇到，連聯絡方式都沒有。房子的事你先來看看，不用因為認識我就不好意思拒絕。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
-          "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
         },
         {
           "id": "owner-first-response-b",
           "time": "2026-10-27 18:15",
-          "body": "是我。Yuki 說你那邊有空房，我可以先去看看嗎？",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "是我 Yuki说你那边有空房？",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
+        },
+        {
+          "id": "hendery-first-response-a-part-1",
+          "time": "2026-10-27 18:16",
+          "body": "記得啊",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-first-response-a",
+          "time": "2026-10-27 18:16",
+          "body": "後來重新分班 就很少碰到了",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-first-response-b-part-1",
+          "time": "2026-10-27 18:16",
+          "body": "對 有一間",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-first-response-b",
           "time": "2026-10-27 18:16",
-          "body": "當然可以啊。放心，不是室友面試現場（笑）。週末有空就過來。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "你可以先來看看 不用急著決定",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-house-details-part-1",
+          "time": "2026-10-27 18:20",
+          "body": "房間照片我整理一下發你",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-house-details-part-2",
+          "time": "2026-10-27 18:20",
+          "body": "明天下午我在家",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-house-details",
           "time": "2026-10-27 18:20",
-          "body": "客廳採光很好，房間也收得滿乾淨的。地址我傳你，週六下午在家。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "你方便的話可以過來",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-viewing-day-part-1",
+          "time": "2026-10-28 16:30",
+          "body": "到樓下跟我說",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-viewing-day",
           "time": "2026-10-28 16:30",
-          "body": "你到了跟我說，我下樓幫你拿東西。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "我下來接你",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
         },
         {
           "id": "owner-move-in-a",
           "time": "2026-10-28 17:02",
-          "body": "房子真的好漂亮，而且比我想像中乾淨。那我就搬進來了？",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "那我就选这间了？",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
-        },
-        {
-          "id": "hendery-move-in-a",
-          "time": "2026-10-28 17:04",
-          "body": "可以啊。你這句問得像在申請入住許可，我又不是房東。鑰匙我放玄關了。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
-          "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
         },
         {
           "id": "owner-move-in-b",
           "time": "2026-10-28 17:02",
-          "body": "好吧，我被客廳收買了。就住這裡，衛生標準之後我會隨機抽查。",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "行 被你家客厅收买了",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
+        },
+        {
+          "id": "hendery-move-in-a-part-1",
+          "time": "2026-10-28 17:04",
+          "body": "可以啊",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-move-in-a-part-2",
+          "time": "2026-10-28 17:04",
+          "body": "鑰匙放玄關了",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-move-in-a",
+          "time": "2026-10-28 17:04",
+          "body": "缺什麼跟我說",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-move-in-b-part-1",
+          "time": "2026-10-28 17:04",
+          "body": "原來是客廳贏了",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-move-in-b",
           "time": "2026-10-28 17:04",
-          "body": "成交。抽查之前提前通知一下，我還要裝作自己很愛打掃。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "行吧 我替它歡迎你",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-first-water-part-1",
+          "time": "2026-11-02 00:48",
+          "body": "你還在客廳？",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-first-water-part-2",
+          "time": "2026-11-02 00:48",
+          "body": "剛才那個人最後有回來嗎",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-first-water",
           "time": "2026-11-02 00:48",
-          "body": "我剛下來倒水。你每次都看到這麼晚？我本來只想看兩眼，結果站在這裡看了半集。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "我上樓以後還在想",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-movie-invite-part-1",
+          "time": "2026-11-06 18:26",
+          "body": "週五還看電影嗎",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-movie-invite-part-2",
+          "time": "2026-11-06 18:26",
+          "body": "我這次坐著看",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-movie-invite",
           "time": "2026-11-06 18:26",
-          "body": "這週客廳沒人，我知道你常看片。週五要不要一起看？我打遊戲可以暫停的。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "站門口有點累",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
         },
         {
           "id": "owner-movie-a",
           "time": "2026-11-06 18:31",
-          "body": "電影你選吧，爛片我也會看完。",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "电影你选 烂片也陪你看完",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
-        },
-        {
-          "id": "hendery-movie-a",
-          "time": "2026-11-06 18:33",
-          "body": "壓力給到我了啊。等我先查一下評分，不能讓你看得太後悔。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
-          "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
         },
         {
           "id": "owner-movie-b",
           "time": "2026-11-06 18:31",
-          "body": "你先打完那局，我來準備電影和零食。",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "你打完那局再来 我拿零食",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
+        },
+        {
+          "id": "hendery-movie-a-part-1",
+          "time": "2026-11-06 18:33",
+          "body": "這可是你說的",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-movie-a",
+          "time": "2026-11-06 18:33",
+          "body": "不准看到一半跑掉",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-movie-b-part-1",
+          "time": "2026-11-06 18:33",
+          "body": "好 等我",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-movie-b",
           "time": "2026-11-06 18:33",
-          "body": "好，等我這把結束。零食我有投票權喔。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "你旁邊那個位置幫我留一下",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-weekly-checkin-part-1",
+          "time": "2026-11-20 18:08",
+          "body": "今天片單呢",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-weekly-checkin-part-2",
+          "time": "2026-11-20 18:08",
+          "body": "我已經把沙發佔好了",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-weekly-checkin",
           "time": "2026-11-20 18:08",
-          "body": "本週電影夜還續嗎？我把遊戲時間空出來了。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "留了你的位置",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-ddl-offer-part-1",
+          "time": "2027-01-18 23:42",
+          "body": "你是不是又沒吃晚飯",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-ddl-offer-part-2",
+          "time": "2027-01-18 23:42",
+          "body": "我煮了麵",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-ddl-offer",
           "time": "2027-01-18 23:42",
-          "body": "還在趕 DDL？冰箱裡有熱的，出來吃一點。放下手機也算休息十分鐘。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "再不下來 就替你吃了",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
         },
         {
           "id": "owner-ddl-a",
           "time": "2027-01-18 23:44",
-          "body": "你怎麼連我幾點睡都掌握了？",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "你先吃 我再写十分钟",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
-        },
-        {
-          "id": "hendery-ddl-a",
-          "time": "2027-01-18 23:45",
-          "body": "我剛好起來喝水，不是專門注意你喔。……好吧，算一半。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
-          "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
         },
         {
           "id": "owner-ddl-b",
           "time": "2027-01-18 23:44",
-          "body": "好，我出來吃。你要不要一起？",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "给我留着 马上下来",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
+        },
+        {
+          "id": "hendery-ddl-a-part-1",
+          "time": "2027-01-18 23:45",
+          "body": "十分鐘",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-ddl-a",
+          "time": "2027-01-18 23:45",
+          "body": "我有計時喔",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-ddl-b-part-1",
+          "time": "2027-01-18 23:45",
+          "body": "好",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-ddl-b",
           "time": "2027-01-18 23:45",
-          "body": "我本來就要吃。你負責出來，我負責把鍋熱一下。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "拖鞋穿上 外面地板冷",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-kitchen-invite-part-1",
+          "body": "你睡了嗎",
+          "senderId": "hendery",
+          "time": "2027-02-02 01:48",
+          "hidden": true
+        },
+        {
+          "id": "hendery-kitchen-invite-part-2",
+          "body": "我在樓下",
+          "senderId": "hendery",
+          "time": "2027-02-02 01:48",
+          "hidden": true
+        },
+        {
+          "id": "hendery-kitchen-invite",
+          "body": "不用帶電腦下來了 今天讓它先睡",
+          "senderId": "hendery",
+          "time": "2027-02-02 01:48",
+          "hidden": true
+        },
+        {
+          "id": "hendery-after-kitchen-part-1",
+          "time": "2027-02-03 10:12",
+          "body": "醒了嗎",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-after-kitchen-part-2",
+          "time": "2027-02-03 10:12",
+          "body": "咖啡在桌上",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-after-kitchen",
           "time": "2027-02-03 10:12",
-          "body": "昨天聊到太晚了。你今天還有課嗎？我把咖啡放桌上了。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "別又空著肚子出門",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-moving-question-part-1",
+          "time": "2027-04-08 20:16",
+          "body": "你那邊的 offer 定下來了嗎",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-moving-question",
           "time": "2027-04-08 20:16",
-          "body": "我大概畢業後就回去了。你去另一個城市繼續讀書的事，已經定下來了嗎？",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "我大概畢業以後就回去了",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
         },
         {
           "id": "owner-leave-a",
           "time": "2027-04-08 20:19",
-          "body": "嗯，offer 下來了。等畢業就搬過去。",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "嗯 拿到了 毕业之后搬过去",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
-        },
-        {
-          "id": "hendery-leave-a",
-          "time": "2027-04-08 20:22",
-          "body": "恭喜啊。雖然你走了以後，週五大概就沒人管我看什麼了。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
-          "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
         },
         {
           "id": "owner-leave-b",
           "time": "2027-04-08 20:19",
-          "body": "差不多定了。你呢，回去的時間想好了嗎？",
-          "sender": "你",
-          "title": "黃冠亨",
+          "body": "差不多定了 你什么时候回去？",
           "hidden": true,
-          "outgoing": true,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "owner"
+        },
+        {
+          "id": "hendery-leave-a-part-1",
+          "time": "2027-04-08 20:22",
+          "body": "那很好啊",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-leave-a-part-2",
+          "time": "2027-04-08 20:22",
+          "body": "恭喜你",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-leave-a",
+          "time": "2027-04-08 20:22",
+          "body": "哪天走 記得跟我說",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-leave-b-part-1",
+          "time": "2027-04-08 20:22",
+          "body": "應該就畢業那陣子",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-leave-b-part-2",
+          "time": "2027-04-08 20:22",
+          "body": "機票還沒買",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-leave-b",
           "time": "2027-04-08 20:22",
-          "body": "大概就畢業那陣子吧。聽起來我們都各自有安排了。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "先把你的東西搬好吧",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-last-logistics-part-1",
+          "time": "2027-04-11 21:05",
+          "body": "紙箱放門口了",
+          "hidden": true,
+          "senderId": "hendery"
+        },
+        {
+          "id": "hendery-last-logistics-part-2",
+          "time": "2027-04-11 21:05",
+          "body": "清潔用品在水槽下面",
+          "hidden": true,
+          "senderId": "hendery"
         },
         {
           "id": "hendery-last-logistics",
           "time": "2027-04-11 21:05",
-          "body": "紙箱留在門口了，清潔用品在水槽下面。鑰匙……你走的時候放桌上就好。",
-          "sender": "黃冠亨",
-          "title": "黃冠亨",
+          "body": "鑰匙走的時候放桌上就好",
           "hidden": true,
-          "outgoing": false,
-          "kind": "text",
-          "folder": "",
-          "meta": {}
+          "senderId": "hendery"
         }
       ]
     }
@@ -445,65 +733,135 @@
     "notes": [
       {
         "id": "apartment-viewing-note",
-        "title": "看房當天",
-        "body": "週六去看了冠亨的房子。客廳比照片裡還漂亮，採光很好，東西也收得乾乾淨淨。其實我猶豫了一下，畢竟再熟也只是以前同班的異性；但想到還要花時間重新找室友，最後還是覺得——就黃冠亨吧。",
+        "title": "看房当天",
+        "body": "房子比照片里还好看。鞋都摆在门口，水槽里没有隔夜的碗。\n\n我本来准备了一堆问题，真的见到人反而只记得问水电怎么算。\n\n他还是以前那样，没表情的时候看着有点难接近，一开口又让人没那么紧张。\n\n以前同班，也不等于熟悉。还是得看房子、看作息。\n\n房子是真的很合适。这个理由已经够用了。",
         "time": "2026-10-28 17:00",
         "kind": "note",
         "hidden": true,
         "sender": "你",
-        "folder": "搬家",
+        "folder": "日记",
         "meta": {}
       },
       {
         "id": "film-night-note",
-        "title": "每週五的電影夜",
-        "body": "從十一月開始，週末的客廳慢慢變成固定電影夜。昏暗的房間裡只有螢幕的光，他總會很紳士地在中間放一個柔軟又巨大的枕頭，好像這樣就不算越界。電影播到一半，膝蓋和大腿早就貼在一起，誰也沒有挪開。",
+        "title": "每周五的电影夜",
+        "body": "他拿了个很大的枕头放中间，说这样靠着舒服。\n\n过了一会儿枕头歪了，他的膝盖挨着我。谁都没动。\n\n有一段我完全没看进去，片尾问他刚才那个人去哪了，他居然也没答上来。\n\n以前隔着教室过道，连打招呼都要找机会。现在他会问我要不要把片尾看完。",
         "time": "2026-11-06 23:58",
         "kind": "note",
         "hidden": true,
         "sender": "你",
-        "folder": "",
+        "folder": "日记",
         "meta": {}
       },
       {
         "id": "ddl-night-note",
-        "title": "趕 DDL 的夜晚",
-        "body": "電影夜變少了，你的筆電倒是常常亮到半夜。他會把夜宵放在伸手就拿得到的地方，不催你停下來。偶爾趁著你看螢幕，悄悄繞到沙發後面，手臂搭在椅背上問你在忙什麼；你一抬頭，才發現自己像是被他圈在懷裡。",
-        "time": "2027-01-18 23:58",
+        "title": "DDL 还没交",
+        "body": "电影夜已经停了两次。\n\n他过来问我写什么，手搭在沙发背上。我抬头的时候，他离得比我以为的近。\n\n他看了两眼屏幕，说这段他也看不懂，然后把碗挪到我右手边。\n\n倒是很清楚我哪边空着。",
+        "time": "2027-01-19 00:20",
         "kind": "note",
         "hidden": true,
         "sender": "你",
-        "folder": "",
+        "folder": "日记",
         "meta": {}
       },
       {
         "id": "kitchen-scene",
-        "title": "凌晨兩點，冰箱裡的光",
-        "body": "你們後來一起站在廚房導台邊。冰箱門開著，冷白的光落在兩個人身上。話題從電影、課程聊到畢業以後要去哪裡，中間也有很多沒什麼結論的小事。誰都沒有急著回房。那一晚很像什麼都沒發生，又像有些話已經藏不住了。",
+        "title": "凌晨两点，冰箱里的光",
+        "body": "都在找吃的，最后站在岛台边聊起来。\n\n冰箱开了太久开始响，他伸手关上，厨房一下暗了。我们谁也没回房。\n\n聊到以前换班，他说后来在路上见到我，想打招呼又怕认错。我一直以为只有我会看见他。\n\n这不代表别的。我知道。\n\n他问冷不冷，把放在椅背上的外套递给我。\n\n回房以后也没马上睡。",
         "time": "2027-02-02 02:00",
         "kind": "note",
         "hidden": true,
         "sender": "你",
-        "folder": "",
+        "folder": "日记",
         "meta": {}
       },
       {
         "id": "last-day-note",
-        "title": "最後一個早晨",
-        "body": "2027-04-12。你要換一座城市繼續讀書，黃冠亨準備回去。屋裡的東西一天比一天少，剩下的話題只剩紙箱、鑰匙和清潔日程。你比他先搬走。最後一面，什麼也沒說。門關上時，這段始終沒有被說清楚的關係，也沒有得到一個正式的告別。",
+        "title": "最后一个早晨",
+        "body": "Yuki 在楼下等。\n\n钥匙放在桌上了。以前出门会顺嘴说一声，今天却不知道要说什么。\n\n他在客厅。我拉着箱子过去，轮子卡在地毯边上，他帮我提了一下。\n\n最后一面，真的什么也没说。\n\n车开出去以后，我又点开那个聊天框。最上面还是他发来的：嗨 我是 Hendery。",
         "time": "2027-04-12 08:10",
         "kind": "note",
         "hidden": true,
         "sender": "你",
-        "folder": "",
+        "folder": "日记",
         "meta": {}
+      },
+      {
+        "id": "diary-first-year",
+        "title": "后排那个人",
+        "body": "今天又坐到了斜前面。\n\n他跟别人聊天的时候笑得很明显，露出门牙。安静下来又是另一张脸。\n\n我只是刚好看到了。\n\nHendery。记一下，不然下次又要问 Yuki。",
+        "time": "2023-09-19 22:34",
+        "kind": "note",
+        "sender": "你",
+        "folder": "旧日记",
+        "hidden": false
+      },
+      {
+        "id": "diary-reassigned",
+        "title": "新课表",
+        "body": "重新排班了。\n\n把新教室和时间抄了一遍，才想起来以后大概不会每周看见他。\n\n其实也没怎么说过话，连联系方式都没有。\n\n这点小心思应该很快就过去了吧。",
+        "time": "2024-02-22 23:10",
+        "kind": "note",
+        "sender": "你",
+        "folder": "旧日记",
+        "hidden": false
+      },
+      {
+        "id": "diary-name-again",
+        "title": "这个名字",
+        "body": "找房找到一个以前不太敢主动说话的人。\n\n看到 Yuki 发来的名字，居然先点回去看了眼以前的聊天。\n\n大一那会儿确实有一点 crush，后来分班就淡下来了。\n\n现在是找房子。见面别表现得太奇怪就行。",
+        "time": "2026-10-27 17:51",
+        "kind": "note",
+        "sender": "你",
+        "folder": "日记",
+        "hidden": true
+      },
+      {
+        "id": "diary-first-film",
+        "title": "他也没上楼",
+        "body": "他本来只是下楼倒水。\n\n我以为站一会儿就走了，结果站着看了十几分钟。让他坐，他还指着楼上说自己游戏没退。\n\n最后还是坐下了。\n\n杯子里的水一口没喝。",
+        "time": "2026-11-02 01:20",
+        "kind": "note",
+        "sender": "你",
+        "folder": "日记",
+        "hidden": true
+      },
+      {
+        "id": "diary-later",
+        "title": "最近的小事",
+        "body": "买东西时会默认算两个人的份。\n\n电影清单里有几部是他加的，我不记得什么时候把备忘录给他看过。\n\nYuki 问我现在什么情况。这个问题比那篇论文还难写。\n\n以前那个 crush 只是见到他就紧张。现在是听见门锁响，会看一眼几点。",
+        "time": "2027-02-18 23:18",
+        "kind": "note",
+        "sender": "你",
+        "folder": "日记",
+        "hidden": true
+      },
+      {
+        "id": "diary-packing",
+        "title": "剩下的东西",
+        "body": "客厅开始有回音了。\n\n打包时找到那颗大枕头。他问要不要留给我，我说箱子放不下。\n\n好像最近所有话都能用“放不下”“带不走”说完。\n\n电影清单最后一部还没划掉。",
+        "time": "2027-04-11 22:10",
+        "kind": "note",
+        "sender": "你",
+        "folder": "日记",
+        "hidden": true
+      },
+      {
+        "id": "movie-watchlist",
+        "title": "电影清单",
+        "body": "想看的\n☑ 第一周那部，看完了，结尾还吵了十分钟\n☑ 他说“绝对不无聊”的那部，确实没有人睡着\n□ 下次再找一部\n\n零食：不要只买我爱吃的，也记得问他。",
+        "time": "2026-11-06 23:59",
+        "kind": "note",
+        "sender": "你",
+        "folder": "清单",
+        "hidden": true
       }
     ],
     "calendar": [
       {
         "id": "cal-viewing",
         "title": "看房",
-        "body": "第一次去黃冠亨家看房。",
+        "body": "Hendery 在家。先问清水电、作息和退租时间。",
         "time": "2026-10-28 16:30",
         "kind": "event",
         "hidden": true,
@@ -513,8 +871,8 @@
       },
       {
         "id": "cal-move-in",
-        "title": "搬進新家",
-        "body": "把必要的東西先搬過去，其他慢慢整理。",
+        "title": "搬进新家",
+        "body": "先搬常用的东西。记得拿钥匙。",
         "time": "2026-10-29 10:00",
         "kind": "event",
         "hidden": true,
@@ -524,8 +882,8 @@
       },
       {
         "id": "cal-movie-night",
-        "title": "週末電影夜",
-        "body": "客廳、電影、柔軟的大枕頭。後來變成每週固定的事。",
+        "title": "电影夜",
+        "body": "晚上留给客厅。",
         "time": "2026-11-06 20:00",
         "kind": "event",
         "hidden": true,
@@ -536,7 +894,7 @@
       {
         "id": "cal-deadline",
         "title": "期末 DDL",
-        "body": "交件週。這陣子電影夜取消了幾次。",
+        "body": "交之前再检查一次引用。",
         "time": "2027-01-19 23:59",
         "kind": "event",
         "hidden": true,
@@ -546,26 +904,35 @@
       },
       {
         "id": "cal-move-out",
-        "title": "搬離合租房",
-        "body": "你先搬去另一座城市，黃冠亨畢業後回去。",
+        "title": "搬家",
+        "body": "Yuki 来接，钥匙放桌上。",
         "time": "2027-04-12 09:00",
         "kind": "event",
         "hidden": true,
         "sender": "你",
         "folder": "",
         "meta": {}
+      },
+      {
+        "id": "cal-offer-confirm",
+        "title": "确认下一学期入学",
+        "body": "offer 已经收到。确认接受，开始找新城市的住处。",
+        "time": "2027-03-20 12:00",
+        "kind": "event",
+        "sender": "你",
+        "hidden": true
       }
     ],
     "instagram": [
       {
         "id": "ig-movie-story",
-        "title": "週五晚上",
-        "body": "片尾字幕停在螢幕上，沙發中間那顆枕頭已經歪到一邊。",
-        "time": "2026-11-06 23:54",
+        "title": "週五",
+        "body": "字幕都跑完了。有人說還要再坐一下。",
+        "time": "2026-11-20 00:12",
         "kind": "post",
         "hidden": true,
-        "sender": "hendery",
-        "folder": "限時動態",
+        "sender": "Hendery",
+        "folder": "快拍",
         "meta": {
           "story": "true",
           "handle": "hendery"
@@ -573,13 +940,13 @@
       },
       {
         "id": "ig-kitchen-story",
-        "title": "夜宵存檔",
-        "body": "兩份熱好的宵夜，和一盞忘了關的廚房燈。",
+        "title": "兩人份",
+        "body": "一份會煮太少。",
         "time": "2027-01-19 00:03",
         "kind": "post",
         "hidden": true,
-        "sender": "hendery",
-        "folder": "限時動態",
+        "sender": "Hendery",
+        "folder": "快拍",
         "meta": {
           "story": "true",
           "handle": "hendery"
@@ -588,12 +955,12 @@
       {
         "id": "ig-boxes-story",
         "title": "打包中",
-        "body": "客廳空了一半。紙箱比想像中還難找。",
+        "body": "誰發明的膠帶 找不到頭。",
         "time": "2027-04-10 19:20",
         "kind": "post",
         "hidden": true,
-        "sender": "hendery",
-        "folder": "限時動態",
+        "sender": "Hendery",
+        "folder": "快拍",
         "meta": {
           "story": "true",
           "handle": "hendery"
@@ -603,12 +970,12 @@
     "threads": [
       {
         "id": "threads-film",
-        "title": "最近多了一個固定的週五行程。",
-        "body": "以前週五都在排位，現在會先問客廳有沒有人要看電影。",
-        "time": "2026-11-20 21:16",
+        "title": "週五晚上",
+        "body": "排位晚一點。客廳有人等。",
+        "time": "2026-11-20 18:02",
         "kind": "post",
         "hidden": true,
-        "sender": "hendery",
+        "sender": "Hendery",
         "folder": "",
         "meta": {
           "handle": "hendery"
@@ -616,15 +983,27 @@
       },
       {
         "id": "threads-goodbye",
-        "title": "有些人好像只會一起走一小段。",
-        "body": "但那一小段，還是會記很久。",
+        "title": "清單",
+        "body": "清單上還有一部沒看。",
         "time": "2027-04-11 23:20",
         "kind": "post",
         "hidden": true,
-        "sender": "hendery",
+        "sender": "Hendery",
         "folder": "",
         "meta": {
           "handle": "hendery"
+        }
+      },
+      {
+        "id": "threads-owner-ddl",
+        "title": "期末存活记录",
+        "body": "电影夜暂停。不是不想看，是那两个字母后面又跟了一个 L。\n今天终于记得吃晚饭了。",
+        "sender": "你",
+        "kind": "post",
+        "time": "2027-01-19 00:31",
+        "hidden": true,
+        "meta": {
+          "handle": "me"
         }
       }
     ]
@@ -641,7 +1020,7 @@
         {
           "type": "notification",
           "key": "",
-          "value": "Yuki：你有一則新訊息"
+          "value": "Yuki：你房东真把房子卖了？"
         }
       ],
       "next": []
@@ -655,11 +1034,13 @@
       "actions": [
         {
           "type": "unlock",
-          "key": "owner-rent-reply",
+          "key": "owner-rent-reply-part-1",
           "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-owner-rent-reply-2"
+      ]
     },
     {
       "id": "yuki-hendery-hook",
@@ -670,11 +1051,13 @@
       "actions": [
         {
           "type": "unlock",
-          "key": "yuki-hendery-intro",
+          "key": "yuki-hendery-intro-part-1",
           "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-yuki-hendery-intro-2"
+      ]
     },
     {
       "id": "hendery-intro-unlock",
@@ -685,13 +1068,13 @@
       "actions": [
         {
           "type": "unlock",
-          "key": "owner-yuki-thanks",
+          "key": "diary-name-again",
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "hendery-first-text",
-          "value": true
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：日记里记下了这个名字"
         }
       ],
       "next": []
@@ -710,7 +1093,7 @@
     },
     {
       "id": "choose-first-memory",
-      "label": "「你還記得我啊。我以為重新分班之後，你早就忘了。」",
+      "label": "你还记得我啊",
       "type": "action",
       "event": "choose",
       "target": "choose-first-memory",
@@ -724,18 +1107,15 @@
           "type": "unlock",
           "key": "owner-first-response-a",
           "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-first-response-a",
-          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-first-response-a-start"
+      ]
     },
     {
       "id": "choose-first-house",
-      "label": "「是我。Yuki 說你那邊有空房，我可以先去看看嗎？」",
+      "label": "是我 Yuki说你那边有空房？",
       "type": "action",
       "event": "choose",
       "target": "choose-first-house",
@@ -749,14 +1129,11 @@
           "type": "unlock",
           "key": "owner-first-response-b",
           "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-first-response-b",
-          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-first-response-b-start"
+      ]
     },
     {
       "id": "first-reply-a-next",
@@ -767,11 +1144,13 @@
       "actions": [
         {
           "type": "unlock",
-          "key": "hendery-house-details",
+          "key": "hendery-house-details-part-1",
           "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-house-details-2"
+      ]
     },
     {
       "id": "first-reply-b-next",
@@ -782,11 +1161,13 @@
       "actions": [
         {
           "type": "unlock",
-          "key": "hendery-house-details",
+          "key": "hendery-house-details-part-1",
           "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-house-details-2"
+      ]
     },
     {
       "id": "viewing-unlocks-house",
@@ -796,27 +1177,29 @@
       "target": "hendery-house-details",
       "actions": [
         {
-          "type": "date",
-          "key": "",
-          "value": "2026-10-27"
-        },
-        {
-          "type": "time",
-          "key": "",
-          "value": "18:20"
-        },
-        {
           "type": "unlock",
-          "key": "hendery-viewing-day",
+          "key": "hendery-viewing-day-part-1",
           "value": true
         },
         {
           "type": "unlock",
           "key": "cal-viewing",
           "value": true
+        },
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-10-28"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "16:30"
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-viewing-day-2"
+      ]
     },
     {
       "id": "viewing-complete",
@@ -829,6 +1212,21 @@
           "type": "unlock",
           "key": "apartment-viewing-note",
           "value": true
+        },
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-10-28"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "17:00"
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：看房当天"
         }
       ],
       "next": []
@@ -847,7 +1245,7 @@
     },
     {
       "id": "choose-move-in-soft",
-      "label": "「房子真的好漂亮，而且比我想像中乾淨。那我就搬進來了？」",
+      "label": "那我就选这间了？",
       "type": "action",
       "event": "choose",
       "target": "choose-move-in-soft",
@@ -863,11 +1261,6 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "hendery-move-in-a",
-          "value": true
-        },
-        {
           "type": "date",
           "key": "",
           "value": "2026-10-28"
@@ -878,11 +1271,13 @@
           "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-move-in-a-start"
+      ]
     },
     {
       "id": "choose-move-in-tease",
-      "label": "「好吧，我被客廳收買了。就住這裡，衛生標準之後我會隨機抽查。」",
+      "label": "行 被你家客厅收买了",
       "type": "action",
       "event": "choose",
       "target": "choose-move-in-tease",
@@ -898,11 +1293,6 @@
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "hendery-move-in-b",
-          "value": true
-        },
-        {
           "type": "date",
           "key": "",
           "value": "2026-10-28"
@@ -913,7 +1303,9 @@
           "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-move-in-b-start"
+      ]
     },
     {
       "id": "movie-first-water-a",
@@ -921,36 +1313,6 @@
       "type": "action",
       "event": "read",
       "target": "hendery-move-in-a",
-      "actions": [
-        {
-          "type": "unlock",
-          "key": "hendery-first-water",
-          "value": true
-        }
-      ],
-      "next": []
-    },
-    {
-      "id": "movie-first-water-b",
-      "label": "第一次一起看電影",
-      "type": "action",
-      "event": "read",
-      "target": "hendery-move-in-b",
-      "actions": [
-        {
-          "type": "unlock",
-          "key": "hendery-first-water",
-          "value": true
-        }
-      ],
-      "next": []
-    },
-    {
-      "id": "movie-night-begins",
-      "label": "每週電影夜開始",
-      "type": "action",
-      "event": "read",
-      "target": "hendery-first-water",
       "actions": [
         {
           "type": "date",
@@ -964,8 +1326,67 @@
         },
         {
           "type": "unlock",
-          "key": "hendery-movie-invite",
+          "key": "hendery-first-water-part-1",
           "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-first-water-2"
+      ]
+    },
+    {
+      "id": "movie-first-water-b",
+      "label": "第一次一起看電影",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-move-in-b",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-11-02"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "00:48"
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-first-water-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-first-water-2"
+      ]
+    },
+    {
+      "id": "movie-night-begins",
+      "label": "每週電影夜開始",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-first-water",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "diary-first-film",
+          "value": true
+        },
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-11-02"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "01:20"
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：他也没上楼"
         }
       ],
       "next": []
@@ -984,7 +1405,7 @@
     },
     {
       "id": "choose-movie-picked",
-      "label": "「電影你選吧，烂片我也會看完。」",
+      "label": "电影你选 烂片也陪你看完",
       "type": "action",
       "event": "choose",
       "target": "choose-movie-picked",
@@ -998,18 +1419,15 @@
           "type": "unlock",
           "key": "owner-movie-a",
           "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-movie-a",
-          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-movie-a-start"
+      ]
     },
     {
       "id": "choose-movie-prep",
-      "label": "「你先打完那局，我來準備電影和零食。」",
+      "label": "你打完那局再来 我拿零食",
       "type": "action",
       "event": "choose",
       "target": "choose-movie-prep",
@@ -1023,14 +1441,11 @@
           "type": "unlock",
           "key": "owner-movie-b",
           "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-movie-b",
-          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-movie-b-start"
+      ]
     },
     {
       "id": "film-a-next",
@@ -1056,13 +1471,18 @@
         },
         {
           "type": "unlock",
-          "key": "hendery-weekly-checkin",
+          "key": "cal-movie-night",
           "value": true
         },
         {
           "type": "unlock",
-          "key": "cal-movie-night",
+          "key": "movie-watchlist",
           "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：每周五的电影夜"
         }
       ],
       "next": []
@@ -1091,13 +1511,18 @@
         },
         {
           "type": "unlock",
-          "key": "hendery-weekly-checkin",
+          "key": "cal-movie-night",
           "value": true
         },
         {
           "type": "unlock",
-          "key": "cal-movie-night",
+          "key": "movie-watchlist",
           "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：每周五的电影夜"
         }
       ],
       "next": []
@@ -1110,6 +1535,16 @@
       "target": "film-night-note",
       "actions": [
         {
+          "type": "date",
+          "key": "",
+          "value": "2026-11-20"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "18:02"
+        },
+        {
           "type": "unlock",
           "key": "ig-movie-story",
           "value": true
@@ -1118,6 +1553,16 @@
           "type": "unlock",
           "key": "threads-film",
           "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "Instagram：Hendery 更新了快拍"
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "Threads：Hendery 发了新动态"
         }
       ],
       "next": []
@@ -1141,16 +1586,24 @@
         },
         {
           "type": "unlock",
-          "key": "hendery-ddl-offer",
+          "key": "hendery-ddl-offer-part-1",
           "value": true
         },
         {
           "type": "unlock",
           "key": "cal-deadline",
           "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "yuki-ddl-check-part-1",
+          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-ddl-offer-2",
+        "deliver-yuki-ddl-check-2"
+      ]
     },
     {
       "id": "ddl-choice",
@@ -1166,7 +1619,7 @@
     },
     {
       "id": "choose-ddl-tease",
-      "label": "「你怎麼連我幾點睡都掌握了？」",
+      "label": "你先吃 我再写十分钟",
       "type": "action",
       "event": "choose",
       "target": "choose-ddl-tease",
@@ -1180,18 +1633,15 @@
           "type": "unlock",
           "key": "owner-ddl-a",
           "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-ddl-a",
-          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-ddl-a-start"
+      ]
     },
     {
       "id": "choose-ddl-join",
-      "label": "「好，我出來吃。你要不要一起？」",
+      "label": "给我留着 马上下来",
       "type": "action",
       "event": "choose",
       "target": "choose-ddl-join",
@@ -1205,14 +1655,11 @@
           "type": "unlock",
           "key": "owner-ddl-b",
           "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-ddl-b",
-          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-ddl-b-start"
+      ]
     },
     {
       "id": "ddl-a-next",
@@ -1222,9 +1669,29 @@
       "target": "hendery-ddl-a",
       "actions": [
         {
+          "type": "date",
+          "key": "",
+          "value": "2027-01-19"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "00:20"
+        },
+        {
           "type": "unlock",
           "key": "ddl-night-note",
           "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "ig-kitchen-story",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：DDL 还没交"
         }
       ],
       "next": []
@@ -1237,9 +1704,29 @@
       "target": "hendery-ddl-b",
       "actions": [
         {
+          "type": "date",
+          "key": "",
+          "value": "2027-01-19"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "00:20"
+        },
+        {
           "type": "unlock",
           "key": "ddl-night-note",
           "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "ig-kitchen-story",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：DDL 还没交"
         }
       ],
       "next": []
@@ -1252,24 +1739,14 @@
       "target": "ddl-night-note",
       "actions": [
         {
-          "type": "date",
-          "key": "",
-          "value": "2027-02-02"
-        },
-        {
-          "type": "time",
-          "key": "",
-          "value": "02:00"
-        },
-        {
           "type": "unlock",
-          "key": "kitchen-scene",
+          "key": "threads-owner-ddl",
           "value": true
         },
         {
-          "type": "unlock",
-          "key": "ig-kitchen-story",
-          "value": true
+          "type": "notification",
+          "key": "",
+          "value": "Threads：期末存活记录"
         }
       ],
       "next": []
@@ -1282,21 +1759,28 @@
       "target": "kitchen-scene",
       "actions": [
         {
-          "type": "unlock",
-          "key": "hendery-after-kitchen",
-          "value": true
+          "type": "date",
+          "key": "",
+          "value": "2027-02-03"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "10:12"
         },
         {
           "type": "unlock",
-          "key": "hendery-moving-question",
+          "key": "hendery-after-kitchen-part-1",
           "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-after-kitchen-2"
+      ]
     },
     {
       "id": "leave-choice-city",
-      "label": "「嗯，offer 下來了。等畢業就搬過去。」",
+      "label": "嗯 拿到了 毕业之后搬过去",
       "type": "action",
       "event": "choose",
       "target": "leave-choice-city",
@@ -1310,28 +1794,15 @@
           "type": "unlock",
           "key": "owner-leave-a",
           "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-leave-a",
-          "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-last-logistics",
-          "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "cal-move-out",
-          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-leave-a-start"
+      ]
     },
     {
       "id": "leave-choice-his-plan",
-      "label": "「差不多定了。你呢，回去的時間想好了嗎？」",
+      "label": "差不多定了 你什么时候回去？",
       "type": "action",
       "event": "choose",
       "target": "leave-choice-his-plan",
@@ -1345,24 +1816,11 @@
           "type": "unlock",
           "key": "owner-leave-b",
           "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-leave-b",
-          "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "hendery-last-logistics",
-          "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "cal-move-out",
-          "value": true
         }
       ],
-      "next": []
+      "next": [
+        "deliver-hendery-leave-b-start"
+      ]
     },
     {
       "id": "last-day-unlock-a",
@@ -1373,30 +1831,25 @@
       "actions": [
         {
           "type": "unlock",
-          "key": "last-day-note",
+          "key": "diary-packing",
           "value": true
-        }
-      ],
-      "next": []
-    },
-    {
-      "id": "last-day-unlock-b",
-      "label": "收拾到最後",
-      "type": "action",
-      "event": "read",
-      "target": "hendery-last-logistics",
-      "actions": [
+        },
         {
           "type": "unlock",
-          "key": "last-day-note",
+          "key": "threads-goodbye",
           "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：剩下的东西"
         }
       ],
       "next": []
     },
     {
       "id": "silent-goodbye",
-      "label": "無聲告別",
+      "label": "无声告别",
       "type": "ending",
       "event": "read",
       "target": "last-day-note",
@@ -1404,7 +1857,7 @@
         {
           "type": "ending",
           "key": "",
-          "value": "無聲告別：你先一步搬走，最後一面什麼也沒說。"
+          "value": "无声告别：我先一步搬走，最后一面什么也没说。"
         }
       ],
       "next": []
@@ -1431,7 +1884,8 @@
           "key": "ig-boxes-story",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
       "id": "graduation-plan",
@@ -1444,233 +1898,2364 @@
         "leave-choice-city",
         "leave-choice-his-plan"
       ]
+    },
+    {
+      "id": "yuki-before-intro-choice",
+      "label": "要怎么回 Yuki",
+      "type": "choice",
+      "event": "read",
+      "target": "diary-name-again",
+      "actions": [],
+      "next": [
+        "choose-yuki-practical",
+        "choose-yuki-recognize"
+      ]
+    },
+    {
+      "id": "choose-yuki-practical",
+      "label": "你把联系方式给他吧 我先去看看",
+      "type": "action",
+      "event": "choose",
+      "target": "choose-yuki-practical",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "owner-yuki-thanks",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-intro-practical-start"
+      ]
+    },
+    {
+      "id": "choose-yuki-recognize",
+      "label": "等等 是我们以前同班那个？",
+      "type": "action",
+      "event": "choose",
+      "target": "choose-yuki-recognize",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "owner-yuki-recognize",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-intro-confirm-start"
+      ]
+    },
+    {
+      "id": "yuki-pass-contact-practical",
+      "label": "重新加上联系方式",
+      "type": "action",
+      "event": "read",
+      "target": "yuki-intro-practical",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-text-part-1",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "Hendery：嗨 我是 Hendery"
+        }
+      ],
+      "next": [
+        "deliver-hendery-first-text-2"
+      ]
+    },
+    {
+      "id": "yuki-pass-contact-confirm",
+      "label": "重新加上联系方式",
+      "type": "action",
+      "event": "read",
+      "target": "yuki-intro-confirm",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-text-part-1",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "Hendery：嗨 我是 Hendery"
+        }
+      ],
+      "next": [
+        "deliver-hendery-first-text-2"
+      ]
+    },
+    {
+      "id": "yuki-remembers-diary",
+      "label": "Yuki 还记得那个名字",
+      "type": "action",
+      "event": "read",
+      "target": "diary-first-year",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-intro-memory-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-intro-memory-2"
+      ],
+      "conditions": [
+        {
+          "key": "read:diary-first-year",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "key": "read:yuki-hendery-intro",
+          "op": "eq",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "yuki-remembers-intro",
+      "label": "Yuki 还记得那个名字",
+      "type": "action",
+      "event": "read",
+      "target": "yuki-hendery-intro",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-intro-memory-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-intro-memory-2"
+      ],
+      "conditions": [
+        {
+          "key": "read:diary-first-year",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "key": "read:yuki-hendery-intro",
+          "op": "eq",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "first-film-to-friday",
+      "label": "第一次坐下来一起看",
+      "type": "action",
+      "event": "read",
+      "target": "diary-first-film",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-11-06"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "18:26"
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-movie-invite-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-movie-invite-2"
+      ]
+    },
+    {
+      "id": "film-social-ig",
+      "label": "看过他的周五动态",
+      "type": "action",
+      "event": "read",
+      "target": "ig-movie-story",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-weekly-checkin-part-1",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "yuki-film-check-part-1",
+          "value": true
+        },
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-11-20"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "18:08"
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "Hendery：今天片單呢"
+        }
+      ],
+      "next": [
+        "deliver-hendery-weekly-checkin-2",
+        "deliver-yuki-film-check-2"
+      ]
+    },
+    {
+      "id": "film-social-threads",
+      "label": "看过他的周五动态",
+      "type": "action",
+      "event": "read",
+      "target": "threads-film",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-weekly-checkin-part-1",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "yuki-film-check-part-1",
+          "value": true
+        },
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-11-20"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "18:08"
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "Hendery：今天片單呢"
+        }
+      ],
+      "next": [
+        "deliver-hendery-weekly-checkin-2",
+        "deliver-yuki-film-check-2"
+      ]
+    },
+    {
+      "id": "threads-ddl-to-kitchen",
+      "label": "忙碌后的一个夜晚",
+      "type": "action",
+      "event": "read",
+      "target": "threads-owner-ddl",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2027-02-02"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "01:48"
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-kitchen-invite-part-1",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "Hendery：你睡了嗎"
+        }
+      ],
+      "next": [
+        "deliver-hendery-kitchen-invite-2"
+      ]
+    },
+    {
+      "id": "kitchen-invite-to-diary",
+      "label": "没带电脑的夜晚",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-kitchen-invite",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2027-02-02"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "02:00"
+        },
+        {
+          "type": "unlock",
+          "key": "kitchen-scene",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：凌晨两点，冰箱里的光"
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "coffee-to-later",
+      "label": "日子继续往前",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-after-kitchen",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2027-02-18"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "23:18"
+        },
+        {
+          "type": "unlock",
+          "key": "diary-later",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "yuki-later-check-part-1",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：最近的小事"
+        }
+      ],
+      "next": [
+        "deliver-yuki-later-check-2"
+      ]
+    },
+    {
+      "id": "later-to-offer",
+      "label": "新的城市逐渐确定",
+      "type": "action",
+      "event": "read",
+      "target": "diary-later",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2027-03-20"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "12:00"
+        },
+        {
+          "type": "unlock",
+          "key": "cal-offer-confirm",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "日历：确认下一学期入学"
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "offer-to-graduation",
+      "label": "终于聊到去向",
+      "type": "action",
+      "event": "read",
+      "target": "cal-offer-confirm",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2027-04-08"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "20:16"
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-moving-question-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-moving-question-2"
+      ]
+    },
+    {
+      "id": "read-hendery-leave-a-packing",
+      "label": "收拾开始了",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-leave-a",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2027-04-11"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "21:05"
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-last-logistics-part-1",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "cal-move-out",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "yuki-moving-help-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-last-logistics-2",
+        "deliver-yuki-moving-help-2"
+      ]
+    },
+    {
+      "id": "read-hendery-leave-b-packing",
+      "label": "收拾开始了",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-leave-b",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2027-04-11"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "21:05"
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-last-logistics-part-1",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "cal-move-out",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "yuki-moving-help-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-last-logistics-2",
+        "deliver-yuki-moving-help-2"
+      ]
+    },
+    {
+      "id": "packing-to-last-day",
+      "label": "出发前的最后一页",
+      "type": "action",
+      "event": "read",
+      "target": "diary-packing",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2027-04-12"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "08:10"
+        },
+        {
+          "type": "unlock",
+          "key": "last-day-note",
+          "value": true
+        },
+        {
+          "type": "notification",
+          "key": "",
+          "value": "备忘录：最后一个早晨"
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-owner-rent-reply-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-owner-rent-reply-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "owner-rent-reply",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-yuki-hendery-intro-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-hendery-intro-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-hendery-intro-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-hendery-intro-3"
+      ]
+    },
+    {
+      "id": "deliver-yuki-hendery-intro-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-hendery-intro-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-hendery-intro-part-3",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-hendery-intro-4"
+      ]
+    },
+    {
+      "id": "deliver-yuki-hendery-intro-4",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-hendery-intro-4",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-hendery-intro",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-first-response-a-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-first-response-a-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-response-a",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-first-response-a-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-first-response-a-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-response-a-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-first-response-a-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-first-response-b-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-first-response-b-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-response-b",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-first-response-b-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-first-response-b-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-response-b-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-first-response-b-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-house-details-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-house-details-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-house-details-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-house-details-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-house-details-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-house-details-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-house-details",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-viewing-day-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-viewing-day-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-viewing-day",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-move-in-a-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-move-in-a-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-move-in-a-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-move-in-a-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-move-in-a-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-move-in-a-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-move-in-a",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-move-in-a-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-move-in-a-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-move-in-a-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-move-in-a-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-move-in-b-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-move-in-b-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-move-in-b",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-move-in-b-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-move-in-b-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-move-in-b-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-move-in-b-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-first-water-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-first-water-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-water-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-first-water-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-first-water-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-first-water-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-water",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-movie-a-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-movie-a-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-movie-a",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-movie-a-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-movie-a-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-movie-a-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-movie-a-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-movie-b-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-movie-b-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-movie-b",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-movie-b-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-movie-b-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-movie-b-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-movie-b-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-ddl-offer-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-ddl-offer-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-ddl-offer-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-ddl-offer-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-ddl-offer-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-ddl-offer-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-ddl-offer",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-yuki-ddl-check-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-ddl-check-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-ddl-check",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-ddl-a-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-ddl-a-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-ddl-a",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-ddl-a-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-ddl-a-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-ddl-a-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-ddl-a-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-ddl-b-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-ddl-b-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-ddl-b",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-ddl-b-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-ddl-b-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-ddl-b-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-ddl-b-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-after-kitchen-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-after-kitchen-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-after-kitchen-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-after-kitchen-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-after-kitchen-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-after-kitchen-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-after-kitchen",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-leave-a-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-leave-a-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-leave-a-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-leave-a-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-leave-a-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-leave-a-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-leave-a",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-leave-a-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-leave-a-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-leave-a-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-leave-a-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-leave-b-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-leave-b-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-leave-b-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-leave-b-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-leave-b-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-leave-b-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-leave-b",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-leave-b-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-leave-b-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-leave-b-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-leave-b-2"
+      ]
+    },
+    {
+      "id": "deliver-yuki-intro-practical-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-intro-practical-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-intro-practical",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-yuki-intro-practical-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-intro-practical-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-intro-practical-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-intro-practical-2"
+      ]
+    },
+    {
+      "id": "deliver-yuki-intro-confirm-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-intro-confirm-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-intro-confirm-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-intro-confirm-3"
+      ]
+    },
+    {
+      "id": "deliver-yuki-intro-confirm-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-intro-confirm-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-intro-confirm",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-yuki-intro-confirm-start",
+      "label": "稍后收到回复",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-intro-confirm-start",
+      "delayMs": 900,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-intro-confirm-part-1",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-intro-confirm-2"
+      ]
+    },
+    {
+      "id": "deliver-hendery-first-text-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-first-text-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-text-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-first-text-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-first-text-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-first-text-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-text",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-yuki-intro-memory-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-intro-memory-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-intro-memory",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-movie-invite-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-movie-invite-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-movie-invite-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-movie-invite-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-movie-invite-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-movie-invite-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-movie-invite",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-weekly-checkin-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-weekly-checkin-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-weekly-checkin-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-weekly-checkin-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-weekly-checkin-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-weekly-checkin-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-weekly-checkin",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-yuki-film-check-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-film-check-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-film-check",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-kitchen-invite-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-kitchen-invite-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-kitchen-invite-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-kitchen-invite-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-kitchen-invite-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-kitchen-invite-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-kitchen-invite",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-yuki-later-check-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-later-check-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-later-check",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-moving-question-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-moving-question-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-moving-question",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-hendery-last-logistics-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-last-logistics-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-last-logistics-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-hendery-last-logistics-3"
+      ]
+    },
+    {
+      "id": "deliver-hendery-last-logistics-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-hendery-last-logistics-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-last-logistics",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "deliver-yuki-moving-help-2",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-moving-help-2",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-moving-help-part-2",
+          "value": true
+        }
+      ],
+      "next": [
+        "deliver-yuki-moving-help-3"
+      ]
+    },
+    {
+      "id": "deliver-yuki-moving-help-3",
+      "label": "消息继续送达",
+      "type": "delay",
+      "event": "timer",
+      "target": "deliver-yuki-moving-help-3",
+      "delayMs": 700,
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "yuki-moving-help",
+          "value": true
+        }
+      ],
+      "next": []
     }
   ],
   "tests": [
     {
-      "name": "完整主線・坦率一點",
+      "name": "完整主线·坦率一点",
       "steps": [
+        {
+          "advanceMs": 6000
+        },
         {
           "event": "read",
           "target": "yuki-rent-news"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "owner-rent-reply"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "yuki-hendery-intro"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-name-again"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "choose": "choose-yuki-practical"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "yuki-intro-practical"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-first-text"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "choose-first-memory"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-first-response-a"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "hendery-house-details"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-viewing-day"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "apartment-viewing-note"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "choose-move-in-soft"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-move-in-a"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "hendery-first-water"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-first-film"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-movie-invite"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "choose-movie-picked"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-movie-a"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "film-night-note"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "ig-movie-story"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-weekly-checkin"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "hendery-ddl-offer"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "choose-ddl-tease"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-ddl-a"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "ddl-night-note"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "threads-owner-ddl"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-kitchen-invite"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "kitchen-scene"
         },
         {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-after-kitchen"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-later"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "cal-offer-confirm"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "hendery-moving-question"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "leave-choice-city"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-leave-a"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-last-logistics"
         },
         {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-packing"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "last-day-note"
         }
       ],
-      "ending": "無聲告別：你先一步搬走，最後一面什麼也沒說。",
+      "ending": "无声告别：我先一步搬走，最后一面什么也没说。",
       "expectUnlocked": [
-        "hendery-first-response-a",
-        "apartment-viewing-note",
-        "film-night-note",
-        "ddl-night-note",
+        "diary-name-again",
+        "diary-first-film",
+        "movie-watchlist",
+        "ig-movie-story",
+        "threads-film",
+        "threads-owner-ddl",
         "kitchen-scene",
+        "diary-later",
+        "cal-offer-confirm",
+        "diary-packing",
         "last-day-note"
       ]
     },
     {
-      "name": "完整主線・用玩笑帶過",
+      "name": "完整主线·用玩笑带过",
       "steps": [
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-first-year"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-reassigned"
+        },
+        {
+          "advanceMs": 6000
+        },
         {
           "event": "read",
           "target": "yuki-rent-news"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "owner-rent-reply"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "yuki-hendery-intro"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-name-again"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "choose": "choose-yuki-recognize"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "yuki-intro-confirm"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-first-text"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "choose-first-house"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-first-response-b"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "hendery-house-details"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-viewing-day"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "apartment-viewing-note"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "choose-move-in-tease"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-move-in-b"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "hendery-first-water"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-first-film"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-movie-invite"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "choose-movie-prep"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-movie-b"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "film-night-note"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "threads-film"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-weekly-checkin"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "hendery-ddl-offer"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "choose-ddl-join"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-ddl-b"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "ddl-night-note"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "threads-owner-ddl"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-kitchen-invite"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "kitchen-scene"
         },
         {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-after-kitchen"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-later"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "cal-offer-confirm"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "hendery-moving-question"
         },
         {
+          "advanceMs": 6000
+        },
+        {
           "choose": "leave-choice-his-plan"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-leave-b"
+        },
+        {
+          "advanceMs": 6000
         },
         {
           "event": "read",
           "target": "hendery-last-logistics"
         },
         {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-packing"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
           "event": "read",
           "target": "last-day-note"
         }
       ],
-      "ending": "無聲告別：你先一步搬走，最後一面什麼也沒說。",
+      "ending": "无声告别：我先一步搬走，最后一面什么也没说。",
       "expectUnlocked": [
-        "hendery-first-response-b",
-        "apartment-viewing-note",
-        "film-night-note",
-        "ddl-night-note",
+        "diary-name-again",
+        "diary-first-film",
+        "movie-watchlist",
+        "ig-movie-story",
+        "threads-film",
+        "threads-owner-ddl",
         "kitchen-scene",
-        "last-day-note"
+        "diary-later",
+        "cal-offer-confirm",
+        "diary-packing",
+        "last-day-note",
+        "yuki-intro-memory"
+      ]
+    },
+    {
+      "name": "完整主线·先重逢后翻旧日记",
+      "steps": [
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "yuki-rent-news"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "owner-rent-reply"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "yuki-hendery-intro"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-first-year"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-name-again"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "choose": "choose-yuki-practical"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "yuki-intro-practical"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-text"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "choose": "choose-first-memory"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-response-a"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-house-details"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-viewing-day"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "apartment-viewing-note"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "choose": "choose-move-in-soft"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-move-in-a"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-water"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-first-film"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-movie-invite"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "choose": "choose-movie-picked"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-movie-a"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "film-night-note"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "ig-movie-story"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-weekly-checkin"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-ddl-offer"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "choose": "choose-ddl-tease"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-ddl-a"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "ddl-night-note"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "threads-owner-ddl"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-kitchen-invite"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "kitchen-scene"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-after-kitchen"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-later"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "cal-offer-confirm"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-moving-question"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "choose": "leave-choice-city"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-leave-a"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "hendery-last-logistics"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "diary-packing"
+        },
+        {
+          "advanceMs": 6000
+        },
+        {
+          "event": "read",
+          "target": "last-day-note"
+        }
+      ],
+      "ending": "无声告别：我先一步搬走，最后一面什么也没说。",
+      "expectUnlocked": [
+        "diary-name-again",
+        "diary-first-film",
+        "movie-watchlist",
+        "ig-movie-story",
+        "threads-film",
+        "threads-owner-ddl",
+        "kitchen-scene",
+        "diary-later",
+        "cal-offer-confirm",
+        "diary-packing",
+        "last-day-note",
+        "yuki-intro-memory"
       ]
     }
   ]
