@@ -579,11 +579,12 @@ function PhoneRuntime({
           )}
           {!creator && s.choices.length > 0 && !locked && (
             <div className="story-overlay">
-              <span className="eyebrow">故事来到一个岔路口</span>
-              <h3>你会如何选择？</h3>
+              <span className="eyebrow">傳送訊息</span>
+              <h3>你會怎麼回？</h3>
               {s.choices.map((c) => (
                 <button
                   key={c.target}
+                  aria-label={`傳送訊息：${c.label}`}
                   onClick={() => update(choose(work, s, c.target))}
                 >
                   {c.label}
