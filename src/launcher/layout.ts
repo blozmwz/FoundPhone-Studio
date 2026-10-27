@@ -34,6 +34,7 @@ export type DeviceLayout = z.infer<typeof layoutSchema>;
 export type Widget = z.infer<typeof widgetSchema>;
 export type AppConfig = Work["apps"][number];
 export function ensureAppStore(work: Work): Work {
+  if (work.id === "fridge-light-roommates") return work;
   return work.apps.some((a) => a.id === "appstore")
     ? work
     : {
@@ -57,11 +58,16 @@ export function defaultLayout(input: Work): DeviceLayout {
   return {
     version: 1,
     workId: w.id,
-    previewLayoutRevision: w.id === "ui-test-phone-v2" ? 1 : 0,
+    previewLayoutRevision:
+      w.id === "fridge-light-roommates"
+        ? 2
+        : w.id === "ui-test-phone-v2"
+          ? 1
+          : 0,
     apps: structuredClone(w.apps)
       .sort((a, b) => (a.id === "appstore" ? -1 : b.id === "appstore" ? 1 : 0))
       .map((a) =>
-        a.id === "appstore"
+        a.id === "appstore" && w.id !== "fridge-light-roommates"
           ? { ...a, installed: true, visible: true, folder: "", dock: false }
           : a,
       ),
@@ -89,7 +95,7 @@ export function validateLayout(raw: unknown, input: Work) {
     ...w.apps.filter((a) => !layout.apps.some((b) => b.id === a.id)),
   );
   const store = layout.apps.find((a) => a.id === "appstore");
-  if (store) {
+  if (store && w.id !== "fridge-light-roommates") {
     store.installed = true;
     store.visible = true;
     store.folder = "";
@@ -117,6 +123,14 @@ export function validateLayout(raw: unknown, input: Work) {
       ...layout.order.filter((id) => !visibleApps.includes(id)),
     ];
     layout.previewLayoutRevision = 1;
+  }
+  if (w.id === "fridge-light-roommates" && layout.previewLayoutRevision < 2) {
+    layout.apps = structuredClone(w.apps);
+    layout.widgets = [];
+    layout.positions = {};
+    layout.order = [];
+    layout.cleared = [];
+    layout.previewLayoutRevision = 2;
   }
   const entries = homeEntries(layout),
     packed = packHome(entries, layout.positions);

@@ -3,25 +3,125 @@
   "id": "fridge-light-roommates",
   "title": "冰箱里的光",
   "description": "房东突然卖房，我通过 Yuki 联系上了大一同班的黄冠亨（Hendery）。旧日记里没写完的心事，后来变成了电影夜、两人份夜宵和凌晨两点的闲聊。半年后，我换城市继续读书，他准备回去。",
-  "revision": 5,
+  "revision": 6,
   "phone": {
     "owner": "你",
     "date": "2026-10-27",
     "time": "17:42",
     "battery": 86,
     "network": "5G",
-    "wallpaper": "sage"
+    "wallpaper": "night",
+    "theme": "light"
   },
   "installedApps": [
-    "messages",
-    "instagram",
-    "threads",
-    "notes",
-    "calendar",
-    "contacts",
-    "phone",
-    "safari",
-    "settings"
+    {
+      "id": "instagram",
+      "name": "Instagram",
+      "installed": true,
+      "visible": true,
+      "dock": false,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "threads",
+      "name": "Threads",
+      "installed": true,
+      "visible": true,
+      "dock": false,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "notes",
+      "name": "备忘录",
+      "installed": true,
+      "visible": true,
+      "dock": false,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "calendar",
+      "name": "日历",
+      "installed": true,
+      "visible": true,
+      "dock": false,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "photos",
+      "name": "照片",
+      "installed": true,
+      "visible": true,
+      "dock": false,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "camera",
+      "name": "相机",
+      "installed": true,
+      "visible": true,
+      "dock": false,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "settings",
+      "name": "设置",
+      "installed": true,
+      "visible": true,
+      "dock": false,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "contacts",
+      "name": "通讯录",
+      "installed": true,
+      "visible": false,
+      "dock": false,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "phone",
+      "name": "电话",
+      "installed": true,
+      "visible": true,
+      "dock": true,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "messages",
+      "name": "信息",
+      "installed": true,
+      "visible": true,
+      "dock": true,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "safari",
+      "name": "Safari",
+      "installed": true,
+      "visible": true,
+      "dock": true,
+      "folder": "",
+      "icon": ""
+    },
+    {
+      "id": "music",
+      "name": "音乐",
+      "installed": true,
+      "visible": true,
+      "dock": true,
+      "folder": "",
+      "icon": ""
+    }
   ],
   "contacts": [
     {

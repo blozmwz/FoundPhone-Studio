@@ -1,0 +1,577 @@
+/* The roommate story uses the existing phone, launcher, event engine and saves. */
+.phone-shell.roommate-phone .phone-screen {
+  background: #000;
+  color: #fff;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC",
+    sans-serif;
+}
+.phone-shell.roommate-phone .wallpaper-orb,
+.phone-shell.roommate-phone .hardware-reflection {
+  display: none;
+}
+.phone-shell.roommate-phone .lock-clock-block {
+  top: 100px;
+}
+.phone-shell.roommate-phone .lock-clock-block > svg {
+  display: none;
+}
+.phone-shell.roommate-phone .lock-clock-block > p {
+  font-size: 21px;
+  font-weight: 500;
+}
+.phone-shell.roommate-phone .lock-clock-block > h1 {
+  font-size: 108px;
+  font-weight: 200;
+  letter-spacing: -5px;
+  line-height: 1.08;
+  margin-top: 5px;
+}
+.phone-shell.roommate-phone .lock-notifications {
+  bottom: 166px;
+  left: 15px;
+  right: 15px;
+}
+.phone-shell.roommate-phone .device-notice {
+  background: #262628e8;
+  color: #f6f6f8;
+  border: 0;
+  box-shadow: none;
+  border-radius: 23px;
+}
+.phone-shell.roommate-phone .notice-copy strong,
+.phone-shell.roommate-phone .notice-copy > span {
+  color: inherit;
+}
+.phone-shell.roommate-phone .lock-tools button {
+  background: #242426;
+  color: #fff;
+  box-shadow: none;
+  border: 0;
+}
+.phone-shell.roommate-phone .app-name {
+  color: #fff;
+  text-shadow: none;
+  font-weight: 400;
+}
+.phone-shell.roommate-phone .app-icon {
+  box-shadow: none;
+  border-radius: 15px;
+}
+.phone-shell.roommate-phone
+  .interactive-home:not(.home-editing)
+  .launcher-toolbar {
+  display: none;
+}
+.phone-shell.roommate-phone .interactive-home .home-pages {
+  top: 103px;
+}
+.phone-shell.roommate-phone .interactive-home .home-app-grid {
+  grid-template-rows: repeat(6, 106px);
+  grid-auto-rows: 106px;
+}
+.phone-shell.roommate-phone .dock {
+  background: #28282ad9;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: blur(24px);
+  border-radius: 33px;
+}
+.phone-shell.roommate-phone .home-search {
+  background: #252527;
+  color: #eee;
+  border: 0;
+  box-shadow: none;
+}
+.phone-shell.roommate-phone .skin-messages {
+  background: #fff;
+}
+.phone-shell.roommate-phone .catalog-slot:has(.roommate-messages) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.phone-shell.roommate-phone .skin-messages:has(.roommate-messages) {
+  padding: 59px 0 0 !important;
+  background: #fff;
+}
+.roommate-messages {
+  --rm-bg: #fff;
+  --rm-text: #111114;
+  --rm-muted: #8e8e93;
+  --rm-received: #e9e9eb;
+  --rm-blue: #007aff;
+  --rm-keyboard: #d1d3d8;
+  --rm-key: #fff;
+  --rm-mod: #aeb3bd;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--rm-text);
+  background: var(--rm-bg);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC",
+    sans-serif;
+  font-size: 17px;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+.roommate-messages * {
+  box-sizing: border-box;
+}
+.roommate-messages button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  margin: 0;
+  box-shadow: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.roommate-messages button:focus-visible {
+  outline: 2px solid var(--rm-blue);
+  outline-offset: 2px;
+}
+.roommate-messages .rm-chat-header {
+  height: 96px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 1px solid #eeeeef;
+  background: #fafafade;
+  padding-top: 4px;
+}
+.roommate-messages .rm-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #bcbdbf;
+  color: white;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-size: 21px;
+}
+.roommate-messages .rm-name {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.roommate-messages .rm-name svg {
+  color: var(--rm-muted);
+}
+.roommate-messages .rm-back {
+  position: absolute;
+  left: 10px;
+  top: 17px;
+  color: var(--rm-blue);
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  min-height: 44px;
+}
+.roommate-messages .rm-video {
+  position: absolute;
+  right: 17px;
+  top: 17px;
+  color: var(--rm-blue);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+}
+.roommate-messages .rm-conversation {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 13px 20px 8px;
+  scrollbar-width: none;
+}
+.roommate-messages .rm-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 5px;
+}
+.roommate-messages .rm-message.rm-outgoing {
+  align-items: flex-end;
+}
+.roommate-messages .rm-date {
+  align-self: center;
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  color: var(--rm-muted);
+  margin: 9px 0 18px;
+  width: 100%;
+}
+.roommate-messages .rm-bubble {
+  position: relative;
+  isolation: isolate;
+  max-width: 84%;
+  padding: 9px 14px;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  border-radius: 20px;
+  background: var(--rm-received);
+  font-size: 17px;
+  line-height: 1.35;
+  min-height: 0;
+  user-select: text;
+}
+.roommate-messages .rm-outgoing .rm-bubble {
+  background: var(--rm-blue);
+  color: #fff;
+}
+.roommate-messages .rm-tail:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  left: -7px;
+  width: 20px;
+  height: 20px;
+  background: inherit;
+  border-radius: 0 0 16px 0;
+}
+.roommate-messages .rm-tail:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  left: -26px;
+  width: 26px;
+  height: 21px;
+  background: var(--rm-bg);
+  border-radius: 0 0 10px 0;
+}
+.roommate-messages .rm-outgoing .rm-tail:before {
+  left: auto;
+  right: -7px;
+  border-radius: 0 0 0 16px;
+}
+.roommate-messages .rm-outgoing .rm-tail:after {
+  left: auto;
+  right: -26px;
+  border-radius: 0 0 0 10px;
+}
+.roommate-messages .rm-receipt {
+  font-size: 11px;
+  color: var(--rm-muted);
+  margin: 3px 3px 9px;
+}
+.roommate-messages .rm-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 9px 13px 38px;
+  flex-shrink: 0;
+  background: var(--rm-bg);
+}
+.roommate-messages[data-keyboard="true"] .rm-composer {
+  padding-bottom: 10px;
+}
+.roommate-messages .rm-plus {
+  background: #eeeef0;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+.roommate-messages .rm-compose-field {
+  border: 1px solid #d2d2d7;
+  border-radius: 23px;
+  min-height: 37px;
+  padding: 7px 10px 7px 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #96969c;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font-size: 16px;
+}
+.roommate-messages .rm-compose-field span {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.roommate-messages .rm-compose-field.has-draft {
+  color: var(--rm-text);
+}
+.roommate-messages .rm-send {
+  width: 30px;
+  height: 30px;
+  background: var(--rm-blue);
+  color: #fff;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  margin-bottom: 3px;
+}
+.roommate-messages .rm-keyboard {
+  flex-shrink: 0;
+  background: var(--rm-keyboard);
+  padding: 0 5px 31px;
+}
+.roommate-messages .rm-predictions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 43px;
+  font-size: 21px;
+}
+.roommate-messages .rm-predictions button {
+  min-width: 40px;
+  min-height: 40px;
+  display: grid;
+  place-items: center;
+}
+.roommate-messages .rm-key-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 9px;
+}
+.roommate-messages .rm-key-row-1 {
+  padding: 0 16px;
+}
+.roommate-messages .rm-key {
+  min-width: 0;
+  flex: 1;
+  height: 43px;
+  border-radius: 6px;
+  background: var(--rm-key);
+  box-shadow: 0 1px 1px #0004;
+  font-size: 23px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.roommate-messages .rm-mod {
+  background: var(--rm-mod);
+  flex: 1.35;
+  font-size: 16px;
+}
+.roommate-messages .rm-space {
+  flex: 4;
+  font-size: 15px;
+}
+.roommate-messages .rm-keyboard-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1px 17px 0;
+  height: 33px;
+}
+.roommate-messages .rm-keyboard-foot button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 33px;
+}
+.roommate-messages .rm-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px 5px;
+}
+.roommate-messages .rm-suggestions button {
+  font-size: 15px;
+  background: var(--rm-key);
+  text-align: left;
+  padding: 10px 13px;
+  border-radius: 12px;
+  min-height: 40px;
+}
+.roommate-messages .rm-list-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 20px 0;
+  height: 45px;
+  color: var(--rm-blue);
+}
+.roommate-messages .rm-list-nav button {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+}
+.roommate-messages h1 {
+  margin: 10px 20px 12px;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -0.6px;
+  color: inherit;
+}
+.roommate-messages .rm-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 20px 16px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #efeff0;
+  color: var(--rm-muted);
+}
+.roommate-messages .rm-search input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+}
+.roommate-messages .rm-thread-list {
+  overflow: auto;
+  flex: 1;
+}
+.roommate-messages .rm-thread {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  width: 100%;
+  text-align: left;
+}
+.roommate-messages .rm-thread-copy {
+  min-width: 0;
+  flex: 1;
+  border-bottom: 1px solid #e5e5e9;
+  padding: 0 0 16px;
+}
+.roommate-messages .rm-thread-copy strong {
+  display: flex;
+  justify-content: space-between;
+  font-size: 17px;
+  font-weight: 600;
+}
+.roommate-messages .rm-thread-copy time {
+  color: var(--rm-muted);
+  font-size: 12px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.roommate-messages .rm-thread-copy > span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  margin-top: 3px;
+  color: var(--rm-muted);
+}
+.roommate-messages .rm-unread {
+  position: absolute;
+  left: 6px;
+  background: var(--rm-blue);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.roommate-messages .rm-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 54px;
+  height: 34px;
+  margin-top: 8px;
+}
+.roommate-messages .rm-typing i {
+  width: 6px;
+  height: 6px;
+  background: #939399;
+  border-radius: 50%;
+  animation: rm-think 1s infinite alternate;
+}
+.roommate-messages .rm-typing i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.roommate-messages .rm-typing i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes rm-think {
+  to {
+    opacity: 0.35;
+    transform: translateY(-2px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .roommate-messages .rm-typing i {
+    animation: none;
+  }
+}
+.phone-shell.roommate-phone .roommate-reply-link {
+  position: absolute;
+  z-index: 84;
+  bottom: 43px;
+  left: 30px;
+  right: 30px;
+  border: 0;
+  border-radius: 18px;
+  background: #f3f3f7;
+  color: #007aff;
+  font-size: 15px;
+  padding: 12px 16px;
+  box-shadow: 0 3px 20px #0002;
+}
+.phone-shell.roommate-phone .device-banner {
+  border-radius: 23px;
+  background: #f6f6f5ec;
+  color: #111;
+  box-shadow: 0 3px 20px #0002;
+  border: 0;
+}
+.phone-shell.roommate-phone.dark-phone .roommate-messages {
+  --rm-bg: #000;
+  --rm-text: #f5f5f7;
+  --rm-received: #262629;
+  --rm-blue: #0a84ff;
+  --rm-keyboard: #202022;
+  --rm-key: #48484b;
+  --rm-mod: #37373b;
+}
+.phone-shell.roommate-phone.dark-phone .rm-chat-header {
+  background: #111113;
+  border-color: #262629;
+}
+.phone-shell.roommate-phone.dark-phone .rm-compose-field {
+  border-color: #353538;
+}
+.phone-shell.roommate-phone.dark-phone .rm-plus,
+.phone-shell.roommate-phone.dark-phone .rm-search {
+  background: #252528;
+}
+.phone-shell.roommate-phone.dark-phone .skin-messages:has(.roommate-messages) {
+  background: #000;
+}
+.phone-shell.roommate-phone.dark-phone
+  .in-app[data-app="messages"]
+  .status-bar {
+  color: #fff;
+}
+.phone-shell.roommate-phone.dark-phone
+  .in-app[data-app="messages"]
+  .home-indicator:after {
+  background: #fff;
+}

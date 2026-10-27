@@ -1,3 +1,4 @@
+import { RoommateMessages, replyThread } from "./runtime/RoommateMessages";
 import { StatusGlyph } from "./ios/StatusGlyph";
 import { SocialDetail, socialDetailApps } from "./skins/SocialDetails";
 import { NativeCalculator } from "./ios/Calculator";
@@ -290,6 +291,8 @@ function PhoneRuntime({
   useEffect(() => {
     if (app && !work.apps.some((a) => a.id === app && a.installed)) setApp("");
   }, [app, work.apps]);
+  const roommateStory = work.id === "fridge-light-roommates";
+  const pendingReply = roommateStory ? replyThread(work, s.choices) : "";
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
   const plugin = getApp(app);
   useEffect(() => {
@@ -314,7 +317,7 @@ function PhoneRuntime({
     <div
       ref={shell}
       style={{ "--phone-scale": deviceScale } as CSSProperties}
-      className={`phone-shell ios18 ${work.phone.theme === "dark" ? "dark-phone" : ""}`}
+      className={`phone-shell ios18 ${roommateStory ? "roommate-phone" : ""} ${work.phone.theme === "dark" ? "dark-phone" : ""}`}
     >
       <KeyboardContext.Provider value={setKeyboard}>
         <div
@@ -428,6 +431,14 @@ function PhoneRuntime({
                 setPinOpen={setPinOpen}
                 error={pinError}
                 onUnlock={unlock}
+                onOpenNotice={
+                  roommateStory
+                    ? (text) => {
+                        unlock();
+                        open(notificationContent(text, work.apps).appId);
+                      }
+                    : undefined
+                }
                 onLight={() => setPanel("light")}
                 onCamera={() => {
                   setQuickCamera(true);
@@ -452,6 +463,9 @@ function PhoneRuntime({
                   ]}
                   creator={creator}
                   state={s}
+                  onChoose={(target) =>
+                    update(choose(work, runtimeRef.current, target))
+                  }
                   onRead={(id) => event("read", id)}
                   onEdit={(item) => onEdit?.(app, item)}
                   onAdd={() => onAdd?.(app)}
@@ -555,8 +569,12 @@ function PhoneRuntime({
                     <SystemNotifications
                       notices={s.notifications}
                       apps={work.apps}
-                      onOpen={() => {
+                      onOpen={(text) => {
                         setPanel("");
+                        if (roommateStory) {
+                          open(notificationContent(text, work.apps).appId);
+                          return;
+                        }
                         if (locked) beginUnlock();
                         else if (installedApps.some((a) => a.id === "messages"))
                           open("messages");
@@ -577,7 +595,7 @@ function PhoneRuntime({
               )}
             </div>
           )}
-          {!creator && s.choices.length > 0 && !locked && (
+          {!creator && !roommateStory && s.choices.length > 0 && !locked && (
             <div className="story-overlay">
               <span className="eyebrow">傳送訊息</span>
               <h3>你會怎麼回？</h3>
@@ -592,6 +610,14 @@ function PhoneRuntime({
                 </button>
               ))}
             </div>
+          )}
+          {!creator && pendingReply && !locked && app !== "messages" && (
+            <button
+              className="roommate-reply-link"
+              onClick={() => open("messages")}
+            >
+              回复 {pendingReply}
+            </button>
           )}
           {!creator && s.endings.length > 0 && !locked && (
             <div className="story-overlay ending">
@@ -684,7 +710,9 @@ function PhoneRuntime({
               className="device-banner"
               onClick={() => {
                 setBanner("");
-                setPanel("notification");
+                if (roommateStory)
+                  open(notificationContent(banner, work.apps).appId);
+                else setPanel("notification");
               }}
             >
               <AppIcon
@@ -868,6 +896,7 @@ function AppContent({
   onSettings,
   onUi,
   work,
+  onChoose,
 }: {
   app: AppPlugin;
   name: string;
@@ -881,6 +910,7 @@ function AppContent({
   onSettings?: () => void;
   onUi?: (key: string, value: UiValue) => void;
   work: Work;
+  onChoose: (target: string) => void;
 }) {
   const [detail, setDetail] = useState<Item | null>(null);
   const [thread, setThread] = useState("");
@@ -915,6 +945,17 @@ function AppContent({
     else if (thread) setThread("");
     else onBack();
   };
+  if (work.id === "fridge-light-roommates" && app.id === "messages" && !creator)
+    return (
+      <RoommateMessages
+        items={shown}
+        state={state}
+        work={work}
+        onRead={onRead}
+        onChoose={onChoose}
+        onBack={onBack}
+      />
+    );
   const Skin =
     app.id === "wechat"
       ? WeChatSkin

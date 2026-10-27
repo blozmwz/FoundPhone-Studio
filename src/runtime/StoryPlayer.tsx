@@ -65,23 +65,23 @@ function StoryPlayer() {
           <section className="story-welcome">
             <span className="story-welcome-kicker">A PHONE, A STORY</span>
             <h1>{personalizedWork.title}</h1>
-            <p>先留下一個稱呼，這台手機就會以你的名字開啟。</p>
+            <p>先留下一个称呼，这是你的手机。</p>
             <form onSubmit={startWithName}>
               <label htmlFor="player-name">你的名字</label>
               <input
                 id="player-name"
                 maxLength={24}
                 autoComplete="given-name"
-                placeholder="輸入名字或暱稱"
+                placeholder="输入名字或昵称"
                 value={nameInput}
                 onChange={(event) => setNameInput(event.target.value)}
                 autoFocus
               />
               <button type="submit" disabled={!nameInput.trim()}>
-                拿起手機 <span aria-hidden="true">↗</span>
+                拿起手机 <span aria-hidden="true">↗</span>
               </button>
             </form>
-            <small>名字只會保存在這台裝置的瀏覽器裡。</small>
+            <small>名字只会保存在这台设备的浏览器里。</small>
           </section>
         )
       ) : (
