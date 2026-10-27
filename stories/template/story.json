@@ -2,455 +2,1047 @@
   "scriptVersion": 1,
   "id": "fridge-light-roommates",
   "title": "冰箱裡的光",
-  "description": "房東突然賣房，讓兩個大一時同班、後來只在路上點頭的舊同學重新住進同一個屋簷下。電影夜、DDL 夜宵，還有凌晨兩點冰箱裡的光，讓最後半年變得有些難以定義。",
-  "revision": 3,
+  "description": "房東突然賣房，讓大一時曾經同班、後來只在路上打招呼的黃冠亨，成為你的新室友。電影夜、DDL 夜宵，和凌晨兩點冰箱裡的光，最後停在一場沒有說出口的告別。",
+  "revision": 4,
   "phone": {
     "owner": "你",
-    "date": "2026-10-27",
-    "time": "21:41",
+    "date": "2027-04-12",
+    "time": "09:41",
     "battery": 86,
     "network": "5G",
     "wallpaper": "sage"
   },
   "installedApps": [
-    "appstore",
-    "wechat",
-    "phone",
     "messages",
-    "contacts",
-    "photos",
+    "instagram",
+    "threads",
     "notes",
     "calendar",
-    "reminders",
-    "delivery",
+    "contacts",
+    "phone",
     "safari",
     "settings"
   ],
   "contacts": [
     {
-      "id": "hendery",
-      "name": "黃冠亨",
+      "id": "yuki",
+      "name": "Yuki",
       "phone": "",
-      "bio": "27歲，175.6 cm。身形清瘦、線條俐落，五官輪廓偏銳利，安靜時有點冷感；眼睛明亮，笑起來會露兔牙。大一曾與你同班，後來課程重排，只在路上碰見時打招呼。外向、會逗人，也會留意別人是否自在；自認 ENFP，偶爾有點 ENTP 式的犯賤。害羞時容易傻笑，再用玩笑把話題帶開。"
-    },
-    {
-      "id": "mutual-friend",
-      "name": "Mia",
-      "phone": "",
-      "bio": "朋友的朋友，意外替你和黃冠亨牽上了線。"
+      "bio": "你的朋友。房東突然賣房後，第一個想到幫你找住處的人。"
     }
   ],
   "chats": [
     {
-      "id": "chat-mia-housing",
-      "app": "wechat",
-      "title": "Mia",
+      "id": "chat-yuki",
+      "app": "messages",
+      "title": "Yuki",
       "participants": [
         "owner",
-        "mutual-friend"
+        "yuki"
       ],
       "messages": [
         {
-          "id": "friend-landlord-news",
+          "id": "yuki-rent-news",
           "time": "2026-10-27 17:42",
           "body": "你房東真的把房子賣掉了？也太突然了吧。",
-          "senderId": "mutual-friend"
+          "senderId": "yuki"
         },
         {
-          "id": "owner-housing-rush",
+          "id": "owner-rent-reply",
           "time": "2026-10-27 17:46",
-          "body": "嗯，最近得趕快找地方住。離畢業也沒剩多久了，真的不想再重新開一次室友盲盒。",
-          "senderId": "owner"
+          "body": "嗯，離畢業也沒剩多久了，得趕快找個地方住。我真的不想再開一次室友盲盒。",
+          "senderId": "owner",
+          "hidden": true
         },
         {
-          "id": "friend-old-class",
+          "id": "yuki-hendery-intro",
           "time": "2026-10-27 17:49",
-          "body": "我突然想到，冠亨那邊好像有空房。你們以前大一同班對吧？",
-          "senderId": "mutual-friend"
+          "body": "我突然想到冠亨那邊好像有空房。你們以前大一同班對吧？我可以幫你們牽線。",
+          "senderId": "yuki",
+          "hidden": true
         },
         {
-          "id": "owner-class-memory",
-          "time": "2026-10-27 17:51",
-          "body": "對，後來課程重新分班，就只剩在路上碰到會打招呼了。我們甚至沒有聯絡方式。",
-          "senderId": "owner"
-        },
-        {
-          "id": "friend-hendery-intro",
-          "time": "2026-10-27 17:55",
-          "body": "我先把你的聯絡方式給他了。他說可以先看房，合不合適你們自己決定。",
-          "senderId": "mutual-friend"
+          "id": "owner-yuki-thanks",
+          "time": "2026-10-27 17:52",
+          "body": "好啊，麻煩你了。先看房再說。",
+          "senderId": "owner",
+          "hidden": true
         }
       ]
     },
     {
       "id": "chat-hendery",
-      "app": "wechat",
+      "app": "messages",
       "title": "黃冠亨",
       "participants": [
-        "owner",
-        "hendery"
+        "owner"
       ],
       "messages": [
         {
-          "id": "hendery-room-offer",
+          "id": "hendery-first-text",
           "time": "2026-10-27 18:12",
-          "body": "Mia說你最近在找房。我這裡剛好有間房空著，週末可以先來看看。",
-          "senderId": "hendery",
-          "hidden": true
+          "body": "Yuki 把你的聯絡方式給我了。剛看到名字還愣了一下——我們以前大一同班？",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "hendery-class-memory",
+          "id": "owner-first-response-a",
           "time": "2026-10-27 18:15",
-          "body": "剛剛看到名字才確定是你。大一好像同一班？後來課程一重排，就只在路上偶爾碰到。",
-          "senderId": "hendery",
-          "hidden": true
+          "body": "你還記得我啊。我以為重新分班之後，你早就忘了。",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "owner-ask-viewing",
-          "time": "2026-10-27 18:19",
-          "body": "我週末可以去看看，先把地址傳我吧。",
-          "senderId": "owner",
-          "hidden": true
+          "id": "hendery-first-response-a",
+          "time": "2026-10-27 18:16",
+          "body": "我記性哪有那麼差。只是後來真的很少遇到，連聯絡方式都沒有。房子的事你先來看看，不用因為認識我就不好意思拒絕。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "hendery-viewing-detail",
-          "time": "2026-10-27 18:22",
-          "body": "好啊。客廳採光很好，房間也收拾乾淨了。你慢慢看，不用因為認識我就不好意思拒絕。",
-          "senderId": "hendery",
-          "hidden": true
+          "id": "owner-first-response-b",
+          "time": "2026-10-27 18:15",
+          "body": "是我。Yuki 說你那邊有空房，我可以先去看看嗎？",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "owner-room-accept",
-          "time": "2026-10-29 16:37",
-          "body": "房子真的很漂亮，也比我想像中乾淨。算了，我不想再花時間找室友了，就住這裡吧。",
-          "senderId": "owner",
-          "hidden": true
+          "id": "hendery-first-response-b",
+          "time": "2026-10-27 18:16",
+          "body": "當然可以啊。放心，不是室友面試現場（笑）。週末有空就過來。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "hendery-move-in",
-          "time": "2026-10-29 16:41",
-          "body": "成交得很有效率嘛。鑰匙我放桌上了，搬東西不用一次搬完，客廳我會留著。",
-          "senderId": "hendery",
-          "hidden": true
+          "id": "hendery-house-details",
+          "time": "2026-10-27 18:20",
+          "body": "客廳採光很好，房間也收得滿乾淨的。地址我傳你，週六下午在家。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-viewing-day",
+          "time": "2026-10-28 16:30",
+          "body": "你到了跟我說，我下樓幫你拿東西。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "owner-move-in-a",
+          "time": "2026-10-28 17:02",
+          "body": "房子真的好漂亮，而且比我想像中乾淨。那我就搬進來了？",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-move-in-a",
+          "time": "2026-10-28 17:04",
+          "body": "可以啊。你這句問得像在申請入住許可，我又不是房東。鑰匙我放玄關了。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "owner-move-in-b",
+          "time": "2026-10-28 17:02",
+          "body": "好吧，我被客廳收買了。就住這裡，衛生標準之後我會隨機抽查。",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-move-in-b",
+          "time": "2026-10-28 17:04",
+          "body": "成交。抽查之前提前通知一下，我還要裝作自己很愛打掃。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
           "id": "hendery-first-water",
           "time": "2026-11-02 00:48",
           "body": "我剛下來倒水。你每次都看到這麼晚？我本來只想看兩眼，結果站在這裡看了半集。",
-          "senderId": "hendery",
-          "hidden": true
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
           "id": "hendery-movie-invite",
-          "time": "2026-11-07 18:26",
-          "body": "今晚還看電影嗎？我可以先把遊戲放著。你那個片單看起來比我排位有意思。",
-          "senderId": "hendery",
-          "hidden": true
+          "time": "2026-11-06 18:26",
+          "body": "這週客廳沒人，我知道你常看片。週五要不要一起看？我打遊戲可以暫停的。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "hendery-film-pick-a",
-          "time": "2026-11-07 19:04",
-          "body": "你把片單交給我選？行，那我得認真一點了。選難看的話，記得怪電影，不要怪我。",
-          "senderId": "hendery",
-          "hidden": true
+          "id": "owner-movie-a",
+          "time": "2026-11-06 18:31",
+          "body": "電影你選吧，爛片我也會看完。",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "hendery-film-pick-b",
-          "time": "2026-11-07 19:04",
-          "body": "好，等你看完這部。我先把水拿上去，等下再下來——這次真的只是來看電影。",
-          "senderId": "hendery",
-          "hidden": true
+          "id": "hendery-movie-a",
+          "time": "2026-11-06 18:33",
+          "body": "壓力給到我了啊。等我先查一下評分，不能讓你看得太後悔。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "hendery-weekly-film",
-          "time": "2026-11-14 18:08",
-          "body": "這週要不要續上次那部？我把遊戲時間挪開了，電影夜總不能每次都靠我剛好下樓倒水吧。",
-          "senderId": "hendery",
-          "hidden": true
+          "id": "owner-movie-b",
+          "time": "2026-11-06 18:31",
+          "body": "你先打完那局，我來準備電影和零食。",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "hendery-snack-offer",
+          "id": "hendery-movie-b",
+          "time": "2026-11-06 18:33",
+          "body": "好，等我這把結束。零食我有投票權喔。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-weekly-checkin",
+          "time": "2026-11-20 18:08",
+          "body": "本週電影夜還續嗎？我把遊戲時間空出來了。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-ddl-offer",
           "time": "2027-01-18 23:42",
-          "body": "還在趕 DDL？我煮了點東西，放在廚房。餓了就出來吃，別只靠咖啡撐。",
-          "senderId": "hendery",
-          "hidden": true
+          "body": "還在趕 DDL？冰箱裡有熱的，出來吃一點。放下手機也算休息十分鐘。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         },
         {
-          "id": "hendery-moveout-plan",
+          "id": "owner-ddl-a",
+          "time": "2027-01-18 23:44",
+          "body": "你怎麼連我幾點睡都掌握了？",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-ddl-a",
+          "time": "2027-01-18 23:45",
+          "body": "我剛好起來喝水，不是專門注意你喔。……好吧，算一半。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "owner-ddl-b",
+          "time": "2027-01-18 23:44",
+          "body": "好，我出來吃。你要不要一起？",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-ddl-b",
+          "time": "2027-01-18 23:45",
+          "body": "我本來就要吃。你負責出來，我負責把鍋熱一下。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-after-kitchen",
+          "time": "2027-02-03 10:12",
+          "body": "昨天聊到太晚了。你今天還有課嗎？我把咖啡放桌上了。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-moving-question",
           "time": "2027-04-08 20:16",
-          "body": "我大概畢業後就回去。你不是要換城市繼續讀嗎？門口那幾個紙箱你先用，還不夠我再拿。",
-          "senderId": "hendery",
-          "hidden": true
+          "body": "我大概畢業後就回去了。你去另一個城市繼續讀書的事，已經定下來了嗎？",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "owner-leave-a",
+          "time": "2027-04-08 20:19",
+          "body": "嗯，offer 下來了。等畢業就搬過去。",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-leave-a",
+          "time": "2027-04-08 20:22",
+          "body": "恭喜啊。雖然你走了以後，週五大概就沒人管我看什麼了。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "owner-leave-b",
+          "time": "2027-04-08 20:19",
+          "body": "差不多定了。你呢，回去的時間想好了嗎？",
+          "sender": "你",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": true,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-leave-b",
+          "time": "2027-04-08 20:22",
+          "body": "大概就畢業那陣子吧。聽起來我們都各自有安排了。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
+        },
+        {
+          "id": "hendery-last-logistics",
+          "time": "2027-04-11 21:05",
+          "body": "紙箱留在門口了，清潔用品在水槽下面。鑰匙……你走的時候放桌上就好。",
+          "sender": "黃冠亨",
+          "title": "黃冠亨",
+          "hidden": true,
+          "outgoing": false,
+          "kind": "text",
+          "folder": "",
+          "meta": {}
         }
       ]
     }
   ],
   "content": {
-    "photos": [
-      {
-        "id": "apartment-photo",
-        "title": "房子照片",
-        "body": "客廳有很好的自然光，淺色木地板，沙發乾淨整齊。房間不大，但足夠放下一張床和書桌。",
-        "time": "2026-10-28 15:20",
-        "kind": "image",
-        "hidden": true
-      }
-    ],
     "notes": [
       {
-        "id": "film-night-note",
-        "title": "週末電影夜",
-        "body": "從十一月開始，週末的客廳慢慢變成固定電影夜。沙發中間總放著一個柔軟的大枕頭，像一條認真又沒什麼用的界線。電影播到一半，膝蓋和大腿已經貼在一起，誰也沒有挪開。片尾字幕亮起時，黃冠亨通常先起身倒水，再問：下週還看嗎？",
-        "time": "2026-11-07 23:58",
+        "id": "apartment-viewing-note",
+        "title": "看房當天",
+        "body": "週六去看了冠亨的房子。客廳比照片裡還漂亮，採光很好，東西也收得乾乾淨淨。其實我猶豫了一下，畢竟再熟也只是以前同班的異性；但想到還要花時間重新找室友，最後還是覺得——就黃冠亨吧。",
+        "time": "2026-10-28 17:00",
         "kind": "note",
-        "folder": "電影"
+        "hidden": true,
+        "sender": "你",
+        "folder": "搬家",
+        "meta": {}
       },
       {
-        "id": "midnight-snack-note",
-        "title": "夜宵在廚房",
-        "body": "熱好的湯和簡單的宵夜放在桌上。黃冠亨沒有催你停下，只說等忙完再吃也可以，轉身時還順手把杯子放到了你伸手就拿得到的位置。",
-        "time": "2027-01-18 23:50",
+        "id": "film-night-note",
+        "title": "每週五的電影夜",
+        "body": "從十一月開始，週末的客廳慢慢變成固定電影夜。昏暗的房間裡只有螢幕的光，他總會很紳士地在中間放一個柔軟又巨大的枕頭，好像這樣就不算越界。電影播到一半，膝蓋和大腿早就貼在一起，誰也沒有挪開。",
+        "time": "2026-11-06 23:58",
         "kind": "note",
-        "folder": "未分類",
-        "hidden": true
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
+      },
+      {
+        "id": "ddl-night-note",
+        "title": "趕 DDL 的夜晚",
+        "body": "電影夜變少了，你的筆電倒是常常亮到半夜。他會把夜宵放在伸手就拿得到的地方，不催你停下來。偶爾趁著你看螢幕，悄悄繞到沙發後面，手臂搭在椅背上問你在忙什麼；你一抬頭，才發現自己像是被他圈在懷裡。",
+        "time": "2027-01-18 23:58",
+        "kind": "note",
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
       },
       {
         "id": "kitchen-scene",
-        "title": "清晨兩點",
-        "body": "2027-02-02，02:00。電影夜已經很少，取而代之的是趕不完的 DDL。黃冠亨端著水走到沙發後，手臂搭在椅背上，低頭看你在忙什麼；抬頭時，他就在身後，近得像把你圈在沙發和手臂之間。他先問了幾句進度，又把夜宵推到手邊。後來你們先後走到廚房，借著打開的冰箱裡那點光，靠著導台聊電影、課程、畢業後要去哪裡，也聊些沒有結論的小事。誰都沒有急著回房。",
+        "title": "凌晨兩點，冰箱裡的光",
+        "body": "你們後來一起站在廚房導台邊。冰箱門開著，冷白的光落在兩個人身上。話題從電影、課程聊到畢業以後要去哪裡，中間也有很多沒什麼結論的小事。誰都沒有急著回房。那一晚很像什麼都沒發生，又像有些話已經藏不住了。",
         "time": "2027-02-02 02:00",
         "kind": "note",
-        "folder": "未分類",
-        "hidden": true
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
       },
       {
         "id": "last-day-note",
         "title": "最後一個早晨",
-        "body": "2027-04-12。畢業後，你要換一座城市繼續讀書；黃冠亨準備回去。兩個人開始收拾，屋裡的東西一天比一天少，話題也慢慢只剩紙箱、鑰匙和清潔日程。你比他先搬走。最後一面，什麼也沒說。門關上時，這段始終沒有被說清楚的關係，也沒有得到一個正式的告別。",
+        "body": "2027-04-12。你要換一座城市繼續讀書，黃冠亨準備回去。屋裡的東西一天比一天少，剩下的話題只剩紙箱、鑰匙和清潔日程。你比他先搬走。最後一面，什麼也沒說。門關上時，這段始終沒有被說清楚的關係，也沒有得到一個正式的告別。",
         "time": "2027-04-12 08:10",
         "kind": "note",
-        "folder": "未分類",
-        "hidden": true
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
       }
     ],
     "calendar": [
       {
-        "id": "calendar-move-in",
+        "id": "cal-viewing",
+        "title": "看房",
+        "body": "第一次去黃冠亨家看房。",
+        "time": "2026-10-28 16:30",
+        "kind": "event",
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
+      },
+      {
+        "id": "cal-move-in",
         "title": "搬進新家",
         "body": "把必要的東西先搬過去，其他慢慢整理。",
-        "time": "2026-10-30 10:00",
+        "time": "2026-10-29 10:00",
         "kind": "event",
-        "hidden": true
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
       },
       {
-        "id": "calendar-film-series",
+        "id": "cal-movie-night",
         "title": "週末電影夜",
-        "body": "大多是週末晚上；有時黃冠亨在打遊戲，有時他會下樓倒水，最後留在客廳看完一整部。",
-        "time": "2026-11-14 20:00",
+        "body": "客廳、電影、柔軟的大枕頭。後來變成每週固定的事。",
+        "time": "2026-11-06 20:00",
         "kind": "event",
-        "hidden": true
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
       },
       {
-        "id": "calendar-deadline",
+        "id": "cal-deadline",
         "title": "期末 DDL",
         "body": "交件週。這陣子電影夜取消了幾次。",
         "time": "2027-01-19 23:59",
         "kind": "event",
-        "hidden": true
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
       },
       {
-        "id": "calendar-move-out",
+        "id": "cal-move-out",
         "title": "搬離合租房",
-        "body": "畢業後換城市繼續讀書；黃冠亨回去。",
+        "body": "你先搬去另一座城市，黃冠亨畢業後回去。",
         "time": "2027-04-12 09:00",
         "kind": "event",
-        "hidden": true
+        "hidden": true,
+        "sender": "你",
+        "folder": "",
+        "meta": {}
+      }
+    ],
+    "instagram": [
+      {
+        "id": "ig-movie-story",
+        "title": "週五晚上",
+        "body": "片尾字幕停在螢幕上，沙發中間那顆枕頭已經歪到一邊。",
+        "time": "2026-11-06 23:54",
+        "kind": "post",
+        "hidden": true,
+        "sender": "hendery",
+        "folder": "限時動態",
+        "meta": {
+          "story": "true",
+          "handle": "hendery"
+        }
+      },
+      {
+        "id": "ig-kitchen-story",
+        "title": "夜宵存檔",
+        "body": "兩份熱好的宵夜，和一盞忘了關的廚房燈。",
+        "time": "2027-01-19 00:03",
+        "kind": "post",
+        "hidden": true,
+        "sender": "hendery",
+        "folder": "限時動態",
+        "meta": {
+          "story": "true",
+          "handle": "hendery"
+        }
+      },
+      {
+        "id": "ig-boxes-story",
+        "title": "打包中",
+        "body": "客廳空了一半。紙箱比想像中還難找。",
+        "time": "2027-04-10 19:20",
+        "kind": "post",
+        "hidden": true,
+        "sender": "hendery",
+        "folder": "限時動態",
+        "meta": {
+          "story": "true",
+          "handle": "hendery"
+        }
+      }
+    ],
+    "threads": [
+      {
+        "id": "threads-film",
+        "title": "最近多了一個固定的週五行程。",
+        "body": "以前週五都在排位，現在會先問客廳有沒有人要看電影。",
+        "time": "2026-11-20 21:16",
+        "kind": "post",
+        "hidden": true,
+        "sender": "hendery",
+        "folder": "",
+        "meta": {
+          "handle": "hendery"
+        }
+      },
+      {
+        "id": "threads-goodbye",
+        "title": "有些人好像只會一起走一小段。",
+        "body": "但那一小段，還是會記很久。",
+        "time": "2027-04-11 23:20",
+        "kind": "post",
+        "hidden": true,
+        "sender": "hendery",
+        "folder": "",
+        "meta": {
+          "handle": "hendery"
+        }
       }
     ]
   },
-  "variables": {
-    "filmNightChoice": ""
-  },
+  "variables": {},
   "events": [
     {
-      "id": "welcome",
-      "label": "房東賣房",
+      "id": "story-start",
+      "label": "手機裡的故事開始",
       "type": "start",
+      "event": "",
+      "target": "",
       "actions": [
         {
           "type": "notification",
           "key": "",
-          "value": "微信：Mia傳來一則租房消息"
+          "value": "Yuki：你有一則新訊息"
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "friend-introduces-hendery",
-      "label": "朋友牽線",
+      "id": "yuki-rent-reply",
+      "label": "回覆 Yuki",
+      "type": "action",
       "event": "read",
-      "target": "friend-hendery-intro",
+      "target": "yuki-rent-news",
       "actions": [
         {
           "type": "unlock",
-          "key": "hendery-room-offer",
+          "key": "owner-rent-reply",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "hendery-offers-viewing",
-      "label": "重新認識",
+      "id": "yuki-hendery-hook",
+      "label": "Yuki 想到一個人",
+      "type": "action",
       "event": "read",
-      "target": "hendery-room-offer",
+      "target": "owner-rent-reply",
       "actions": [
         {
           "type": "unlock",
-          "key": "hendery-class-memory",
+          "key": "yuki-hendery-intro",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "hendery-intro-unlock",
+      "label": "重新聯絡",
+      "type": "action",
+      "event": "read",
+      "target": "yuki-hendery-intro",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "owner-yuki-thanks",
           "value": true
         },
         {
           "type": "unlock",
-          "key": "owner-ask-viewing",
+          "key": "hendery-first-text",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "first-message-choice",
+      "label": "第一次重新說上話",
+      "type": "choice",
+      "event": "read",
+      "target": "hendery-first-text",
+      "actions": [],
+      "next": [
+        "choose-first-memory",
+        "choose-first-house"
+      ]
+    },
+    {
+      "id": "choose-first-memory",
+      "label": "「你還記得我啊。我以為重新分班之後，你早就忘了。」",
+      "type": "action",
+      "event": "choose",
+      "target": "choose-first-memory",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "firstReply",
+          "value": "memory"
+        },
+        {
+          "type": "unlock",
+          "key": "owner-first-response-a",
           "value": true
         },
         {
           "type": "unlock",
-          "key": "hendery-viewing-detail",
+          "key": "hendery-first-response-a",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "viewing-unlocks-listing",
-      "label": "看房",
+      "id": "choose-first-house",
+      "label": "「是我。Yuki 說你那邊有空房，我可以先去看看嗎？」",
+      "type": "action",
+      "event": "choose",
+      "target": "choose-first-house",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "firstReply",
+          "value": "house"
+        },
+        {
+          "type": "unlock",
+          "key": "owner-first-response-b",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-first-response-b",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "first-reply-a-next",
+      "label": "聊起以前",
+      "type": "action",
       "event": "read",
-      "target": "hendery-viewing-detail",
+      "target": "hendery-first-response-a",
       "actions": [
         {
           "type": "unlock",
-          "key": "apartment-photo",
+          "key": "hendery-house-details",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "move-in-confirmed",
-      "label": "住進來",
+      "id": "first-reply-b-next",
+      "label": "聊起看房",
+      "type": "action",
       "event": "read",
-      "target": "apartment-photo",
+      "target": "hendery-first-response-b",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-house-details",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "viewing-unlocks-house",
+      "label": "約好看房",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-house-details",
       "actions": [
         {
           "type": "date",
           "key": "",
-          "value": "2026-10-29"
+          "value": "2026-10-27"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "18:20"
         },
         {
           "type": "unlock",
-          "key": "owner-room-accept",
+          "key": "hendery-viewing-day",
           "value": true
         },
         {
           "type": "unlock",
-          "key": "calendar-move-in",
+          "key": "cal-viewing",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "first-week-at-home",
-      "label": "第一次在客廳看電影",
+      "id": "viewing-complete",
+      "label": "看過房子",
+      "type": "action",
       "event": "read",
-      "target": "owner-room-accept",
+      "target": "hendery-viewing-day",
       "actions": [
         {
           "type": "unlock",
-          "key": "hendery-move-in",
+          "key": "apartment-viewing-note",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "move-in-choice",
+      "label": "決定要不要搬進來",
+      "type": "choice",
+      "event": "read",
+      "target": "apartment-viewing-note",
+      "actions": [],
+      "next": [
+        "choose-move-in-soft",
+        "choose-move-in-tease"
+      ]
+    },
+    {
+      "id": "choose-move-in-soft",
+      "label": "「房子真的好漂亮，而且比我想像中乾淨。那我就搬進來了？」",
+      "type": "action",
+      "event": "choose",
+      "target": "choose-move-in-soft",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "moveInReply",
+          "value": "soft"
+        },
+        {
+          "type": "unlock",
+          "key": "owner-move-in-a",
           "value": true
         },
+        {
+          "type": "unlock",
+          "key": "hendery-move-in-a",
+          "value": true
+        },
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-10-28"
+        },
+        {
+          "type": "unlock",
+          "key": "cal-move-in",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "choose-move-in-tease",
+      "label": "「好吧，我被客廳收買了。就住這裡，衛生標準之後我會隨機抽查。」",
+      "type": "action",
+      "event": "choose",
+      "target": "choose-move-in-tease",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "moveInReply",
+          "value": "tease"
+        },
+        {
+          "type": "unlock",
+          "key": "owner-move-in-b",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-move-in-b",
+          "value": true
+        },
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-10-28"
+        },
+        {
+          "type": "unlock",
+          "key": "cal-move-in",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "movie-first-water-a",
+      "label": "第一次一起看電影",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-move-in-a",
+      "actions": [
         {
           "type": "unlock",
           "key": "hendery-first-water",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "movie-night-invite",
-      "label": "每週電影夜的開始",
+      "id": "movie-first-water-b",
+      "label": "第一次一起看電影",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-move-in-b",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-first-water",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "movie-night-begins",
+      "label": "每週電影夜開始",
+      "type": "action",
       "event": "read",
       "target": "hendery-first-water",
       "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-11-02"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "00:48"
+        },
         {
           "type": "unlock",
           "key": "hendery-movie-invite",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
       "id": "movie-night-choice",
-      "label": "第一個電影夜",
+      "label": "電影夜的第一個選擇",
       "type": "choice",
       "event": "read",
       "target": "hendery-movie-invite",
+      "actions": [],
       "next": [
-        "choice-hendery-picks",
-        "choice-you-keep-film"
+        "choose-movie-picked",
+        "choose-movie-prep"
       ]
     },
     {
-      "id": "choice-hendery-picks",
-      "label": "把片單遞給他，讓他挑。",
+      "id": "choose-movie-picked",
+      "label": "「電影你選吧，烂片我也會看完。」",
       "type": "action",
       "event": "choose",
-      "target": "choice-hendery-picks",
+      "target": "choose-movie-picked",
       "actions": [
         {
           "type": "variable",
-          "key": "filmNightChoice",
-          "value": "hendery-picks"
+          "key": "movieReply",
+          "value": "he-picks"
         },
         {
           "type": "unlock",
-          "key": "hendery-film-pick-a",
+          "key": "owner-movie-a",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-movie-a",
           "value": true
         }
       ],
-      "next": [
-        "first-film-night"
-      ]
+      "next": []
     },
     {
-      "id": "choice-you-keep-film",
-      "label": "先看完正在播的電影，等他打完遊戲再問。",
+      "id": "choose-movie-prep",
+      "label": "「你先打完那局，我來準備電影和零食。」",
       "type": "action",
       "event": "choose",
-      "target": "choice-you-keep-film",
+      "target": "choose-movie-prep",
       "actions": [
         {
           "type": "variable",
-          "key": "filmNightChoice",
-          "value": "finish-current-film"
+          "key": "movieReply",
+          "value": "I-pick"
         },
         {
           "type": "unlock",
-          "key": "hendery-film-pick-b",
+          "key": "owner-movie-b",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-movie-b",
           "value": true
         }
       ],
-      "next": [
-        "first-film-night"
-      ]
+      "next": []
     },
     {
-      "id": "first-film-night",
-      "label": "枕頭放在中間",
+      "id": "film-a-next",
+      "label": "電影夜成了習慣",
       "type": "action",
+      "event": "read",
+      "target": "hendery-movie-a",
       "actions": [
         {
           "type": "date",
           "key": "",
-          "value": "2026-11-07"
+          "value": "2026-11-06"
         },
         {
           "type": "time",
@@ -464,52 +1056,78 @@
         },
         {
           "type": "unlock",
-          "key": "hendery-weekly-film",
+          "key": "hendery-weekly-checkin",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "cal-movie-night",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "weekly-film-turns-routine",
-      "label": "電影夜變成習慣",
+      "id": "film-b-next",
+      "label": "電影夜成了習慣",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-movie-b",
+      "actions": [
+        {
+          "type": "date",
+          "key": "",
+          "value": "2026-11-06"
+        },
+        {
+          "type": "time",
+          "key": "",
+          "value": "23:58"
+        },
+        {
+          "type": "unlock",
+          "key": "film-night-note",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-weekly-checkin",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "cal-movie-night",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "film-posts-unlock",
+      "label": "社群留下的小痕跡",
+      "type": "action",
       "event": "read",
       "target": "film-night-note",
       "actions": [
         {
           "type": "unlock",
-          "key": "calendar-film-series",
-          "value": true
-        }
-      ]
-    },
-    {
-      "id": "deadlines-replace-movie-nights",
-      "label": "DDL 和夜宵",
-      "event": "read",
-      "target": "hendery-weekly-film",
-      "actions": [
-        {
-          "type": "date",
-          "key": "",
-          "value": "2027-01-14"
-        },
-        {
-          "type": "unlock",
-          "key": "calendar-deadline",
+          "key": "ig-movie-story",
           "value": true
         },
         {
           "type": "unlock",
-          "key": "hendery-snack-offer",
+          "key": "threads-film",
           "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "midnight-snack",
-      "label": "夜宵留在廚房",
+      "id": "ddl-time-arrives",
+      "label": "開始忙起來",
+      "type": "action",
       "event": "read",
-      "target": "hendery-snack-offer",
+      "target": "hendery-weekly-checkin",
       "actions": [
         {
           "type": "date",
@@ -519,20 +1137,119 @@
         {
           "type": "time",
           "key": "",
-          "value": "23:50"
+          "value": "23:42"
         },
         {
           "type": "unlock",
-          "key": "midnight-snack-note",
+          "key": "hendery-ddl-offer",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "cal-deadline",
           "value": true
         }
+      ],
+      "next": []
+    },
+    {
+      "id": "ddl-choice",
+      "label": "夜宵前要怎麼回他",
+      "type": "choice",
+      "event": "read",
+      "target": "hendery-ddl-offer",
+      "actions": [],
+      "next": [
+        "choose-ddl-tease",
+        "choose-ddl-join"
       ]
     },
     {
-      "id": "two-am-kitchen-talk",
-      "label": "冰箱裡的光",
+      "id": "choose-ddl-tease",
+      "label": "「你怎麼連我幾點睡都掌握了？」",
+      "type": "action",
+      "event": "choose",
+      "target": "choose-ddl-tease",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "ddlReply",
+          "value": "tease"
+        },
+        {
+          "type": "unlock",
+          "key": "owner-ddl-a",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-ddl-a",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "choose-ddl-join",
+      "label": "「好，我出來吃。你要不要一起？」",
+      "type": "action",
+      "event": "choose",
+      "target": "choose-ddl-join",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "ddlReply",
+          "value": "join"
+        },
+        {
+          "type": "unlock",
+          "key": "owner-ddl-b",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-ddl-b",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "ddl-a-next",
+      "label": "他準備了夜宵",
+      "type": "action",
       "event": "read",
-      "target": "midnight-snack-note",
+      "target": "hendery-ddl-a",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "ddl-night-note",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "ddl-b-next",
+      "label": "他準備了夜宵",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-ddl-b",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "ddl-night-note",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "kitchen-night-unlock",
+      "label": "凌晨兩點的廚房",
+      "type": "action",
+      "event": "read",
+      "target": "ddl-night-note",
       "actions": [
         {
           "type": "date",
@@ -548,14 +1265,156 @@
           "type": "unlock",
           "key": "kitchen-scene",
           "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "ig-kitchen-story",
+          "value": true
         }
-      ]
+      ],
+      "next": []
     },
     {
-      "id": "packing-starts",
-      "label": "紙箱越來越多",
+      "id": "after-kitchen-chat",
+      "label": "醒來後",
+      "type": "action",
       "event": "read",
       "target": "kitchen-scene",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "hendery-after-kitchen",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-moving-question",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "leave-choice-city",
+      "label": "「嗯，offer 下來了。等畢業就搬過去。」",
+      "type": "action",
+      "event": "choose",
+      "target": "leave-choice-city",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "leaveReply",
+          "value": "city"
+        },
+        {
+          "type": "unlock",
+          "key": "owner-leave-a",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-leave-a",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-last-logistics",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "cal-move-out",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "leave-choice-his-plan",
+      "label": "「差不多定了。你呢，回去的時間想好了嗎？」",
+      "type": "action",
+      "event": "choose",
+      "target": "leave-choice-his-plan",
+      "actions": [
+        {
+          "type": "variable",
+          "key": "leaveReply",
+          "value": "his-plan"
+        },
+        {
+          "type": "unlock",
+          "key": "owner-leave-b",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-leave-b",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "hendery-last-logistics",
+          "value": true
+        },
+        {
+          "type": "unlock",
+          "key": "cal-move-out",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "last-day-unlock-a",
+      "label": "收拾到最後",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-last-logistics",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "last-day-note",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "last-day-unlock-b",
+      "label": "收拾到最後",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-last-logistics",
+      "actions": [
+        {
+          "type": "unlock",
+          "key": "last-day-note",
+          "value": true
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "silent-goodbye",
+      "label": "無聲告別",
+      "type": "ending",
+      "event": "read",
+      "target": "last-day-note",
+      "actions": [
+        {
+          "type": "ending",
+          "key": "",
+          "value": "無聲告別：你先一步搬走，最後一面什麼也沒說。"
+        }
+      ],
+      "next": []
+    },
+    {
+      "id": "moveout-timeline",
+      "label": "開始收拾行李",
+      "type": "action",
+      "event": "read",
+      "target": "hendery-moving-question",
       "actions": [
         {
           "type": "date",
@@ -563,108 +1422,253 @@
           "value": "2027-04-08"
         },
         {
-          "type": "unlock",
-          "key": "hendery-moveout-plan",
-          "value": true
-        },
-        {
-          "type": "unlock",
-          "key": "calendar-move-out",
-          "value": true
-        }
-      ]
-    },
-    {
-      "id": "last-morning",
-      "label": "最後一個早晨",
-      "event": "read",
-      "target": "hendery-moveout-plan",
-      "actions": [
-        {
-          "type": "date",
+          "type": "time",
           "key": "",
-          "value": "2027-04-12"
+          "value": "20:16"
         },
         {
           "type": "unlock",
-          "key": "last-day-note",
+          "key": "ig-boxes-story",
           "value": true
         }
       ]
     },
     {
-      "id": "quiet-goodbye",
-      "label": "沒有說出口的告別",
+      "id": "graduation-plan",
+      "label": "聊到畢業以後",
+      "type": "choice",
       "event": "read",
-      "target": "last-day-note",
+      "target": "hendery-moving-question",
+      "actions": [],
       "next": [
-        "ending-silent-moveout"
-      ]
-    },
-    {
-      "id": "ending-silent-moveout",
-      "label": "無聲告別",
-      "type": "ending",
-      "actions": [
-        {
-          "type": "ending",
-          "key": "",
-          "value": "無聲告別：你先一步搬走，最後一面沒有說話。"
-        }
+        "leave-choice-city",
+        "leave-choice-his-plan"
       ]
     }
   ],
   "tests": [
     {
-      "name": "電影夜由冠亨選片",
+      "name": "完整主線・坦率一點",
       "steps": [
-        { "event": "read", "target": "friend-hendery-intro" },
-        { "event": "read", "target": "hendery-room-offer" },
-        { "event": "read", "target": "hendery-viewing-detail" },
-        { "event": "read", "target": "apartment-photo" },
-        { "event": "read", "target": "owner-room-accept" },
-        { "event": "read", "target": "hendery-first-water" },
-        { "event": "read", "target": "hendery-movie-invite" },
-        { "choose": "choice-hendery-picks" },
-        { "event": "read", "target": "film-night-note" },
-        { "event": "read", "target": "hendery-weekly-film" },
-        { "event": "read", "target": "hendery-snack-offer" },
-        { "event": "read", "target": "midnight-snack-note" },
-        { "event": "read", "target": "kitchen-scene" },
-        { "event": "read", "target": "hendery-moveout-plan" },
-        { "event": "read", "target": "last-day-note" }
+        {
+          "event": "read",
+          "target": "yuki-rent-news"
+        },
+        {
+          "event": "read",
+          "target": "owner-rent-reply"
+        },
+        {
+          "event": "read",
+          "target": "yuki-hendery-intro"
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-text"
+        },
+        {
+          "choose": "choose-first-memory"
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-response-a"
+        },
+        {
+          "event": "read",
+          "target": "hendery-house-details"
+        },
+        {
+          "event": "read",
+          "target": "hendery-viewing-day"
+        },
+        {
+          "event": "read",
+          "target": "apartment-viewing-note"
+        },
+        {
+          "choose": "choose-move-in-soft"
+        },
+        {
+          "event": "read",
+          "target": "hendery-move-in-a"
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-water"
+        },
+        {
+          "event": "read",
+          "target": "hendery-movie-invite"
+        },
+        {
+          "choose": "choose-movie-picked"
+        },
+        {
+          "event": "read",
+          "target": "hendery-movie-a"
+        },
+        {
+          "event": "read",
+          "target": "film-night-note"
+        },
+        {
+          "event": "read",
+          "target": "hendery-weekly-checkin"
+        },
+        {
+          "event": "read",
+          "target": "hendery-ddl-offer"
+        },
+        {
+          "choose": "choose-ddl-tease"
+        },
+        {
+          "event": "read",
+          "target": "hendery-ddl-a"
+        },
+        {
+          "event": "read",
+          "target": "ddl-night-note"
+        },
+        {
+          "event": "read",
+          "target": "kitchen-scene"
+        },
+        {
+          "event": "read",
+          "target": "hendery-moving-question"
+        },
+        {
+          "choose": "leave-choice-city"
+        },
+        {
+          "event": "read",
+          "target": "hendery-last-logistics"
+        },
+        {
+          "event": "read",
+          "target": "last-day-note"
+        }
       ],
-      "ending": "無聲告別：你先一步搬走，最後一面沒有說話。",
+      "ending": "無聲告別：你先一步搬走，最後一面什麼也沒說。",
       "expectUnlocked": [
-        "hendery-film-pick-a",
+        "hendery-first-response-a",
+        "apartment-viewing-note",
         "film-night-note",
+        "ddl-night-note",
         "kitchen-scene",
         "last-day-note"
       ]
     },
     {
-      "name": "先看完正在播的電影",
+      "name": "完整主線・用玩笑帶過",
       "steps": [
-        { "event": "read", "target": "friend-hendery-intro" },
-        { "event": "read", "target": "hendery-room-offer" },
-        { "event": "read", "target": "hendery-viewing-detail" },
-        { "event": "read", "target": "apartment-photo" },
-        { "event": "read", "target": "owner-room-accept" },
-        { "event": "read", "target": "hendery-first-water" },
-        { "event": "read", "target": "hendery-movie-invite" },
-        { "choose": "choice-you-keep-film" },
-        { "event": "read", "target": "film-night-note" },
-        { "event": "read", "target": "hendery-weekly-film" },
-        { "event": "read", "target": "hendery-snack-offer" },
-        { "event": "read", "target": "midnight-snack-note" },
-        { "event": "read", "target": "kitchen-scene" },
-        { "event": "read", "target": "hendery-moveout-plan" },
-        { "event": "read", "target": "last-day-note" }
+        {
+          "event": "read",
+          "target": "yuki-rent-news"
+        },
+        {
+          "event": "read",
+          "target": "owner-rent-reply"
+        },
+        {
+          "event": "read",
+          "target": "yuki-hendery-intro"
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-text"
+        },
+        {
+          "choose": "choose-first-house"
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-response-b"
+        },
+        {
+          "event": "read",
+          "target": "hendery-house-details"
+        },
+        {
+          "event": "read",
+          "target": "hendery-viewing-day"
+        },
+        {
+          "event": "read",
+          "target": "apartment-viewing-note"
+        },
+        {
+          "choose": "choose-move-in-tease"
+        },
+        {
+          "event": "read",
+          "target": "hendery-move-in-b"
+        },
+        {
+          "event": "read",
+          "target": "hendery-first-water"
+        },
+        {
+          "event": "read",
+          "target": "hendery-movie-invite"
+        },
+        {
+          "choose": "choose-movie-prep"
+        },
+        {
+          "event": "read",
+          "target": "hendery-movie-b"
+        },
+        {
+          "event": "read",
+          "target": "film-night-note"
+        },
+        {
+          "event": "read",
+          "target": "hendery-weekly-checkin"
+        },
+        {
+          "event": "read",
+          "target": "hendery-ddl-offer"
+        },
+        {
+          "choose": "choose-ddl-join"
+        },
+        {
+          "event": "read",
+          "target": "hendery-ddl-b"
+        },
+        {
+          "event": "read",
+          "target": "ddl-night-note"
+        },
+        {
+          "event": "read",
+          "target": "kitchen-scene"
+        },
+        {
+          "event": "read",
+          "target": "hendery-moving-question"
+        },
+        {
+          "choose": "leave-choice-his-plan"
+        },
+        {
+          "event": "read",
+          "target": "hendery-last-logistics"
+        },
+        {
+          "event": "read",
+          "target": "last-day-note"
+        }
       ],
-      "ending": "無聲告別：你先一步搬走，最後一面沒有說話。",
+      "ending": "無聲告別：你先一步搬走，最後一面什麼也沒說。",
       "expectUnlocked": [
-        "hendery-film-pick-b",
+        "hendery-first-response-b",
+        "apartment-viewing-note",
         "film-night-note",
+        "ddl-night-note",
         "kitchen-scene",
         "last-day-note"
       ]
