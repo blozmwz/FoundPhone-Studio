@@ -419,6 +419,7 @@
 }
 .roommate-messages .rm-search {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 6px;
   margin: 0 20px 16px;

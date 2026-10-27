@@ -87,7 +87,7 @@ export function RoommateMessages({
       .querySelectorAll("[data-message-id]")
       .forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [signature, thread]);
+  }, [signature, thread, keyboard, suggestions]);
   const choices = pending === thread ? state.choices : [];
   const choice = choices.find((c) => c.target === selected);
   const scheduledMessage = state.scheduled?.some((s) =>
