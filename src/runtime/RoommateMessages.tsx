@@ -1,3 +1,4 @@
+import { availableTopics } from "./lifeInteractions";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowUp,
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 import type { Item, Runtime, Work } from "../schema";
 import "./roommate.css";
+import { messagePacing } from "../story-engine/messagePacing";
 
 export function replyThread(work: Work, choices: Runtime["choices"]) {
   for (const choice of choices) {
@@ -36,27 +38,63 @@ export function RoommateMessages({
   work,
   onRead,
   onChoose,
+  onDraft,
+  onOpenContact,
+  initialThread,
   onBack,
+  onStoryEvent,
+  onReaction,
 }: {
   items: Item[];
   state: Runtime;
   work: Work;
   onRead: (id: string) => void;
   onChoose: (id: string) => void;
+  onDraft?: (id: string) => void;
+  onOpenContact?: (id: string) => void;
+  initialThread?: string;
+  onStoryEvent?: (event: string, target: string) => void;
+  onReaction?: (id: string, reaction: string) => void;
   onBack: () => void;
 }) {
   const pending = replyThread(work, state.choices);
-  const [thread, setThread] = useState(pending);
+  const [thread, setThread] = useState(initialThread || pending);
   const [query, setQuery] = useState("");
-  const [keyboard, setKeyboard] = useState(false);
+  const [keyboard, setKeyboard] = useState(
+    Boolean(state.ui?.messages?.replyDraft),
+  );
   const [suggestions, setSuggestions] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(
+    String(state.ui?.messages?.replyDraft ?? ""),
+  );
+  const [zoomAvatar, setZoomAvatar] = useState(false);
+  const [reactionTarget, setReactionTarget] = useState("");
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const held = useRef(false);
+  useEffect(
+    () => () => {
+      if (holdTimer.current) clearTimeout(holdTimer.current);
+    },
+    [],
+  );
   const scroll = useRef<HTMLDivElement>(null);
+  const followBottom = useRef(true);
+  const lastThread = useRef("");
   const readCallback = useRef(onRead);
   readCallback.current = onRead;
   const readIds = useRef(new Set(state.read));
   for (const id of state.read) readIds.current.add(id);
-  const list = items.filter((m) => m.title === thread);
+  const list = items
+    .filter((m) => m.title === thread)
+    .sort((a, b) => a.time.localeCompare(b.time));
+  function avatarFor(name: string) {
+    return (
+      work.data.contacts?.find((c) => c.title === name)?.avatar ||
+      items.find((m) => m.title === name && !m.outgoing && m.avatar)?.avatar ||
+      ""
+    );
+  }
+  const conversationAvatar = avatarFor(thread);
   const signature = list.map((m) => m.id).join("|");
   const names = [...new Set(items.map((m) => m.title))]
     .filter((name) => name.toLowerCase().includes(query.toLowerCase()))
@@ -70,7 +108,9 @@ export function RoommateMessages({
   useEffect(() => {
     const area = scroll.current;
     if (!area || !thread) return;
-    area.scrollTop = area.scrollHeight;
+    if (lastThread.current !== thread || followBottom.current)
+      area.scrollTop = area.scrollHeight;
+    lastThread.current = thread;
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -88,20 +128,30 @@ export function RoommateMessages({
       .forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [signature, thread, keyboard, suggestions]);
-  const choices = pending === thread ? state.choices : [];
+  const ordinary = pending === thread ? state.choices : [];
+  const topics =
+    thread === "Hendery"
+      ? availableTopics(work, state).map((m) => ({
+          target: "topic:" + m.id,
+          label: m.body,
+        }))
+      : [];
+  const choices = ordinary.length ? ordinary : topics;
   const choice = choices.find((c) => c.target === selected);
-  const scheduledMessage = state.scheduled?.some((s) =>
-    work.nodes
-      .find((n) => n.id === s.nodeId)
-      ?.actions.some((a) =>
-        work.data.messages?.some(
-          (m) =>
-            a.type === "unlock" &&
-            a.key === m.id &&
-            m.title === thread &&
-            !m.outgoing,
+  const scheduledMessage = state.scheduled?.some(
+    (s) =>
+      s.due - (state.elapsedMs ?? 0) <= messagePacing.typingWindowMs &&
+      work.nodes
+        .find((n) => n.id === s.nodeId)
+        ?.actions.some((a) =>
+          work.data.messages?.some(
+            (m) =>
+              a.type === "unlock" &&
+              a.key === m.id &&
+              m.title === thread &&
+              !m.outgoing,
+          ),
         ),
-      ),
   );
   function showKeyboard() {
     setKeyboard(true);
@@ -111,7 +161,10 @@ export function RoommateMessages({
   }
   function send() {
     if (!choice) return;
-    onChoose(choice.target);
+    onDraft?.("");
+    if (choice.target.startsWith("topic:"))
+      onStoryEvent?.("topic", choice.target.slice(6));
+    else onChoose(choice.target);
     setSelected("");
     setSuggestions(false);
     setKeyboard(false);
@@ -120,7 +173,7 @@ export function RoommateMessages({
     setThread(name);
     setKeyboard(false);
     setSuggestions(false);
-    setSelected("");
+    setSelected(String(state.ui?.messages?.replyDraft ?? ""));
   }
   return (
     <div
@@ -139,9 +192,22 @@ export function RoommateMessages({
               <ChevronLeft size={28} />
               <span>信息</span>
             </button>
-            <span className="rm-avatar">
-              <UserRound size={32} />
-            </span>
+            <button
+              className="rm-avatar"
+              aria-label={`查看${thread}头像大图`}
+              onClick={() => {
+                if (!conversationAvatar) return;
+                setZoomAvatar(true);
+                if (thread === "Hendery")
+                  onStoryEvent?.("avatarViewed", "hendery");
+              }}
+            >
+              {conversationAvatar ? (
+                <img src={conversationAvatar} alt={`${thread}的头像`} />
+              ) : (
+                <UserRound size={32} />
+              )}
+            </button>
             <span className="rm-name">
               {thread}
               <ChevronRight size={11} />
@@ -157,6 +223,12 @@ export function RoommateMessages({
           <div
             className="rm-conversation"
             ref={scroll}
+            onScroll={(event) => {
+              const area = event.currentTarget;
+              followBottom.current =
+                area.scrollHeight - area.scrollTop - area.clientHeight <=
+                messagePacing.followBottomPx;
+            }}
             aria-live="polite"
             aria-label={`与 ${thread} 的聊天`}
           >
@@ -188,10 +260,65 @@ export function RoommateMessages({
                   <button
                     data-message-id={m.id}
                     className={`rm-bubble ${tail ? "rm-tail" : ""}`}
-                    onClick={() => onRead(m.id)}
+                    onPointerDown={() => {
+                      held.current = false;
+                      if (holdTimer.current) clearTimeout(holdTimer.current);
+                      holdTimer.current = setTimeout(() => {
+                        held.current = true;
+                        setReactionTarget(m.id);
+                      }, 500);
+                    }}
+                    onPointerUp={() => {
+                      if (holdTimer.current) clearTimeout(holdTimer.current);
+                    }}
+                    onPointerCancel={() => {
+                      if (holdTimer.current) clearTimeout(holdTimer.current);
+                    }}
+                    onPointerMove={() => {
+                      if (holdTimer.current) clearTimeout(holdTimer.current);
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      held.current = true;
+                      setReactionTarget(m.id);
+                    }}
+                    onClick={() => {
+                      if (held.current) return;
+                      onRead(m.id);
+                      if (m.meta.contactId) onOpenContact?.(m.meta.contactId);
+                    }}
                   >
-                    {m.body}
+                    {m.meta.contactId ? (
+                      <span className="rm-contact-card">
+                        {work.data.contacts?.find(
+                          (c) => c.id === m.meta.contactId,
+                        )?.avatar ? (
+                          <img
+                            className="rm-contact-photo"
+                            src={
+                              work.data.contacts.find(
+                                (c) => c.id === m.meta.contactId,
+                              )!.avatar
+                            }
+                            alt={`${m.meta.contactName || m.body}的头像`}
+                          />
+                        ) : (
+                          <UserRound size={30} />
+                        )}
+                        <span>
+                          <strong>{m.meta.contactName || m.body}</strong>
+                          <small>联系人名片</small>
+                        </span>
+                      </span>
+                    ) : (
+                      m.body
+                    )}
                   </button>
+                  {state.ui?.messages?.["reaction:" + m.id] && (
+                    <span className="rm-reaction" aria-label="消息回应">
+                      {String(state.ui.messages["reaction:" + m.id])}
+                    </span>
+                  )}
                   {m.outgoing && tail && (
                     <small className="rm-receipt">已送达</small>
                   )}
@@ -235,6 +362,62 @@ export function RoommateMessages({
               </button>
             )}
           </div>
+          {choice && (
+            <div className="rm-draft-tools">
+              <button
+                onClick={() => {
+                  setKeyboard(true);
+                  setSuggestions(true);
+                }}
+              >
+                换个说法
+              </button>
+              <button
+                onClick={() => {
+                  setSelected("");
+                  onDraft?.("");
+                  setSuggestions(false);
+                }}
+              >
+                删除草稿
+              </button>
+            </div>
+          )}
+          {reactionTarget && (
+            <div
+              className="rm-reactions"
+              role="dialog"
+              aria-label="回应这条消息"
+            >
+              {["♥", "😂", "👍"].map((reaction) => (
+                <button
+                  key={reaction}
+                  aria-label={`回应${reaction}`}
+                  onClick={() => {
+                    onReaction?.(reactionTarget, reaction);
+                    setReactionTarget("");
+                  }}
+                >
+                  {reaction}
+                </button>
+              ))}
+              <button
+                onClick={() => {
+                  onReaction?.(reactionTarget, "");
+                  setReactionTarget("");
+                }}
+              >
+                撤回回应
+              </button>
+              <button onClick={() => setReactionTarget("")}>取消</button>
+            </div>
+          )}
+          {zoomAvatar && (
+            <div className="rm-avatar-view" role="dialog" aria-label="头像大图">
+              <button onClick={() => setZoomAvatar(false)}>关闭头像</button>
+              <img src={conversationAvatar} alt={`${thread}头像原图`} />
+            </div>
+          )}
           {keyboard && (
             <div className="rm-keyboard" aria-label="模拟键盘">
               {suggestions && choices.length > 0 ? (
@@ -244,6 +427,7 @@ export function RoommateMessages({
                       key={c.target}
                       onClick={() => {
                         setSelected(c.target);
+                        onDraft?.(c.target);
                         setSuggestions(false);
                       }}
                     >
@@ -289,6 +473,7 @@ export function RoommateMessages({
                       aria-label="删除"
                       onClick={() => {
                         setSelected("");
+                        onDraft?.("");
                         setSuggestions(false);
                       }}
                     >
@@ -307,10 +492,7 @@ export function RoommateMessages({
                 <button className="rm-key rm-space" onClick={pressKey}>
                   空格
                 </button>
-                <button
-                  className="rm-key rm-mod"
-                  onClick={choice ? send : pressKey}
-                >
+                <button className="rm-key rm-mod" onClick={pressKey}>
                   换行
                 </button>
               </div>
@@ -359,12 +541,19 @@ export function RoommateMessages({
               return (
                 <button
                   className="rm-thread"
+                  aria-label={`与 ${name} 的会话`}
                   key={name}
                   onClick={() => openThread(name)}
                 >
                   {unread && <i className="rm-unread" />}
                   <span className="rm-avatar">
-                    {name === "Yuki" ? "Y" : <UserRound size={32} />}
+                    {avatarFor(name) ? (
+                      <img src={avatarFor(name)} alt={`${name}的头像`} />
+                    ) : name === "Yuki" ? (
+                      "Y"
+                    ) : (
+                      <UserRound size={32} />
+                    )}
                   </span>
                   <span className="rm-thread-copy">
                     <strong>

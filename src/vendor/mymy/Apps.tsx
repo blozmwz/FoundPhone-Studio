@@ -324,22 +324,29 @@ export function MymyInstagram(p: SkinProps) {
     [story, setStory] = useState(0),
     [draft, setDraft] = useState(""),
     [pop, setPop] = useState("");
+  const [profile, setProfile] = useState<Item | null>(null);
+  const profiles = p.items.filter((i) => i.meta.profile === "true");
   const posts = p.items.filter(
-      (i) => i.folder !== "私信" && i.meta.story !== "true",
+      (i) =>
+        i.folder !== "私信" &&
+        i.meta.story !== "true" &&
+        i.meta.profile !== "true",
     ),
-    stories = p.items.filter((i) => i.meta.story === "true"),
+    stories = p.items
+      .filter((i) => i.meta.story === "true")
+      .sort((a, b) => a.time.localeCompare(b.time)),
     dms = p.items.filter((i) => i.folder === "私信"),
     active = stories[story - 1];
   const toggle = (id: string, values: string[], set: (v: string[]) => void) =>
     set(values.includes(id) ? values.filter((v) => v !== id) : [...values, id]);
   useEffect(() => {
-    if (!active) return;
+    if (!active || p.deferRead) return;
     const t = setTimeout(
       () => setStory((n) => (n < stories.length ? n + 1 : 0)),
       5000,
     );
     return () => clearTimeout(t);
-  }, [active, stories.length]);
+  }, [active, stories.length, p.deferRead]);
   const openStory = (i: number) => {
     const m = stories[i];
     setSeen([...new Set([...seen, m.id])]);
@@ -353,12 +360,33 @@ export function MymyInstagram(p: SkinProps) {
       setSelected(i);
     }
   };
+  const accountPosts = profile
+    ? posts.filter((i) => i.meta.handle === profile.meta.handle)
+    : profiles.length
+      ? posts.filter((i) => i.sender === p.owner)
+      : posts;
+  const accountStories = profile
+    ? stories.filter((i) => i.meta.handle === profile.meta.handle)
+    : [];
+  const storyAccounts = profiles.length
+    ? stories.filter(
+        (i, n) =>
+          stories.findIndex((j) => j.meta.handle === i.meta.handle) === n,
+      )
+    : stories;
   const post = (i: Item) => (
     <article className="igp" key={i.id}>
       <header className="igph">
         <Avatar name={i.sender} src={i.avatar} />
         <div className="igpn">
-          <button onClick={() => setTab("个人主页")}>
+          <button
+            onClick={() => {
+              setProfile(
+                profiles.find((x) => x.meta.handle === i.meta.handle) ?? null,
+              );
+              setTab("个人主页");
+            }}
+          >
             <b>{i.sender}</b>
           </button>
           <small>{i.meta.location || i.time}</small>
@@ -454,11 +482,13 @@ export function MymyInstagram(p: SkinProps) {
           {!selected && tab === "主页" && (
             <>
               <div className="sts">
-                {stories.map((s, n) => (
+                {storyAccounts.map((s) => (
                   <button
                     className="st"
                     key={s.id}
-                    onClick={() => openStory(n)}
+                    onClick={() =>
+                      openStory(stories.findIndex((item) => item.id === s.id))
+                    }
                   >
                     <span
                       className={"sr on " + (seen.includes(s.id) ? "seen" : "")}
@@ -469,17 +499,37 @@ export function MymyInstagram(p: SkinProps) {
                   </button>
                 ))}
               </div>
+              {profiles.map((account) => (
+                <button
+                  className="ig-account-entry"
+                  key={account.id}
+                  onClick={() => {
+                    setProfile(account);
+                    setTab("个人主页");
+                  }}
+                >
+                  <Avatar name={account.sender} src={account.avatar} />
+                  <span>
+                    <b>{account.meta.handle}</b>
+                    <small>{account.body}</small>
+                  </span>
+                  <span>查看主页 ›</span>
+                </button>
+              ))}
               {posts.map(post)}
-              {!posts.length && <Blank />}
+              {!posts.length && !profiles.length && <Blank />}
             </>
           )}
           {!selected && tab === "个人主页" && (
             <>
               <div className="pf">
-                <Avatar name={p.owner || "机主"} />
+                <Avatar
+                  name={profile?.sender || p.owner || "机主"}
+                  src={profile?.avatar}
+                />
                 <div className="ps">
                   <div>
-                    <b>{posts.length}</b>
+                    <b>{accountPosts.length}</b>
                     <small>帖子</small>
                   </div>
                   <div>
@@ -492,14 +542,31 @@ export function MymyInstagram(p: SkinProps) {
                   </div>
                 </div>
               </div>
-              <p className="pn">{p.owner}</p>
+              <p className="pn">{profile ? profile.meta.handle : p.owner}</p>
+              {profile && <p className="ig-profile-bio">{profile.body}</p>}
+              {accountStories.length > 0 && (
+                <div className="ig-story-archive">
+                  <b>快拍存档</b>
+                  {accountStories.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() =>
+                        openStory(stories.findIndex((x) => x.id === item.id))
+                      }
+                    >
+                      <Media item={item} />
+                      <small>{item.time.slice(0, 10)}</small>
+                    </button>
+                  ))}
+                </div>
+              )}
               <div className="ptab">
                 <div className="on">
                   <Grid />
                 </div>
               </div>
               <div className="pg2">
-                {posts.map((i) => (
+                {accountPosts.map((i) => (
                   <button key={i.id} onClick={() => openPost(i)}>
                     <Media item={i} />
                   </button>
@@ -530,6 +597,23 @@ export function MymyInstagram(p: SkinProps) {
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
               />
+              {profiles
+                .filter((i) =>
+                  (i.title + i.sender + i.meta.handle).includes(draft),
+                )
+                .map((i) => (
+                  <button
+                    className="ig-account-entry"
+                    key={i.id}
+                    onClick={() => {
+                      setProfile(i);
+                      setTab("个人主页");
+                    }}
+                  >
+                    <Avatar name={i.sender} />
+                    <b>{i.meta.handle}</b>
+                  </button>
+                ))}
               {posts
                 .filter((i) => (i.title + i.body + i.sender).includes(draft))
                 .map(post)}
@@ -546,6 +630,7 @@ export function MymyInstagram(p: SkinProps) {
               }
               onClick={() => {
                 setSelected(null);
+                setProfile(null);
                 setTab(["主页", "搜索", "私信", "个人主页"][n]);
               }}
             >
@@ -607,7 +692,7 @@ export function MymyInstagram(p: SkinProps) {
       {active && (
         <div
           className="mymy-story"
-          onPointerDown={(e) => {
+          onClick={(e) => {
             const box = e.currentTarget.getBoundingClientRect();
             const next =
               e.clientX - box.left < box.width * 0.3 ? story - 1 : story + 1;
@@ -621,17 +706,45 @@ export function MymyInstagram(p: SkinProps) {
           </div>
           <header>
             <Avatar name={active.sender} src={active.avatar} />
-            <b>{active.sender}</b>
+            <div>
+              <b>{active.meta.handle || active.sender}</b>
+              <small className="ig-story-time">{active.time}</small>
+            </div>
             <button
               aria-label="关闭快拍"
               onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => setStory(0)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setStory(0);
+              }}
             >
               <X />
             </button>
           </header>
           <Media item={active} />
           <p>{active.body}</p>
+          {p.deferRead && (
+            <div className="ig-story-controls">
+              <button
+                aria-label="上一条快拍"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setStory(Math.max(1, story - 1));
+                }}
+              >
+                ‹
+              </button>
+              <button
+                aria-label="下一条快拍"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setStory(story < stories.length ? story + 1 : 0);
+                }}
+              >
+                ›
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

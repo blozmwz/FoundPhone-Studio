@@ -1,3 +1,8 @@
+import { lifeInteraction } from "./runtime/lifeInteractions";
+import { FilmList, Delivery } from "./runtime/LifeApps";
+import { storyDatedItem } from "./runtime/storyDates";
+import { pendingScene } from "./runtime/scenePacing";
+import { storyContinuation } from "./runtime/continuation";
 import { RoommateMessages, replyThread } from "./runtime/RoommateMessages";
 import { StatusGlyph } from "./ios/StatusGlyph";
 import { SocialDetail, socialDetailApps } from "./skins/SocialDetails";
@@ -134,6 +139,9 @@ function PhoneRuntime({
   onRuntime?: (s: Runtime) => void;
 }) {
   const [app, setApp] = useState("");
+  const [focusItem, setFocusItem] = useState("");
+  const [readingItem, setReadingItem] = useState("");
+  const [pendingNotice, setPendingNotice] = useState("");
   const [homeRequest, setHomeRequest] = useState(0);
   const [locked, setLocked] = useState(!creator);
   const [pinOpen, setPinOpen] = useState(false);
@@ -266,9 +274,16 @@ function PhoneRuntime({
     for (const id of appSnapshots.current.keys())
       if (!recent.includes(id) && id !== app) appSnapshots.current.delete(id);
   };
+  const leaveApp = () => {
+    if (work.id === "fridge-light-roommates" && readingItem)
+      event("read", readingItem);
+    setApp("");
+    setFocusItem("");
+  };
   const open = (id: string) => {
     if (!work.apps.some((a) => a.id === id && a.installed)) return;
     setApp(id);
+    setFocusItem("");
     setKeyboard(false);
     setRecent((v) => [id, ...v.filter((a) => a !== id)].slice(0, 8));
     setFolder("");
@@ -276,15 +291,37 @@ function PhoneRuntime({
     onOpen?.(id);
     event("openApp", id);
   };
+  const openNotice = (text: string) => {
+    const notice = notificationContent(text, work.apps);
+    const items = (work.data[notice.appId] ?? []).filter((i) =>
+      visible(i, runtimeRef.current),
+    );
+    const item = items.find(
+      (i) =>
+        (notice.appId !== "messages" || i.sender === notice.title) &&
+        (i.body === notice.body || (i.title && notice.body.includes(i.title))),
+    );
+    open(notice.appId);
+    if (item) setFocusItem(item.id);
+  };
   const installedApps = work.apps.filter((a) => a.installed);
   const apps = installedApps.filter((a) => a.visible);
   const unlock = (pin = "") => {
     if (!work.phone.passcode || pin === work.phone.passcode) {
       setLocked(false);
       setPinOpen(false);
+      setPinError("");
       event("password", pin);
+      if (pendingNotice) {
+        openNotice(pendingNotice);
+        setPendingNotice("");
+      }
     } else {
-      setPinError("密码不正确");
+      setPinError(
+        work.id === "fridge-light-roommates" && work.phone.passcode === "0917"
+          ? "密码不正确。提示：礼拜四"
+          : "密码不正确",
+      );
       setPinOpen(true);
     }
   };
@@ -292,19 +329,31 @@ function PhoneRuntime({
     if (app && !work.apps.some((a) => a.id === app && a.installed)) setApp("");
   }, [app, work.apps]);
   const roommateStory = work.id === "fridge-light-roommates";
+  const continuation = storyContinuation(work, s);
+  const nextScene = pendingScene(work, s);
   const pendingReply = roommateStory ? replyThread(work, s.choices) : "";
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
   const plugin = getApp(app);
   useEffect(() => {
     const count = s.notifications.length;
     if (!locked && work.phone.notifications && count > noticesSeen.current) {
-      setBanner(s.notifications.at(-1) || "");
-      const timer = setTimeout(() => setBanner(""), 4500);
-      noticesSeen.current = count;
-      return () => clearTimeout(timer);
+      const text = s.notifications.at(-1) || "";
+      const activeThread =
+        shell.current?.querySelector<HTMLElement>(".roommate-messages")?.dataset
+          .thread;
+      const sameThread =
+        roommateStory &&
+        app === "messages" &&
+        notificationContent(text, work.apps).title === activeThread;
+      setBanner(sameThread ? "" : text);
     }
     noticesSeen.current = count;
   }, [s.notifications.length, locked, work.phone.notifications]);
+  useEffect(() => {
+    if (!banner) return;
+    const timer = setTimeout(() => setBanner(""), 4500);
+    return () => clearTimeout(timer);
+  }, [banner]);
   const dismissNotice = (index: number) =>
     update({
       ...runtimeRef.current,
@@ -312,6 +361,9 @@ function PhoneRuntime({
         (_, i) => i !== index,
       ),
     });
+  const photoWallpaper = work.phone.wallpaper.startsWith("data:image/")
+    ? safeMedia(work.phone.wallpaper)
+    : "";
   if (!ready) return <div className="phone-loading">正在恢复进度…</div>;
   return (
     <div
@@ -321,7 +373,17 @@ function PhoneRuntime({
     >
       <KeyboardContext.Provider value={setKeyboard}>
         <div
-          className={`phone-screen wallpaper-${work.phone.wallpaper} ${locked ? "is-locked" : ""} ${app ? "in-app" : ""} ${keyboard ? "keyboard-open" : ""}`}
+          style={
+            photoWallpaper
+              ? {
+                  backgroundImage: `url("${photoWallpaper}")`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }
+              : undefined
+          }
+          className={`phone-screen wallpaper-${photoWallpaper ? "photo" : work.phone.wallpaper} ${locked ? "is-locked" : ""} ${app ? "in-app" : ""} ${keyboard ? "keyboard-open" : ""}`}
           data-app={app}
           onDragStart={(e) => e.preventDefault()}
           onPointerDown={(e) => {
@@ -370,7 +432,7 @@ function PhoneRuntime({
                 captureApp();
                 setPanel("switcher");
               } else {
-                setApp("");
+                leaveApp();
                 setPanel("");
                 setFolder("");
               }
@@ -387,8 +449,12 @@ function PhoneRuntime({
             }
           }}
         >
-          <div className="wallpaper-orb orb-one" />
-          <div className="wallpaper-orb orb-two" />
+          {!photoWallpaper && (
+            <>
+              <div className="wallpaper-orb orb-one" />
+              <div className="wallpaper-orb orb-two" />
+            </>
+          )}
           <div className="status-bar">
             <button
               onClick={() =>
@@ -434,8 +500,13 @@ function PhoneRuntime({
                 onOpenNotice={
                   roommateStory
                     ? (text) => {
-                        unlock();
-                        open(notificationContent(text, work.apps).appId);
+                        if (work.phone.passcode) {
+                          setPendingNotice(text);
+                          setPinOpen(true);
+                        } else {
+                          unlock();
+                          openNotice(text);
+                        }
                       }
                     : undefined
                 }
@@ -453,6 +524,13 @@ function PhoneRuntime({
                 origin={launchOrigin}
               >
                 <AppContent
+                  key={`${app}:${focusItem}`}
+                  focusItem={focusItem}
+                  onReading={setReadingItem}
+                  onOpenContact={(id) => {
+                    open("contacts");
+                    setFocusItem(id);
+                  }}
                   app={plugin}
                   name={
                     work.apps.find((a) => a.id === app)?.name ?? plugin.name
@@ -460,16 +538,23 @@ function PhoneRuntime({
                   items={[
                     ...(work.data[app] ?? []),
                     ...(s.messages[app] ?? []),
-                  ]}
+                  ].map((item) =>
+                    roommateStory ? storyDatedItem(item, s) : item,
+                  )}
                   creator={creator}
                   state={s}
+                  onStoryEvent={(event, target) =>
+                    update(
+                      lifeInteraction(work, runtimeRef.current, event, target),
+                    )
+                  }
                   onChoose={(target) =>
                     update(choose(work, runtimeRef.current, target))
                   }
                   onRead={(id) => event("read", id)}
                   onEdit={(item) => onEdit?.(app, item)}
                   onAdd={() => onAdd?.(app)}
-                  onBack={() => setApp("")}
+                  onBack={leaveApp}
                   onSettings={onSettings}
                   onUi={(key, value) => {
                     const current = runtimeRef.current;
@@ -572,7 +657,11 @@ function PhoneRuntime({
                       onOpen={(text) => {
                         setPanel("");
                         if (roommateStory) {
-                          open(notificationContent(text, work.apps).appId);
+                          if (locked && work.phone.passcode) {
+                            setPendingNotice(text);
+                            setPinOpen(true);
+                            setPanel("");
+                          } else openNotice(text);
                           return;
                         }
                         if (locked) beginUnlock();
@@ -611,30 +700,133 @@ function PhoneRuntime({
               ))}
             </div>
           )}
+          {!creator &&
+            !locked &&
+            !app &&
+            s.variables.openingPaused === true && (
+              <div className="opening-review-note" role="status">
+                <strong>
+                  {s.variables.viewingReviewComplete
+                    ? "搬家时间约好了"
+                    : "约好了"}
+                </strong>
+                <span>
+                  租房和搬家时间已确认。本轮先到这里，可以继续逛逛手机。
+                </span>
+              </div>
+            )}
+          {!creator && !locked && !app && nextScene && (
+            <button
+              className="roommate-continuation"
+              aria-label="继续到下一段日常"
+              onClick={() => {
+                event("continueScene", nextScene.id);
+              }}
+            >
+              <span>这会儿可以先逛逛手机</span>
+              <strong>
+                {nextScene.days === 0
+                  ? "当天晚上"
+                  : nextScene.days === 1
+                    ? "第二天"
+                    : `${nextScene.days} 天后`}{" "}
+                · {nextScene.date}
+              </strong>
+            </button>
+          )}
+          {!creator && !locked && continuation && !readingItem && !banner && (
+            <button
+              className={`roommate-continuation ${app ? "in-app" : ""}`}
+              aria-label={`打开未读内容：${continuation.item.title}`}
+              onClick={() => {
+                open(continuation.appId);
+                setFocusItem(continuation.item.id);
+                // Opening a record is navigation; its reader confirms completion.
+              }}
+            >
+              <span>
+                {work.apps.find((a) => a.id === continuation.appId)?.name} ·
+                未读
+              </span>
+              <strong>{continuation.item.title}</strong>
+              <span>{continuation.item.body.slice(0, 42)}</span>
+            </button>
+          )}
           {!creator && pendingReply && !locked && app !== "messages" && (
             <button
               className="roommate-reply-link"
-              onClick={() => open("messages")}
+              onClick={() => {
+                open("messages");
+                // Give a reopened Messages window an explicit conversation key,
+                // even when its previous exit animation is still mounted.
+                setFocusItem(
+                  work.data.messages.find((m) => m.title === pendingReply)
+                    ?.id ?? "",
+                );
+              }}
             >
-              回复 {pendingReply}
+              {s.variables.initiating ? "找" : "回复"} {pendingReply}
+              {s.variables.initiating ? "聊聊" : ""}
             </button>
           )}
-          {!creator && s.endings.length > 0 && !locked && (
-            <div className="story-overlay ending">
-              <span className="eyebrow">ENDING · {s.endings.length}</span>
-              <h2>故事在这里停泊。</h2>
-              <p>{s.endings[s.endings.length - 1]}</p>
-              <button
-                onClick={() => {
-                  update(dispatch(work, initialRuntime(work), "start"));
-                  setApp("");
-                  setLocked(true);
-                }}
-              >
-                重新开始
-              </button>
-            </div>
+          {!creator && !locked && s.ui?.messages?.reunionOpen === true && (
+            <button
+              className="roommate-reply-link"
+              onClick={() => {
+                const current = runtimeRef.current;
+                update({
+                  ...current,
+                  ui: {
+                    ...current.ui,
+                    messages: { ...current.ui?.messages, reunionOpen: false },
+                  },
+                });
+              }}
+            >
+              返回结局
+            </button>
           )}
+          {!creator &&
+            s.endings.length > 0 &&
+            !locked &&
+            s.ui?.messages?.reunionOpen !== true && (
+              <div className="story-overlay ending">
+                <span className="eyebrow">ENDING · {s.endings.length}</span>
+                <h2>故事在这里停泊。</h2>
+                <p>{s.endings[s.endings.length - 1]}</p>
+                {s.variables.lifeEnding === "quiet" && (
+                  <button
+                    onClick={() => {
+                      update(
+                        lifeInteraction(
+                          work,
+                          runtimeRef.current,
+                          "reunion",
+                          "quiet",
+                        ),
+                      );
+                      open("messages");
+                      setFocusItem(
+                        work.data.messages.find(
+                          (m) => m.id === "life-reunion-1",
+                        )?.id ?? "",
+                      );
+                    }}
+                  >
+                    几年后 · 打开消息
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    update(dispatch(work, initialRuntime(work), "start"));
+                    setApp("");
+                    setLocked(true);
+                  }}
+                >
+                  重新开始
+                </button>
+              </div>
+            )}
           {!creator && s.incomingCall && (
             <div className="incoming-call-screen">
               <small>
@@ -710,8 +902,7 @@ function PhoneRuntime({
               className="device-banner"
               onClick={() => {
                 setBanner("");
-                if (roommateStory)
-                  open(notificationContent(banner, work.apps).appId);
+                if (roommateStory) openNotice(banner);
                 else setPanel("notification");
               }}
             >
@@ -814,7 +1005,7 @@ function PhoneRuntime({
               captureApp();
               setHomeRequest((n) => n + 1);
               setKeyboard(false);
-              setApp("");
+              leaveApp();
               setFolder("");
               setPanel("");
             }}
@@ -897,7 +1088,15 @@ function AppContent({
   onUi,
   work,
   onChoose,
+  focusItem,
+  onReading,
+  onOpenContact,
+  onStoryEvent,
 }: {
+  onStoryEvent?: (event: string, target: string) => void;
+  onOpenContact?: (id: string) => void;
+  onReading?: (id: string) => void;
+  focusItem?: string;
   app: AppPlugin;
   name: string;
   items: Item[];
@@ -912,7 +1111,16 @@ function AppContent({
   work: Work;
   onChoose: (target: string) => void;
 }) {
-  const [detail, setDetail] = useState<Item | null>(null);
+  const [detail, setDetail] = useState<Item | null>(
+    app.id === "threads" || app.id === "messages"
+      ? null
+      : (items.find((i) => i.id === focusItem) ?? null),
+  );
+  useEffect(() => {
+    if (app.id === "threads") return;
+    onReading?.(detail?.id ?? "");
+    return () => onReading?.("");
+  }, [detail?.id, onReading, app.id]);
   const [thread, setThread] = useState("");
   const [tab, setTab] = useState(app.tabs[0]);
   const [q, setQ] = useState("");
@@ -937,14 +1145,40 @@ function AppContent({
       return;
     }
     setDetail(i);
-    if (!i.password || unlocks.includes(i.id)) onRead(i.id);
+    if (
+      work.id !== "fridge-light-roommates" &&
+      (!i.password || unlocks.includes(i.id))
+    )
+      onRead(i.id);
   };
   const chats = [...new Set(shown.map((i) => i.title))];
   const back = () => {
-    if (detail) setDetail(null);
-    else if (thread) setThread("");
+    if (detail) {
+      if (
+        work.id === "fridge-light-roommates" &&
+        (!detail.password || unlocks.includes(detail.id))
+      )
+        onRead(detail.id);
+      setDetail(null);
+    } else if (thread) setThread("");
     else onBack();
   };
+  if (
+    work.id === "fridge-light-roommates" &&
+    !creator &&
+    (app.id === "netflix" || app.id === "delivery")
+  ) {
+    const Component = app.id === "netflix" ? FilmList : Delivery;
+    return (
+      <Component
+        items={shown}
+        state={state}
+        onEvent={(e, t) => onStoryEvent?.(e, t)}
+        onUi={onUi}
+        onBack={onBack}
+      />
+    );
+  }
   if (work.id === "fridge-light-roommates" && app.id === "messages" && !creator)
     return (
       <RoommateMessages
@@ -953,6 +1187,14 @@ function AppContent({
         work={work}
         onRead={onRead}
         onChoose={onChoose}
+        onOpenContact={onOpenContact}
+        initialThread={items.find((i) => i.id === focusItem)?.title}
+        onDraft={(id) => onUi?.("replyDraft", id)}
+        onReaction={(id, reaction) => {
+          onUi?.("reaction:" + id, reaction);
+          if (reaction) onStoryEvent?.("reactMessage", id);
+        }}
+        onStoryEvent={onStoryEvent}
         onBack={onBack}
       />
     );
@@ -1028,9 +1270,13 @@ function AppContent({
         <div className="catalog-slot" hidden={!!detail}>
           <Suspense fallback={<div className="catalog-loading">正在打开…</div>}>
             <Skin
+              focusItem={focusItem}
+              deferRead={work.id === "fridge-light-roommates"}
+              onReading={onReading}
               appId={app.id}
               owner={work.phone.owner}
               virtualTime={state.time}
+              virtualDate={state.date}
               ui={state.ui?.[app.id]}
               onUi={creator ? undefined : onUi}
               name={name}

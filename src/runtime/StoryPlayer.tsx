@@ -1,3 +1,4 @@
+import { CheckpointPhone } from "./CheckpointPhone";
 import { useEffect, useState, type FormEvent } from "react";
 import { createRoot } from "react-dom/client";
 import { Phone } from "../Phone";
@@ -60,7 +61,23 @@ function StoryPlayer() {
     <main className="story-runtime">
       {personalizedWork ? (
         playerName ? (
-          <Phone work={personalizedWork} />
+          ["127.0.0.1", "localhost", "[::1]"].includes(location.hostname) &&
+          ["viewing", "roommates"].includes(
+            new URLSearchParams(location.search).get("start") ?? "",
+          ) &&
+          personalizedWork.id === "fridge-light-roommates" ? (
+            <CheckpointPhone
+              work={personalizedWork}
+              start={
+                new URLSearchParams(location.search).get("start") ===
+                "roommates"
+                  ? "roommates"
+                  : "viewing"
+              }
+            />
+          ) : (
+            <Phone work={personalizedWork} />
+          )
         ) : (
           <section className="story-welcome">
             <span className="story-welcome-kicker">A PHONE, A STORY</span>

@@ -177,7 +177,15 @@ export function DeviceLock({
             inputMode="numeric"
             type="password"
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={(e) =>
+              setCode(
+                /^\d+$/.test(work.phone.passcode)
+                  ? e.target.value
+                      .replace(/\D/g, "")
+                      .slice(0, work.phone.passcode.length)
+                  : e.target.value,
+              )
+            }
             onKeyDown={(e) => e.key === "Enter" && onUnlock(code)}
           />
           <div className="pin-keypad">

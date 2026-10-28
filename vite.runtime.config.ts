@@ -11,8 +11,8 @@ export default defineConfig(({ command }) => ({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "捡手机",
-        short_name: "捡手机",
+        name: "礼拜四",
+        short_name: "礼拜四",
         display: "standalone",
         background_color: "#000000",
         theme_color: "#000000",
@@ -21,7 +21,7 @@ export default defineConfig(({ command }) => ({
       workbox: {
         clientsClaim: true,
         globPatterns: ["**/*.{js,css,html,svg,json,txt,png,jpg}"],
-        maximumFileSizeToCacheInBytes: 4000000,
+        maximumFileSizeToCacheInBytes: 8000000,
       },
     }),
   ],

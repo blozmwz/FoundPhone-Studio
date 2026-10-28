@@ -33,11 +33,15 @@ import {
 } from "lucide-react";
 import { safeMedia, type Item, type UiValue } from "./schema";
 export type SkinProps = {
+  focusItem?: string;
+  deferRead?: boolean;
+  onReading?: (id: string) => void;
   ui?: Record<string, UiValue>;
   onUi?: (key: string, value: UiValue) => void;
   appId?: string;
   owner?: string;
   virtualTime?: string;
+  virtualDate?: string;
   name: string;
   items: Item[];
   creator: boolean;

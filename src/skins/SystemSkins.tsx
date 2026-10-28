@@ -1,3 +1,4 @@
+import { newestFirst } from "./chronology";
 export { WeatherSkin, HealthSkin } from "./CalibratedSystemApps";
 import { AudioPlayer, useTrack } from "../audio";
 import { useSkinState } from "../skinState";
@@ -359,9 +360,9 @@ export function SafariSkin(p: Props) {
 export function NotesSkin(p: Props) {
   const { q, setQ, items } = useContent(p, "备忘录");
   const [folder, setFolder] = useState<string | null>(null);
-  const list = folder
-    ? items.filter((i) => (i.folder || "备忘录") === folder)
-    : items;
+  const list = newestFirst(
+    folder ? items.filter((i) => (i.folder || "备忘录") === folder) : items,
+  );
   return (
     <div className="catalog-skin native-notes">
       <Header p={p} />

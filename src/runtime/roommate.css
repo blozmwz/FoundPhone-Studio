@@ -525,7 +525,7 @@
 .phone-shell.roommate-phone .roommate-reply-link {
   position: absolute;
   z-index: 84;
-  bottom: 43px;
+  bottom: 146px;
   left: 30px;
   right: 30px;
   border: 0;
@@ -576,3 +576,99 @@
   .home-indicator:after {
   background: #fff;
 }
+
+.phone-shell.roommate-phone .roommate-continuation {
+  position: absolute;
+  z-index: 83;
+  bottom: 146px;
+  left: 22px;
+  right: 22px;
+  display: grid;
+  gap: 3px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 18px;
+  background: #f3f3f7f5;
+  box-shadow: 0 3px 20px #0002;
+  color: #111;
+  text-align: left;
+}
+.phone-shell.roommate-phone .roommate-continuation.in-app {
+  bottom: 100px;
+}
+.phone-shell.roommate-phone .roommate-continuation span {
+  font-size: 12px;
+  color: #595963;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.phone-shell.roommate-phone .roommate-continuation strong {
+  font-size: 14px;
+}
+
+.phone-shell.roommate-phone .roommate-continuation.in-app > span:last-child {
+  display: none;
+}
+.phone-shell.roommate-phone:has(.roommate-continuation) .tr-scroll {
+  padding-bottom: 180px;
+}
+.phone-shell.roommate-phone:has(.roommate-continuation) .rm-conversation {
+  padding-bottom: 100px;
+}
+.rm-contact-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  min-width: 170px;
+}
+.rm-contact-card > span {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+}
+.rm-contact-card small {
+  font-size: 12px;
+  opacity: 0.65;
+}
+.rm-suggestions button {
+  white-space: pre-line;
+}
+.opening-review-note {
+  position: absolute;
+  bottom: 146px;
+  left: 24px;
+  right: 24px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 6px;
+  background: #f3f3f7ef;
+  color: #111;
+  border-radius: 18px;
+  font-size: 13px;
+}
+.roommate-messages .rm-avatar > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.roommate-messages .rm-contact-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.rm-draft-tools { display:flex; justify-content:flex-end; gap:12px; padding:0 16px 8px; background:#fff; }
+.rm-draft-tools button { border:0; background:none; color:#007aff; font-size:12px; padding:5px; }
+.rm-message { position:relative; }
+.rm-reaction { display:block; align-self:flex-start; margin: -5px 8px 5px; border-radius:12px; background:#e4e4e8; padding:2px 8px; z-index:1; font-size:16px; }
+.rm-outgoing .rm-reaction { align-self:flex-end; }
+.rm-reactions { position:absolute; top:110px; left:15px; right:15px; display:flex; flex-wrap:wrap; gap:7px; padding:12px; border-radius:18px; background:#f7f7fa; box-shadow:0 8px 30px #0003; z-index:12; }
+.rm-reactions button { border:0; background:white; border-radius:14px; padding:10px; }
+.rm-avatar-view { position:absolute; inset:0; z-index:15; background:#111; display:flex; flex-direction:column; justify-content:center; gap:20px; }
+.rm-avatar-view > img { width:100%; object-fit:contain; }
+.rm-avatar-view > button { align-self:flex-end; margin-right:20px; background:none; color:white; border:0; padding:12px; }
+button.rm-avatar { padding:0; border:0; cursor:pointer; }

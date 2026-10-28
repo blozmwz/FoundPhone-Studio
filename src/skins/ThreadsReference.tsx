@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { newestFirst, storedThread } from "./chronology";
+import { useState, useEffect } from "react";
 import {
   Home,
   Send,
@@ -44,21 +45,33 @@ export function ThreadsReference(p: SkinProps) {
     [shift, setShift] = useState(false),
     [numbers, setNumbers] = useState(false),
     [options, setOptions] = useState(false),
-    [selected, setSelected] = useState<Item | null>(null);
+    [selected, setSelected] = useState<Item | null>(
+      p.items.find((i) => i.id === p.focusItem) ?? null,
+    );
+  useEffect(() => {
+    p.onReading?.(selected?.id ?? "");
+    return () => p.onReading?.("");
+  }, [selected?.id, p.onReading]);
+  function closePost() {
+    if (selected && p.deferRead && selected.meta.local !== "true")
+      p.onRead(selected.id);
+    setSelected(null);
+  }
+  const anonymous = p.items.find((i) => i.meta.account === "anonymous-owner");
+  const accountName = anonymous?.sender || p.owner || "机主";
   const local = posts.map((body, n) =>
     makeItem({
       id: "local-thread-" + n,
       title: "本地串文",
-      body,
-      sender: p.owner || "机主",
-      time: p.virtualTime || "09:41",
+      ...storedThread(body),
+      sender: accountName,
       meta: { local: "true" },
     }),
   );
-  const feed = [
+  const feed = newestFirst([
       ...local,
       ...p.items.filter((i) => i.folder !== "私信" && !i.meta.activityType),
-    ],
+    ]),
     messages = p.items.filter((i) => i.folder === "私信"),
     activities = p.items.filter((i) => i.meta.activityType);
   const toggle = (id: string, items: string[], set: (v: string[]) => void) =>
@@ -68,7 +81,7 @@ export function ThreadsReference(p: SkinProps) {
       p.onItem(i);
       return;
     }
-    if (i.meta.local !== "true") p.onRead(i.id);
+    if (!p.deferRead && i.meta.local !== "true") p.onRead(i.id);
     setSelected(i);
   };
   const card = (i: Item) => (
@@ -80,7 +93,11 @@ export function ThreadsReference(p: SkinProps) {
       <div className="tr-post-content">
         <div className="tr-byline">
           <b>{i.sender}</b>
-          <span>{i.time.slice(-5)}</span>
+          <span>
+            <time dateTime={i.time.replace(" ", "T")}>
+              {i.time.slice(0, 10)} {i.time.slice(-5)}
+            </time>
+          </span>
           <button
             aria-label="帖子选项"
             onClick={() => {
@@ -136,10 +153,7 @@ export function ThreadsReference(p: SkinProps) {
         {selected ? (
           <>
             <header className="tr-head">
-              <button
-                aria-label="返回Threads列表"
-                onClick={() => setSelected(null)}
-              >
+              <button aria-label="返回Threads列表" onClick={closePost}>
                 <ArrowLeft />
               </button>
               <b>串文</b>
@@ -151,11 +165,19 @@ export function ThreadsReference(p: SkinProps) {
                 ...selected.comments,
                 ...replies
                   .filter((v) => v.startsWith(selected.id + "\t"))
-                  .map((v) => v.split("\t").slice(1).join("\t")),
+                  .map(
+                    (v) =>
+                      `${accountName}：${v.split("\t").slice(1).join("\t")}`,
+                  ),
               ].map((c, n) => (
                 <p key={n}>{c}</p>
               ))}
             </div>
+            {p.deferRead && (
+              <button className="tr-finish-reading" onClick={closePost}>
+                读完，返回动态
+              </button>
+            )}
             <form
               className="tr-reply"
               onSubmit={(e) => {
@@ -220,7 +242,7 @@ export function ThreadsReference(p: SkinProps) {
                       : tab === "动态"
                         ? "动态"
                         : tab === "个人主页"
-                          ? p.owner || "机主"
+                          ? accountName
                           : tab}
                   </h1>
                   {(tab === "消息" || tab === "动态") && <BellOff />}
@@ -330,12 +352,15 @@ export function ThreadsReference(p: SkinProps) {
             {tab === "个人主页" && (
               <>
                 <div className="tr-profile">
-                  <Avatar name={p.owner || "机主"} />
-                  <p>{p.owner}</p>
+                  <Avatar name={accountName} />
+                  <p>{accountName}</p>
                 </div>
                 {feed
                   .filter(
-                    (i) => i.sender === p.owner || i.meta.local === "true",
+                    (i) =>
+                      i.sender === p.owner ||
+                      i.meta.local === "true" ||
+                      i.meta.account === "anonymous-owner",
                   )
                   .map(card)}
               </>
@@ -447,9 +472,9 @@ export function ThreadsReference(p: SkinProps) {
             </button>
           </header>
           <div className="tr-compose-content">
-            <Avatar name={p.owner || "机主"} />
+            <Avatar name={accountName} />
             <div>
-              <b>{p.owner}</b>
+              <b>{accountName}</b>
               <span className="tr-muted"> › 社群或话题</span>
               <textarea
                 aria-label="串文内容"
@@ -471,7 +496,13 @@ export function ThreadsReference(p: SkinProps) {
             <button
               disabled={!draft.trim()}
               onClick={() => {
-                setPosts([draft.trim(), ...posts]);
+                setPosts([
+                  JSON.stringify({
+                    body: draft.trim(),
+                    time: `${p.virtualDate || "2026-10-23"} ${p.virtualTime || "09:41"}`,
+                  }),
+                  ...posts,
+                ]);
                 setDraft("");
                 setCompose(false);
                 setKeyboard(false);
