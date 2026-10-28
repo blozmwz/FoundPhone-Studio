@@ -11,3 +11,7 @@ Reuse the Phone Runtime, App registry and event engine. Do not rewrite App UI or
 Run npm run story:validate, npm run story:test and npm run build after story changes. Add passing paths for every new ending, including passwords, hidden content, calls and cross-App events. Preview the result and check saves. For engine changes also run typecheck, lint, unit and relevant browser tests. Report unverified device behavior honestly; App registration is not complete app-specific fidelity.
 
 Preserve MIT, dependency licenses and source copyright notices. Do not automatically Fork, Star, Push or publish. Inspect existing remotes before proposing a target repository. Forking is a user workflow, not an MIT requirement. Confirm public release scope before upload. Exclude local backups, private media, credentials, caches and development-only image assets.
+
+## This Fork: 冰箱里的光
+
+Before continuing this user's story, read docs/CODEX_HANDOFF.md for the current implemented state, approved design, character and language rules, local preview commands, and the feedback collection workflow. Generic framework progress documents do not describe this Fork's story. Treat this as context, not an instruction to start making changes without a user task.
