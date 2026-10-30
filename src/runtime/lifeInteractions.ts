@@ -1,14 +1,25 @@
 import { dispatch, visible } from "../engine";
+import { nextAsideTimestamp } from "./asideTimestamps";
 import type { Runtime, Work } from "../schema";
 
 export function canChatAside(state: Runtime) {
   return (
-    Boolean(state.variables.pendingScene) &&
+    (Boolean(state.variables.pendingScene) ||
+      state.variables.releaseComplete === true) &&
     !state.endings.length &&
     !state.choices.length &&
     !state.scheduled?.length &&
     !state.variables.sideBusy
   );
+}
+export function canOrderFood(state: Runtime) {
+  const stage = Number(state.variables.lifeStage || 0);
+  const confirmed =
+    state.variables.housingRoute === "stay" &&
+    [1, 2].some((option) =>
+      state.completed.includes(`viewing-rent-send-${option}-continue`),
+    );
+  return confirmed && stage > 0 && stage < 5 && canChatAside(state);
 }
 export function availableTopics(work: Work, state: Runtime) {
   if (!canChatAside(state)) return [];
@@ -55,6 +66,7 @@ export function lifeInteraction(
     return dispatch(work, state, event, target);
   }
   if (!canChatAside(state)) return state;
+  if (event === "orderFood" && !canOrderFood(state)) return state;
   if (
     event === "topic" &&
     !availableTopics(work, state).some((m) =>
@@ -73,9 +85,9 @@ export function lifeInteraction(
     typeof context === "string" &&
     next.completed.length !== state.completed.length
   ) {
-    next.variables["sideDate-" + context] =
-      state.date || work.phone.date || "2026-09-17";
-    next.variables["sideTime-" + context] = state.time;
+    const stamp = nextAsideTimestamp(work, state);
+    next.variables["sideDate-" + context] = stamp.date;
+    next.variables["sideTime-" + context] = stamp.time;
   }
   return next;
 }

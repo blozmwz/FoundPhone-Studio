@@ -3,7 +3,9 @@ export function pendingScene(work: Work, state: Runtime) {
   if (
     work.id !== "fridge-light-roommates" ||
     state.endings.length ||
-    state.variables.sideBusy
+    state.variables.sideBusy ||
+    state.choices.length ||
+    state.scheduled?.length
   )
     return null;
   const id = state.variables.pendingScene;

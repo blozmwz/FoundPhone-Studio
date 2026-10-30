@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Item, Runtime, UiValue } from "../schema";
-import { canChatAside } from "./lifeInteractions";
+import { canOrderFood } from "./lifeInteractions";
 import "./life-apps.css";
 
 type Props = {
@@ -92,7 +92,7 @@ export function Delivery({ items, state, onEvent, onUi, onBack }: Props) {
   }
   const [notice, setNotice] = useState("");
   const stage = Number(state.variables.lifeStage || 0);
-  const ready = canChatAside(state) && stage > 0 && stage < 5;
+  const ready = canOrderFood(state);
   function order(item: Item) {
     if (!ready) return;
     const food = item.meta.food;
@@ -128,6 +128,15 @@ export function Delivery({ items, state, onEvent, onUi, onBack }: Props) {
       </header>
       <p>今天吃点什么</p>
       <small>游戏内模拟点餐 · 无真实支付</small>
+      {!ready && (
+        <p role="status">
+          {stage === 0
+            ? "入住后，聊天告一段落时就可以点餐了。"
+            : state.endings.length || stage >= 5
+              ? "现在可以看看菜单和之前的订单。"
+              : "先回完这轮消息，再来点餐吧。"}
+        </p>
+      )}
       {notice && <p role="status">{notice}</p>}
       {items
         .filter((item) => item.meta.authoredOrder !== "true")

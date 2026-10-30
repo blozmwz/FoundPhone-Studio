@@ -1,4 +1,5 @@
 import { orderedMessages } from "./messageOrder";
+import { storyDatedItem } from "./storyDates";
 import type { Item, Runtime, Work } from "../schema";
 import { visible } from "../engine";
 import { notificationContent } from "../SystemNotifications";
@@ -28,7 +29,10 @@ export function unreadMessageItems(
   state: Runtime,
   startDate = "2026-09-17",
 ) {
-  const ordered = orderedMessages(items, state.unlocked);
+  const ordered = orderedMessages(
+    items.map((item) => storyDatedItem(item, state)),
+    state.unlocked,
+  );
   const through = new Map<string, number>();
   ordered.forEach((m, index) => {
     if (m.read || state.read.includes(m.id)) through.set(m.title, index);

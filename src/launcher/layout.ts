@@ -60,7 +60,7 @@ export function defaultLayout(input: Work): DeviceLayout {
     workId: w.id,
     previewLayoutRevision:
       w.id === "fridge-light-roommates"
-        ? 2
+        ? 3
         : w.id === "ui-test-phone-v2"
           ? 1
           : 0,
@@ -131,6 +131,32 @@ export function validateLayout(raw: unknown, input: Work) {
     layout.order = [];
     layout.cleared = [];
     layout.previewLayoutRevision = 2;
+  }
+  if (w.id === "fridge-light-roommates" && layout.previewLayoutRevision < 3) {
+    // A saved layout contains every registered app, including disabled ones.
+    // Adding them to story.apps alone therefore does not install them for old
+    // players. Upgrade only the two newly available apps, retaining the rest of
+    // the player's layout and all story/save data.
+    for (const id of ["delivery", "netflix"]) {
+      const authored = w.apps.find(
+        (a) => a.id === id && a.installed && a.visible,
+      );
+      const app = layout.apps.find((a) => a.id === id);
+      if (!authored || !app) continue;
+      const wasAvailable = app.installed && app.visible;
+      Object.assign(app, {
+        name: authored.name,
+        icon: authored.icon,
+        installed: true,
+        visible: true,
+      });
+      if (!wasAvailable) {
+        app.dock = false;
+        app.folder = "";
+        delete layout.positions[id];
+      }
+    }
+    layout.previewLayoutRevision = 3;
   }
   const entries = homeEntries(layout),
     packed = packHome(entries, layout.positions);

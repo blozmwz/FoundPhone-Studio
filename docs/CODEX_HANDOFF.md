@@ -26,3 +26,13 @@ work.json 使用网络优先并支持离线回退；实际 Service Worker 升级
 复用现有引擎、App 和许可，不整体重写手机。story.json 中 releaseStage2 标记使标准 npm run build 只生成当前作品，不生成空白/测试作品。测试夹具为上一版已公开数据，仅供源码回归，不打包到 dist。
 
 运行 typecheck、lint、test、story:validate、story:test、build。四条路线为两种拒绝与两种 Stage2 非结局停点；所有主要互动需保持两个有效选项。后台 Chrome 覆盖名字、PIN、回复/草稿刷新、旧存档接续、拒绝重选、备份导入导出、缓存升级、已读与菜单；未验证实体 iPhone/Safari，不应声称全设备兼容或穷举所有选择组合。
+
+## Stage1-2 maintenance release
+
+The user approved publishing the local ordering/layout fixes and one November20 B wording change to the existing Cloudflare domain. Preserve revision1502 saves, stable choice IDs and unsent drafts. Restore current choice labels without sending them.
+
+Desktop layout revision3 updates only the newly available delivery/netflix settings. Optional conversations cannot precede already delivered messages; old timestamps are corrected without re-sending. Unread receipts use actual story dates. Date advancement waits for replies and scheduled messages.
+
+Delivery UI and event dispatch share canOrderFood: housingRoute=stay, completed Hendery rental confirmation, moved-in stage, and no current choices/scheduled messages/active side conversation. Existing at-home knowledge and once-only stage events remain. Stage2 soft stop supports existing food interactions; Stage3-5 data remain excluded.
+
+Validate actual deployed assets and independent Chrome saves rather than just the unchanged data revision. No blanket reset or personal-browser access.

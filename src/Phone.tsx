@@ -278,6 +278,10 @@ function PhoneRuntime({
   }, [creator, ready, work.id, work.updatedAt]);
   const event = (event: string, target: string) => {
     if (!creator) {
+      if (
+        event === "continueScene" &&
+        pendingScene(work, runtimeRef.current)?.id !== target
+      ) return;
       const next = dispatch(work, runtimeRef.current, event, target);
       const value = event === "read" ? reconcileReadNotices(work, next) : next;
       update(value);

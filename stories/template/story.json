@@ -4129,7 +4129,7 @@
         },
         {
           "id": "life-film2-pick-send-2-out-1",
-          "body": "行 那我等你 你快点",
+          "body": "行 那你选好了叫我",
           "senderId": "owner",
           "time": "2026-11-20 21:00",
           "hidden": true,
@@ -16173,7 +16173,7 @@
     },
     {
       "id": "life-film2-pick-send-2",
-      "label": "行 那我等你 你快点",
+      "label": "行 那你选好了叫我",
       "type": "action",
       "event": "choose",
       "target": "life-film2-pick-send-2",

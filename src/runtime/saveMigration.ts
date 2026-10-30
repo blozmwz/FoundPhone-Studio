@@ -1,4 +1,5 @@
 import { reconcileReadNotices } from "./messageRead";
+import { reconcileAsideTimestamps } from "./asideTimestamps";
 import { backfillApprovedPosts } from "../story-engine/recordTimestamp";
 import { z } from "zod";
 import { itemSchema, initialRuntime, type Runtime, type Work } from "../schema";
@@ -92,8 +93,18 @@ export function restoreRuntime(work: Work, input: unknown): Runtime {
     }
   }
   state = migrateStage2Trim(work, state);
+  // Stable choice IDs keep unsent drafts valid across a wording-only update.
+  state.choices = state.choices.map((choice) => ({
+    ...choice,
+    label:
+      work.nodes.find((node) => node.id === choice.target)?.label ??
+      choice.label,
+  }));
   state.variables = { ...work.variables, ...state.variables };
-  return reconcileReadNotices(work, backfillApprovedPosts(work, state));
+  return reconcileReadNotices(
+    work,
+    backfillApprovedPosts(work, reconcileAsideTimestamps(work, state)),
+  );
 }
 export function startFresh(work: Work) {
   return dispatch(work, initialRuntime(work), "start");
