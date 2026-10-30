@@ -11,3 +11,5 @@
 本作依据作者设定进行虚构演绎，不代表现实人物的真实私生活。MIT 和第三方许可见 LICENSE、THIRD_PARTY_LICENSES.txt、BRAND_NOTICE.txt、MYMY_NOTICE.txt。
 
 本地运行：`npm ci`、`npm run dev`。检查：`npm run typecheck`、`npm run lint`、`npm test`、`npm run story:validate`、`npm run story:test`、`npm run build`。
+
+当前构建标识：stage12-20261030-r4（存档版本1502保持兼容）。游戏默认自动保存，设置→游戏进度提供备份与二次确认重开。更新无需清除网站数据。多标签冲突合并、云同步和实体Safari验证尚未完成。

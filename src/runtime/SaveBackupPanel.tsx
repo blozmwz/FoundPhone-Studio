@@ -12,16 +12,18 @@ export function SaveBackup({
   work,
   state,
   saveKey,
-  onRestore,
   nameKey = "foundphone-player-name",
   importOnly = false,
+  embedded = false,
+  onRestart,
 }: {
   work: Work;
   state: Runtime;
   saveKey: string;
-  onRestore: (state: Runtime) => void;
   nameKey?: string;
   importOnly?: boolean;
+  embedded?: boolean;
+  onRestart?: () => Promise<void>;
 }) {
   const [open, setOpen] = useState(false),
     [error, setError] = useState("");
@@ -30,15 +32,18 @@ export function SaveBackup({
   > | null>(null);
   const [busy, setBusy] = useState(false);
   const input = useRef<HTMLInputElement>(null);
-  return createPortal(
-    <aside className="save-backup-tools">
-      <button onClick={() => setOpen(!open)}>
-        {importOnly ? "导入已有存档" : "存档与备份"}
-      </button>
-      {open && (
+  const content = (
+    <aside className={`save-backup-tools ${embedded ? "embedded" : ""}`}>
+      {!embedded && (
+        <button onClick={() => setOpen(!open)}>
+          {importOnly ? "导入已有存档" : "存档与备份"}
+        </button>
+      )}
+      {(embedded || open) && (
         <section aria-label="存档与备份" className="save-backup-panel">
           <strong>{importOnly ? "恢复已有进度" : "进度自动保存"}</strong>
           <p>备份可用于换设备或保留进度。</p>
+          {embedded && <p>刷新或下次打开同一网址，会接着当前进度继续。</p>}
           {!importOnly && (
             <>
               <button
@@ -58,6 +63,23 @@ export function SaveBackup({
           >
             导入存档
           </button>
+          {onRestart && (
+            <button
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await onRestart();
+                } catch {
+                  setError("重新开始未完成，原进度已保留，请重试。");
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              重新开始
+            </button>
+          )}
           <input
             hidden
             type="file"
@@ -108,17 +130,26 @@ export function SaveBackup({
               setBusy(true);
               try {
                 const current = await readSavedRuntime(saveKey);
+                const restored = {
+                  ...pending.state,
+                  ui: {
+                    ...pending.state.ui,
+                    profile: {
+                      ...pending.state.ui?.profile,
+                      playerName: pending.playerName,
+                    },
+                  },
+                };
                 await replaceRuntime(
                   saveKey,
                   current?.state ?? state,
-                  pending.state,
+                  restored,
                 );
                 try {
                   localStorage.setItem(nameKey, pending.playerName);
                 } catch {
                   /* Current visit still restores its progress. */
                 }
-                onRestore(pending.state);
                 setPending(null);
                 location.reload();
               } catch {
@@ -132,7 +163,7 @@ export function SaveBackup({
           </button>
         </section>
       )}
-    </aside>,
-    document.body,
+    </aside>
   );
+  return embedded ? content : createPortal(content, document.body);
 }

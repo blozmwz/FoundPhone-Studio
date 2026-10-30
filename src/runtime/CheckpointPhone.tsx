@@ -37,9 +37,7 @@ export function CheckpointPhone({
       .then((saved) => {
         if (active)
           setState(
-            saved?.state.revision === work.updatedAt
-              ? restoreRuntime(work, saved.state)
-              : checkpoint(work),
+            saved ? restoreRuntime(work, saved.state) : checkpoint(work),
           );
       })
       .catch((e) => {
@@ -77,6 +75,8 @@ export function CheckpointPhone({
           </span>
           <button
             onClick={() => {
+              if (!confirm("重新开始这个独立试玩进度？名字和正常存档会保留。"))
+                return;
               update(checkpoint(work));
               setRestartKey((key) => key + 1);
             }}

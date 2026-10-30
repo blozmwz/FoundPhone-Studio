@@ -211,3 +211,77 @@
   color: #333;
   font-size: 13px;
 }
+/* Save controls belong to the phone's Settings page during normal play. */
+.save-backup-tools.embedded {
+  position: static;
+  color: #1c1c1e;
+  z-index: auto;
+  width: 100%;
+  font-size: 15px;
+}
+.save-backup-tools.embedded .save-backup-panel {
+  width: auto;
+  margin: 12px 0;
+  padding: 16px;
+  background: #fff;
+  border: 0;
+  color: #1c1c1e;
+  box-shadow: none;
+}
+.save-backup-tools.embedded .save-backup-panel p {
+  color: #666;
+  font-size: 13px;
+}
+.save-backup-tools.embedded button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #f2f2f7;
+  color: #007aff;
+  margin: 9px 0;
+  font-size: 15px;
+}
+.save-backup-tools.embedded .save-import-confirm {
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  transform: none;
+  width: 90%;
+  box-sizing: border-box;
+  background: #fff;
+  color: #1c1c1e;
+  z-index: 30;
+}
+.save-backup-tools.embedded .save-import-confirm p {
+  font-size: 13px;
+}
+.autosave-error {
+  position: absolute;
+  top: 58px;
+  left: 12px;
+  right: 12px;
+  z-index: 150;
+  background: #fff3cd;
+  color: #643f00;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+/* Fast phone controls must not be interpreted as browser double-tap zoom.
+   Keep normal panning and deliberate pinch zoom available. */
+.story-runtime,
+.story-runtime .phone-screen,
+.story-runtime button,
+.story-runtime [role="button"] {
+  touch-action: manipulation;
+}
+.story-runtime .home-pages {
+  touch-action: pan-x pinch-zoom;
+}
+@media (pointer: coarse) {
+  .story-runtime input,
+  .story-runtime textarea,
+  .story-runtime select {
+    font-size: 16px;
+  }
+}

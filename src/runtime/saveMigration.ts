@@ -5,6 +5,11 @@ import { z } from "zod";
 import { itemSchema, initialRuntime, type Runtime, type Work } from "../schema";
 import { dispatch } from "../engine";
 import { migrateStage2Trim } from "./stage2SaveTrim";
+import {
+  compatibleSaveRevision,
+  resumeExtendedRelease,
+  validateSaveAnchors,
+} from "./saveCompatibility";
 const scalar = z.union([z.string(), z.number().finite(), z.boolean()]);
 const strings = z.array(z.string().max(10000)).max(50000);
 const uiValue = z.union([scalar, strings]);
@@ -52,9 +57,11 @@ export function restoreRuntime(work: Work, input: unknown): Runtime {
   const saved = parsed.data;
   if (saved.workId !== work.id)
     throw Error("这份存档属于另一部作品，未覆盖进度。");
-  const publicUpgrade =
-    work.variables.releaseStage2 === true && saved.revision === 1501;
-  if (saved.revision !== work.updatedAt && !publicUpgrade)
+  const publicWork =
+    work.variables.releaseStage2 === true ||
+    work.variables.saveFamily === "thursday-public";
+  const publicUpgrade = publicWork && saved.revision === 1501;
+  if (!compatibleSaveRevision(work, saved) && !publicUpgrade)
     throw Error("这份存档版本暂不兼容，原存档已保留，请先导出备份。");
   let state: Runtime = {
     ...initialRuntime(work),
@@ -80,7 +87,7 @@ export function restoreRuntime(work: Work, input: unknown): Runtime {
     }
     state.variables.publicSaveMigrated = 1501;
   }
-  if (work.variables.releaseStage2 === true) {
+  if (publicWork) {
     const hadStop = state.endings.some((e) =>
       e.startsWith("Stage 2 试玩结束｜"),
     );
@@ -101,6 +108,8 @@ export function restoreRuntime(work: Work, input: unknown): Runtime {
       choice.label,
   }));
   state.variables = { ...work.variables, ...state.variables };
+  resumeExtendedRelease(work, state);
+  if (saved.revision !== work.updatedAt) validateSaveAnchors(work, state);
   return reconcileReadNotices(
     work,
     backfillApprovedPosts(work, reconcileAsideTimestamps(work, state)),

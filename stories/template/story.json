@@ -5623,7 +5623,10 @@
     "sideBusy": false,
     "henderyHome": false,
     "stage2TrimRevision": 1,
+    "saveFamily": "thursday-public",
+    "saveCompatibleFrom": 1501,
     "publicDemo": true,
+    "releaseBuild": "stage12-20261030-r4",
     "releaseStage2": true,
     "releaseComplete": false
   },

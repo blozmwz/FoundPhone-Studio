@@ -50,6 +50,7 @@ import {
   useRef,
   Suspense,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import { AnimatePresence } from "motion/react";
 import {
@@ -74,7 +75,11 @@ import {
   type UiValue,
 } from "./schema";
 import { dispatch, choose, visible, advance } from "./engine";
-import { persistRuntime, readSavedRuntime } from "./persistence";
+import {
+  persistRuntime,
+  readSavedRuntime,
+  replaceRuntime,
+} from "./persistence";
 export function AppIcon({
   id,
   name,
@@ -190,6 +195,7 @@ function PhoneRuntime({
   const [ready, setReady] = useState(creator || !!external);
   const [loadError, setLoadError] = useState("");
   const [blockedSave, setBlockedSave] = useState<Runtime | null>(null);
+  const [endingDismissed, setEndingDismissed] = useState(false);
   useEffect(() => {
     const el = shell.current;
     if (!el) return;
@@ -217,7 +223,15 @@ function PhoneRuntime({
   const s = external ?? own;
   const runtimeRef = useRef(s);
   runtimeRef.current = s;
+  const withPlayerName = (next: Runtime): Runtime => ({
+    ...next,
+    ui: {
+      ...next.ui,
+      profile: { ...next.ui?.profile, playerName: work.phone.owner },
+    },
+  });
   const update = (next: Runtime) => {
+    next = withPlayerName(next);
     runtimeRef.current = next;
     setOwn(next);
     onRuntime?.(next);
@@ -233,9 +247,11 @@ function PhoneRuntime({
       .then((saved) => {
         if (!active) return;
         try {
-          const value = saved
-            ? restoreRuntime(work, saved.state)
-            : dispatch(work, initialRuntime(work), "start");
+          const value = withPlayerName(
+            saved
+              ? restoreRuntime(work, saved.state)
+              : dispatch(work, initialRuntime(work), "start"),
+          );
           runtimeRef.current = value;
           setOwn(value);
           setReady(true);
@@ -281,7 +297,8 @@ function PhoneRuntime({
       if (
         event === "continueScene" &&
         pendingScene(work, runtimeRef.current)?.id !== target
-      ) return;
+      )
+        return;
       const next = dispatch(work, runtimeRef.current, event, target);
       const value = event === "read" ? reconcileReadNotices(work, next) : next;
       update(value);
@@ -406,6 +423,25 @@ function PhoneRuntime({
   const photoWallpaper = work.phone.wallpaper.startsWith("data:image/")
     ? safeMedia(work.phone.wallpaper)
     : "";
+  async function restartStory() {
+    if (!confirm("重新开始当前故事？名字会保留，当前剧情进度将清除。")) return;
+    const next = dispatch(work, initialRuntime(work), "start");
+    await replaceRuntime(saveKey, runtimeRef.current, next);
+    update(next);
+    setApp("");
+    setLocked(true);
+    setEndingDismissed(false);
+  }
+  const saveControls = !creator ? (
+    <SaveBackup
+      embedded
+      work={work}
+      state={s}
+      saveKey={saveKey}
+      nameKey={nameKey}
+      onRestart={restartStory}
+    />
+  ) : undefined;
   if (!ready)
     return (
       <div className="phone-loading">
@@ -424,12 +460,6 @@ function PhoneRuntime({
               state={blockedSave}
               saveKey={saveKey}
               nameKey={nameKey}
-              onRestore={(next) => {
-                setBlockedSave(null);
-                setLoadError("");
-                update(next);
-                setReady(true);
-              }}
             />
           </>
         )}
@@ -441,19 +471,6 @@ function PhoneRuntime({
       style={{ "--phone-scale": deviceScale } as CSSProperties}
       className={`phone-shell ios18 ${roommateStory ? "roommate-phone" : ""} ${work.phone.theme === "dark" ? "dark-phone" : ""}`}
     >
-      {!creator && (
-        <SaveBackup
-          work={work}
-          state={s}
-          saveKey={saveKey}
-          nameKey={nameKey}
-          onRestore={(next) => {
-            update(next);
-            setApp("");
-            setLocked(true);
-          }}
-        />
-      )}
       <KeyboardContext.Provider value={setKeyboard}>
         <div
           style={
@@ -532,6 +549,11 @@ function PhoneRuntime({
             }
           }}
         >
+          {loadError && (
+            <p className="autosave-error" role="alert">
+              {loadError}
+            </p>
+          )}
           {!photoWallpaper && (
             <>
               <div className="wallpaper-orb orb-one" />
@@ -639,6 +661,7 @@ function PhoneRuntime({
                   onAdd={() => onAdd?.(app)}
                   onBack={leaveApp}
                   onSettings={onSettings}
+                  saveControls={saveControls}
                   onUi={(key, value) => {
                     const current = runtimeRef.current;
                     update(
@@ -903,6 +926,7 @@ function PhoneRuntime({
           )}
           {!creator &&
             s.endings.length > 0 &&
+            !endingDismissed &&
             !locked &&
             s.ui?.messages?.reunionOpen !== true && (
               <div className="story-overlay ending">
@@ -934,6 +958,12 @@ function PhoneRuntime({
                 {roommateStory && (
                   <button
                     onClick={() => {
+                      if (
+                        !confirm(
+                          "返回入住选择？此选择之后的剧情会重置，名字保留。",
+                        )
+                      )
+                        return;
                       update(housingCheckpoint(work, s));
                       setApp("");
                     }}
@@ -943,12 +973,11 @@ function PhoneRuntime({
                 )}
                 <button
                   onClick={() => {
-                    update(dispatch(work, initialRuntime(work), "start"));
+                    setEndingDismissed(true);
                     setApp("");
-                    setLocked(true);
                   }}
                 >
-                  重新开始
+                  返回手机
                 </button>
               </div>
             )}
@@ -1210,6 +1239,7 @@ function AppContent({
   onAdd,
   onBack,
   onSettings,
+  saveControls,
   onUi,
   work,
   onChoose,
@@ -1232,6 +1262,7 @@ function AppContent({
   onAdd: () => void;
   onBack: () => void;
   onSettings?: () => void;
+  saveControls?: ReactNode;
   onUi?: (key: string, value: UiValue) => void;
   work: Work;
   onChoose: (target: string) => void;
@@ -1475,6 +1506,7 @@ function AppContent({
           creator={creator}
           onItem={read}
           onSettings={onSettings}
+          saveControls={saveControls}
         />
       ) : app.id === "calculator" && !detail ? (
         <NativeCalculator

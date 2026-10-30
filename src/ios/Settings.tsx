@@ -1,4 +1,4 @@
-import { useState, type ComponentType } from "react";
+import { useState, type ComponentType, type ReactNode } from "react";
 import {
   Plane,
   Wifi,
@@ -51,12 +51,14 @@ export function NativeSettings({
   creator,
   onItem,
   onSettings,
+  saveControls,
 }: {
   work: Work;
   items: Item[];
   creator: boolean;
   onItem: (i: Item) => void;
   onSettings?: () => void;
+  saveControls?: ReactNode;
 }) {
   const nav = useNavigation(),
     [query, setQuery] = useState(""),
@@ -79,6 +81,8 @@ export function NativeSettings({
   );
   const sub = () => {
     switch (nav.page) {
+      case "游戏进度":
+        return saveControls;
       case "通用":
         return (
           <div className="settings-group">
@@ -270,6 +274,11 @@ export function NativeSettings({
                   ))}
               </div>
             ))}
+            {saveControls && "游戏进度自动保存备份重新开始".includes(query) && (
+              <div className="settings-group">
+                {row("游戏进度", "自动保存", () => nav.push("游戏进度"))}
+              </div>
+            )}
           </>
         )}
         {items

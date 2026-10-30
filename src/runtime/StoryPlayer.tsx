@@ -1,5 +1,6 @@
 import { SaveBackup } from "./SaveBackupPanel";
 import { initialRuntime } from "../schema";
+import { readSavedRuntime } from "../persistence";
 import { localReviewSlot, playerNameKey } from "./reviewSlot";
 import { ReleaseReview } from "./ReleaseReview";
 import { CheckpointPhone } from "./CheckpointPhone";
@@ -46,6 +47,30 @@ function StoryPlayer() {
       });
     return () => abort.abort();
   }, []);
+  useEffect(() => {
+    if (!work || playerName) return;
+    let active = true;
+    const slot = localReviewSlot();
+    void readSavedRuntime(work.id + (slot ? ":rc:" + slot : ""))
+      .then((saved) => {
+        const name = saved?.state.ui?.profile?.playerName;
+        if (active && typeof name === "string" && name.trim()) {
+          setPlayerName((current) => current || name);
+          setNameInput((current) => current || name);
+          try {
+            localStorage.setItem(playerNameKey(), name);
+          } catch {
+            /* DB copy remains. */
+          }
+        }
+      })
+      .catch(() => {
+        /* The name form remains available. */
+      });
+    return () => {
+      active = false;
+    };
+  }, [work, playerName]);
   const startWithName = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const name = nameInput.trim().slice(0, 24);
@@ -133,7 +158,6 @@ function StoryPlayer() {
                 personalizedWork.id +
                 (localReviewSlot() ? ":rc:" + localReviewSlot() : "")
               }
-              onRestore={() => {}}
             />
           </section>
         )

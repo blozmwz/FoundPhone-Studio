@@ -36,3 +36,15 @@ Desktop layout revision3 updates only the newly available delivery/netflix setti
 Delivery UI and event dispatch share canOrderFood: housingRoute=stay, completed Hendery rental confirmation, moved-in stage, and no current choices/scheduled messages/active side conversation. Existing at-home knowledge and once-only stage events remain. Stage2 soft stop supports existing food interactions; Stage3-5 data remain excluded.
 
 Validate actual deployed assets and independent Chrome saves rather than just the unchanged data revision. No blanket reset or personal-browser access.
+
+## Stage1-2 release stage12-20261030-r4
+
+The user explicitly approved publishing all completed Stage1-2 changes to project bdg/main. Preserve the f2644b3 rollback branch and prior Cloudflare deployment. Keep save revision1502 compatible; build identifier is work.variables.releaseBuild.
+
+Autosave remains automatic with synchronous journal plus IndexedDB. Name is mirrored in ui.profile.playerName. Settings / Game Progress contains import, export and confirmed restart; ordinary gameplay has no floating save panel. Restart retains the name, cancellation changes no progress.
+
+Forward-compatible saves declare saveFamily and saveCompatibleFrom. Stable graph IDs and known migrations preserve prior progress; incompatible anchors retain the raw save instead of resetting. A future stage requires an explicitly validated resumeAfterRelease entry; this release does not enable Stage3-5.
+
+Touch controls use touch-action manipulation to avoid unintended double-tap zoom; panning and deliberate pinch remain available. Coarse-pointer inputs use 16px text. Mobile checks use Chrome emulation; physical Safari/iPhone is not verified. Reference: https://webkit.org/blog/5610/more-responsive-tapping-on-ios/ .
+
+Known limits: saves are local to the browser/origin, no cloud sync or multi-tab merge. Clearing site data/private sessions can lose saves. Storage failures display a warning; failed writes can fall back to the short-term journal. Never tell players to clear site data to update.
