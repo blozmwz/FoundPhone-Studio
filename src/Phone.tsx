@@ -1,3 +1,8 @@
+import { reconcileReadNotices, unreadMessages } from "./runtime/messageRead";
+import { restoreRuntime } from "./runtime/saveMigration";
+import { SaveBackup } from "./runtime/SaveBackupPanel";
+import { downloadBackup, encodeBackup } from "./runtime/saveBackup";
+import { housingCheckpoint } from "./runtime/checkpoint";
 import { lifeInteraction } from "./runtime/lifeInteractions";
 import { FilmList, Delivery } from "./runtime/LifeApps";
 import { storyDatedItem } from "./runtime/storyDates";
@@ -69,7 +74,7 @@ import {
   type UiValue,
 } from "./schema";
 import { dispatch, choose, visible, advance } from "./engine";
-import { db } from "./persistence";
+import { persistRuntime, readSavedRuntime } from "./persistence";
 export function AppIcon({
   id,
   name,
@@ -77,6 +82,7 @@ export function AppIcon({
   custom = "",
   date,
   time,
+  unread = 0,
 }: {
   id: string;
   name?: string;
@@ -84,6 +90,7 @@ export function AppIcon({
   custom?: string;
   date?: string;
   time?: string;
+  unread?: number;
 }) {
   const a = getApp(id);
   const Icon = a.icon;
@@ -102,6 +109,11 @@ export function AppIcon({
           <Icon size={small ? 21 : 28} strokeWidth={1.65} />
         )}
       </span>
+      {unread > 0 && (
+        <b className="app-unread-badge" aria-label={`信息 ${unread} 条未读`}>
+          {unread > 99 ? "99+" : unread}
+        </b>
+      )}
       {name && <span className="app-name">{name}</span>}
     </span>
   );
@@ -127,6 +139,8 @@ function PhoneRuntime({
   onOpen,
   runtime: external,
   onRuntime,
+  saveKey = work.id,
+  nameKey,
 }: {
   deviceLayout: ReturnType<typeof useDeviceLayout>;
   work: Work;
@@ -137,6 +151,8 @@ function PhoneRuntime({
   onOpen?: (app: string) => void;
   runtime?: Runtime;
   onRuntime?: (s: Runtime) => void;
+  saveKey?: string;
+  nameKey?: string;
 }) {
   const [app, setApp] = useState("");
   const [focusItem, setFocusItem] = useState("");
@@ -150,7 +166,7 @@ function PhoneRuntime({
   const [recent, setRecent] = useState<string[]>([]);
   const appSnapshots = useRef(new Map<string, HTMLElement>());
   const [banner, setBanner] = useState("");
-  const noticesSeen = useRef(0);
+  const noticesSeen = useRef<string[]>([]);
   const [contextApp, setContextApp] = useState("");
   const [deviceScale, setDeviceScale] = useState(0.84);
   const shell = useRef<HTMLDivElement>(null);
@@ -173,6 +189,7 @@ function PhoneRuntime({
   const [own, setOwn] = useState(() => initialRuntime(work));
   const [ready, setReady] = useState(creator || !!external);
   const [loadError, setLoadError] = useState("");
+  const [blockedSave, setBlockedSave] = useState<Runtime | null>(null);
   useEffect(() => {
     const el = shell.current;
     if (!el) return;
@@ -204,37 +221,44 @@ function PhoneRuntime({
     runtimeRef.current = next;
     setOwn(next);
     onRuntime?.(next);
+    if (!creator && !external)
+      void persistRuntime(saveKey, next).catch(() =>
+        setLoadError("存档失败，请导出备份并检查浏览器存储权限。"),
+      );
   };
   useEffect(() => {
     let active = true;
     if (creator || external) return;
-    void db.saves
-      .get(work.id)
+    void readSavedRuntime(saveKey)
       .then((saved) => {
         if (!active) return;
-        if (saved && saved.state.revision === work.updatedAt)
-          setOwn(saved.state);
-        else {
-          setOwn(dispatch(work, initialRuntime(work), "start"));
-          if (saved) setLoadError("作品已更新，已开始新的进度。");
+        try {
+          const value = saved
+            ? restoreRuntime(work, saved.state)
+            : dispatch(work, initialRuntime(work), "start");
+          runtimeRef.current = value;
+          setOwn(value);
+          setReady(true);
+          void persistRuntime(saveKey, value).catch(() =>
+            setLoadError("存档失败，请导出备份。"),
+          );
+        } catch (e) {
+          setBlockedSave(saved?.state ?? null);
+          setLoadError(
+            e instanceof Error ? e.message : "存档读取失败，原进度保留。",
+          );
         }
-        setReady(true);
       })
       .catch(() => {
-        setOwn(dispatch(work, initialRuntime(work), "start"));
-        setLoadError("无法读取本地存档。本次仍可游玩。");
-        setReady(true);
+        if (active)
+          setLoadError(
+            "无法读取本地存档，请检查浏览器存储权限；未覆盖原进度。",
+          );
       });
     return () => {
       active = false;
     };
-  }, [work.id, work.updatedAt, creator, external]);
-  useEffect(() => {
-    if (!creator && !external && ready)
-      void db.saves
-        .put({ id: work.id, state: own })
-        .catch(() => setLoadError("存档失败，请检查浏览器存储权限。"));
-  }, [own, creator, work.id, external, ready]);
+  }, [saveKey, work.id, work.updatedAt, creator, external]);
   useEffect(() => {
     if (creator || !ready) return;
     const interval = setInterval(() => {
@@ -253,7 +277,15 @@ function PhoneRuntime({
     return () => clearInterval(interval);
   }, [creator, ready, work.id, work.updatedAt]);
   const event = (event: string, target: string) => {
-    if (!creator) update(dispatch(work, runtimeRef.current, event, target));
+    if (!creator) {
+      const next = dispatch(work, runtimeRef.current, event, target);
+      const value = event === "read" ? reconcileReadNotices(work, next) : next;
+      update(value);
+      if (event === "read")
+        setBanner((current) =>
+          value.notifications.includes(current) ? current : "",
+        );
+    }
   };
   const captureApp = () => {
     if (!app) return;
@@ -335,9 +367,15 @@ function PhoneRuntime({
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
   const plugin = getApp(app);
   useEffect(() => {
-    const count = s.notifications.length;
-    if (!locked && work.phone.notifications && count > noticesSeen.current) {
-      const text = s.notifications.at(-1) || "";
+    const previous = [...noticesSeen.current];
+    const added = s.notifications.filter((text) => {
+      const index = previous.indexOf(text);
+      if (index < 0) return true;
+      previous.splice(index, 1);
+      return false;
+    });
+    if (!locked && work.phone.notifications && added.length) {
+      const text = added.at(-1) || "";
       const activeThread =
         shell.current?.querySelector<HTMLElement>(".roommate-messages")?.dataset
           .thread;
@@ -347,8 +385,8 @@ function PhoneRuntime({
         notificationContent(text, work.apps).title === activeThread;
       setBanner(sameThread ? "" : text);
     }
-    noticesSeen.current = count;
-  }, [s.notifications.length, locked, work.phone.notifications]);
+    noticesSeen.current = [...s.notifications];
+  }, [s.notifications, locked, work.phone.notifications]);
   useEffect(() => {
     if (!banner) return;
     const timer = setTimeout(() => setBanner(""), 4500);
@@ -364,13 +402,54 @@ function PhoneRuntime({
   const photoWallpaper = work.phone.wallpaper.startsWith("data:image/")
     ? safeMedia(work.phone.wallpaper)
     : "";
-  if (!ready) return <div className="phone-loading">正在恢复进度…</div>;
+  if (!ready)
+    return (
+      <div className="phone-loading">
+        <p>{loadError || "正在恢复进度…"}</p>
+        {blockedSave && (
+          <>
+            <button
+              onClick={() =>
+                downloadBackup(encodeBackup(blockedSave, work.phone.owner))
+              }
+            >
+              导出保留的旧存档
+            </button>
+            <SaveBackup
+              work={work}
+              state={blockedSave}
+              saveKey={saveKey}
+              nameKey={nameKey}
+              onRestore={(next) => {
+                setBlockedSave(null);
+                setLoadError("");
+                update(next);
+                setReady(true);
+              }}
+            />
+          </>
+        )}
+      </div>
+    );
   return (
     <div
       ref={shell}
       style={{ "--phone-scale": deviceScale } as CSSProperties}
       className={`phone-shell ios18 ${roommateStory ? "roommate-phone" : ""} ${work.phone.theme === "dark" ? "dark-phone" : ""}`}
     >
+      {!creator && (
+        <SaveBackup
+          work={work}
+          state={s}
+          saveKey={saveKey}
+          nameKey={nameKey}
+          onRestore={(next) => {
+            update(next);
+            setApp("");
+            setLocked(true);
+          }}
+        />
+      )}
       <KeyboardContext.Provider value={setKeyboard}>
         <div
           style={
@@ -599,6 +678,9 @@ function PhoneRuntime({
                     name={small ? undefined : a.name}
                     small={small}
                     custom={a.icon}
+                    unread={
+                      a.id === "messages" ? unreadMessages(work, s).length : 0
+                    }
                     date={s.date || work.phone.date}
                     time={s.time}
                   />
@@ -715,6 +797,35 @@ function PhoneRuntime({
                 </span>
               </div>
             )}
+          {!creator &&
+            !locked &&
+            !app &&
+            work.variables.releaseStage2 === true &&
+            s.variables.releaseComplete === true &&
+            (s.ui?.release?.updateHintShown === true ? (
+              <p className="release-update-hint" role="status">
+                目前已更新至这里，等待后续更新。
+              </p>
+            ) : (
+              <button
+                className="roommate-continuation"
+                aria-label="继续到下一日期"
+                onClick={() =>
+                  update({
+                    ...runtimeRef.current,
+                    ui: {
+                      ...runtimeRef.current.ui,
+                      release: {
+                        ...runtimeRef.current.ui?.release,
+                        updateHintShown: true,
+                      },
+                    },
+                  })
+                }
+              >
+                继续到下一日期
+              </button>
+            ))}
           {!creator && !locked && !app && nextScene && (
             <button
               className="roommate-continuation"
@@ -814,6 +925,16 @@ function PhoneRuntime({
                     }}
                   >
                     几年后 · 打开消息
+                  </button>
+                )}
+                {roommateStory && (
+                  <button
+                    onClick={() => {
+                      update(housingCheckpoint(work, s));
+                      setApp("");
+                    }}
+                  >
+                    返回是否入住的选择
                   </button>
                 )}
                 <button

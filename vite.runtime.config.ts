@@ -20,8 +20,21 @@ export default defineConfig(({ command }) => ({
       },
       workbox: {
         clientsClaim: true,
+        importScripts: ["./sw-refresh.js"],
+        globIgnores: ["**/work.json"],
+        runtimeCaching: [
+          {
+            urlPattern: /\/work\.json(?:\?.*)?$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "thursday-story-data",
+              networkTimeoutSeconds: 3,
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
         globPatterns: ["**/*.{js,css,html,svg,json,txt,png,jpg}"],
-        maximumFileSizeToCacheInBytes: 8000000,
+        maximumFileSizeToCacheInBytes: 16000000,
       },
     }),
   ],

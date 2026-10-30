@@ -8,6 +8,31 @@
   overflow: hidden;
   background: #111113;
 }
+.stage2-preview-tools {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #242427;
+  color: #ddd;
+  font:
+    12px -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+.stage2-preview-tools button {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #007aff;
+  color: white;
+  cursor: pointer;
+}
 .story-runtime .phone-stage {
   width: 100%;
   height: 100%;
@@ -104,4 +129,85 @@
     padding: 28px 24px 24px;
     border-radius: 22px;
   }
+}
+.save-backup-tools {
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  z-index: 200;
+  font-size: 13px;
+  color: #eee;
+}
+.save-backup-tools button {
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 12px;
+  background: #353539;
+  color: white;
+  cursor: pointer;
+  margin: 3px;
+}
+.save-backup-panel {
+  width: 260px;
+  background: #202024;
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 7px;
+  box-shadow: 0 8px 25px #0006;
+}
+.save-backup-panel p {
+  font-size: 12px;
+  color: #bbb;
+  line-height: 1.6;
+}
+.save-import-confirm {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(360px, 90vw);
+  background: #242428;
+  border: 1px solid #666;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 0 0 100vmax #000b;
+  z-index: 201;
+}
+.save-import-confirm p {
+  line-height: 1.6;
+}
+.save-backup-tools [role="alert"] {
+  color: #ffb3b3;
+}
+.ios18 .app-icon-wrap {
+  position: relative;
+}
+.ios18 .app-unread-badge {
+  position: absolute;
+  right: -7px;
+  top: -6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 12px;
+  background: #ff3b30;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  line-height: 1;
+  z-index: 2;
+}
+.release-update-hint {
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+  right: 20px;
+  padding: 12px 16px;
+  text-align: center;
+  border-radius: 16px;
+  background: #f1f1f4ed;
+  color: #333;
+  font-size: 13px;
 }

@@ -1,3 +1,4 @@
+import { stampUnlockedPost } from "./story-engine/recordTimestamp";
 import type { Action, Condition, Runtime, StoryNode, Work } from "./schema";
 import { makeItem } from "./schema";
 export function testCondition(c: Condition, s: Runtime): boolean {
@@ -39,6 +40,7 @@ function apply(a: Action, s: Runtime, w: Work) {
       break;
     case "unlock":
       if (!s.unlocked.includes(a.key)) s.unlocked.push(a.key);
+      stampUnlockedPost(w, s, a.key);
       break;
     case "hide":
       if (!s.hidden.includes(a.key)) s.hidden.push(a.key);

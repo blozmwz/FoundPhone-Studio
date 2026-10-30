@@ -103,21 +103,26 @@ try {
   } else if (mode === "build") {
     await mkdir("public", { recursive: true });
     await writeFile("public/work.json", JSON.stringify(work, null, 2) + "\n");
-    const blank = compileStory(
-      JSON.parse(await readFile("stories/blank/story.json", "utf8")),
-    ).work;
-    await writeFile(
-      "public/blank-work.json",
-      JSON.stringify(blank, null, 2) + "\n",
-    );
-    {
-      const preview = compileStory(
-        JSON.parse(await readFile("stories/test-preview/story.json", "utf8")),
+    if (
+      process.env.FOUNDPHONE_RELEASE_ONLY !== "1" &&
+      raw.variables?.releaseStage2 !== true
+    ) {
+      const blank = compileStory(
+        JSON.parse(await readFile("stories/blank/story.json", "utf8")),
       ).work;
       await writeFile(
-        "public/test-work.json",
-        JSON.stringify(preview, null, 2) + "\n",
+        "public/blank-work.json",
+        JSON.stringify(blank, null, 2) + "\n",
       );
+      {
+        const preview = compileStory(
+          JSON.parse(await readFile("stories/test-preview/story.json", "utf8")),
+        ).work;
+        await writeFile(
+          "public/test-work.json",
+          JSON.stringify(preview, null, 2) + "\n",
+        );
+      }
     }
   } else if (!["validate", "test"].includes(mode))
     throw Error("未知命令 " + mode);

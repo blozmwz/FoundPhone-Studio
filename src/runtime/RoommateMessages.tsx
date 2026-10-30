@@ -1,4 +1,6 @@
-import { availableTopics } from "./lifeInteractions";
+import { unreadMessageItems } from "./messageRead";
+import { orderedMessages } from "./messageOrder";
+import { availableTopics, topicReplies } from "./lifeInteractions";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowUp,
@@ -64,6 +66,7 @@ export function RoommateMessages({
     Boolean(state.ui?.messages?.replyDraft),
   );
   const [suggestions, setSuggestions] = useState(false);
+  const [topicIndex, setTopicIndex] = useState(0);
   const [selected, setSelected] = useState(
     String(state.ui?.messages?.replyDraft ?? ""),
   );
@@ -84,9 +87,8 @@ export function RoommateMessages({
   readCallback.current = onRead;
   const readIds = useRef(new Set(state.read));
   for (const id of state.read) readIds.current.add(id);
-  const list = items
-    .filter((m) => m.title === thread)
-    .sort((a, b) => a.time.localeCompare(b.time));
+  const ordered = orderedMessages(items, state.unlocked);
+  const list = ordered.filter((m) => m.title === thread);
   function avatarFor(name: string) {
     return (
       work.data.contacts?.find((c) => c.title === name)?.avatar ||
@@ -96,12 +98,12 @@ export function RoommateMessages({
   }
   const conversationAvatar = avatarFor(thread);
   const signature = list.map((m) => m.id).join("|");
-  const names = [...new Set(items.map((m) => m.title))]
+  const names = [...new Set(ordered.map((m) => m.title))]
     .filter((name) => name.toLowerCase().includes(query.toLowerCase()))
     .sort((a, b) => {
       return (
-        items.filter((m) => m.title === b).at(-1)?.time ?? ""
-      ).localeCompare(items.filter((m) => m.title === a).at(-1)?.time ?? "");
+        ordered.filter((m) => m.title === b).at(-1)?.time ?? ""
+      ).localeCompare(ordered.filter((m) => m.title === a).at(-1)?.time ?? "");
     });
   // Read only bubbles that are actually on screen. This also works after returning
   // from a diary or restoring a saved game; branch decisions still require send.
@@ -129,13 +131,19 @@ export function RoommateMessages({
     return () => observer.disconnect();
   }, [signature, thread, keyboard, suggestions]);
   const ordinary = pending === thread ? state.choices : [];
-  const topics =
-    thread === "Hendery"
-      ? availableTopics(work, state).map((m) => ({
-          target: "topic:" + m.id,
-          label: m.body,
-        }))
-      : [];
+  const available = thread === "Hendery" ? availableTopics(work, state) : [];
+  const selectedTopic = selected.replace(/^topic:/, "");
+  const activeTopic =
+    available.find(
+      (m) =>
+        m.id === selectedTopic || m.meta.alternateReplyId === selectedTopic,
+    ) ?? available[topicIndex % Math.max(available.length, 1)];
+  const topics = activeTopic
+    ? topicReplies(work, state, activeTopic.id).map((m) => ({
+        target: "topic:" + m.id,
+        label: m.body,
+      }))
+    : [];
   const choices = ordinary.length ? ordinary : topics;
   const choice = choices.find((c) => c.target === selected);
   const scheduledMessage = state.scheduled?.some(
@@ -451,6 +459,19 @@ export function RoommateMessages({
                   </button>
                 </div>
               )}
+              {suggestions && !ordinary.length && available.length > 1 && (
+                <div className="rm-draft-tools">
+                  <button
+                    onClick={() => {
+                      setSelected("");
+                      onDraft?.("");
+                      setTopicIndex((index) => (index + 1) % available.length);
+                    }}
+                  >
+                    换个话题
+                  </button>
+                </div>
+              )}
               {["qwertyuiop", "asdfghjkl", "zxcvbnm"].map((row, i) => (
                 <div className={`rm-key-row rm-key-row-${i}`} key={row}>
                   {i === 2 && (
@@ -533,11 +554,13 @@ export function RoommateMessages({
           </label>
           <div className="rm-thread-list">
             {names.map((name) => {
-              const messages = items.filter((m) => m.title === name),
+              const messages = ordered.filter((m) => m.title === name),
                 last = messages.at(-1)!;
-              const unread = messages.some(
-                (m) => !m.outgoing && !state.read.includes(m.id),
-              );
+              const unread = unreadMessageItems(
+                messages,
+                state,
+                work.phone.date,
+              ).length;
               return (
                 <button
                   className="rm-thread"
@@ -545,7 +568,9 @@ export function RoommateMessages({
                   key={name}
                   onClick={() => openThread(name)}
                 >
-                  {unread && <i className="rm-unread" />}
+                  {unread > 0 && (
+                    <i className="rm-unread" aria-label={`${unread}条未读`} />
+                  )}
                   <span className="rm-avatar">
                     {avatarFor(name) ? (
                       <img src={avatarFor(name)} alt={`${name}的头像`} />

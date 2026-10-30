@@ -630,7 +630,8 @@
             }
           },
           "ending": {
-            "type": "string"
+            "type": "string",
+            "default": ""
           },
           "expectUnlocked": {
             "default": [],
@@ -638,12 +639,14 @@
             "items": {
               "type": "string"
             }
+          },
+          "checkpoint": {
+            "type": "string"
           }
         },
         "required": [
           "name",
           "steps",
-          "ending",
           "expectUnlocked"
         ],
         "additionalProperties": false

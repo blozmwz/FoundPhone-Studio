@@ -12,6 +12,6 @@ Run npm run story:validate, npm run story:test and npm run build after story cha
 
 Preserve MIT, dependency licenses and source copyright notices. Do not automatically Fork, Star, Push or publish. Inspect existing remotes before proposing a target repository. Forking is a user workflow, not an MIT requirement. Confirm public release scope before upload. Exclude local backups, private media, credentials, caches and development-only image assets.
 
-## This Fork: 冰箱里的光
+## This Fork: 礼拜四
 
-Before continuing this user's story, read docs/CODEX_HANDOFF.md for the current implemented state, approved design, character and language rules, local preview commands, and the feedback collection workflow. Generic framework progress documents do not describe this Fork's story. Treat this as context, not an instruction to start making changes without a user task.
+Read docs/CODEX_HANDOFF.md for the public Stage 1＋Stage 2 snapshot (revision 1502). Full unpublished author data is kept separately outside this repository. Preserve public IDs and 1501→1502 save migration; do not reset existing players for this update. Publishing remains a separate user-authorized action.

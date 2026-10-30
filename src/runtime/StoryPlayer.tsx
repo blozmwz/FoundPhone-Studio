@@ -1,3 +1,7 @@
+import { SaveBackup } from "./SaveBackupPanel";
+import { initialRuntime } from "../schema";
+import { localReviewSlot, playerNameKey } from "./reviewSlot";
+import { ReleaseReview } from "./ReleaseReview";
 import { CheckpointPhone } from "./CheckpointPhone";
 import { useEffect, useState, type FormEvent } from "react";
 import { createRoot } from "react-dom/client";
@@ -7,7 +11,7 @@ import "../styles.css";
 import "./player.css";
 function savedPlayerName() {
   try {
-    return localStorage.getItem("foundphone-player-name") || "";
+    return localStorage.getItem(playerNameKey()) || "";
   } catch {
     return "";
   }
@@ -25,7 +29,7 @@ function StoryPlayer() {
         : new URLSearchParams(location.search).get("template") === "blank"
           ? "./blank-work.json"
           : "./work.json",
-      { signal: abort.signal },
+      { signal: abort.signal, cache: "no-store" },
     )
       .then((r) => {
         if (!r.ok) throw Error("缺少作品文件，请运行 npm run story:build");
@@ -47,7 +51,7 @@ function StoryPlayer() {
     const name = nameInput.trim().slice(0, 24);
     if (!name) return;
     try {
-      localStorage.setItem("foundphone-player-name", name);
+      localStorage.setItem(playerNameKey(), name);
     } catch {
       // The name still works for this visit if browser storage is unavailable.
     }
@@ -61,18 +65,39 @@ function StoryPlayer() {
     <main className="story-runtime">
       {personalizedWork ? (
         playerName ? (
-          ["127.0.0.1", "localhost", "[::1]"].includes(location.hostname) &&
-          ["viewing", "roommates"].includes(
-            new URLSearchParams(location.search).get("start") ?? "",
-          ) &&
-          personalizedWork.id === "fridge-light-roommates" ? (
+          localReviewSlot() &&
+          personalizedWork.variables.releaseStage2 === true ? (
+            <ReleaseReview work={personalizedWork} slot={localReviewSlot()} />
+          ) : ["127.0.0.1", "localhost", "[::1]"].includes(location.hostname) &&
+            [
+              "viewing",
+              "roommates",
+              "stage2",
+              "pizza",
+              "instagram",
+              "menu",
+            ].includes(
+              new URLSearchParams(location.search).get("start") ?? "",
+            ) &&
+            personalizedWork.id === "fridge-light-roommates" ? (
             <CheckpointPhone
               work={personalizedWork}
               start={
-                new URLSearchParams(location.search).get("start") ===
-                "roommates"
-                  ? "roommates"
-                  : "viewing"
+                new URLSearchParams(location.search).get("start") === "menu"
+                  ? "menu"
+                  : new URLSearchParams(location.search).get("start") ===
+                      "instagram"
+                    ? "instagram"
+                    : new URLSearchParams(location.search).get("start") ===
+                        "pizza"
+                      ? "pizza"
+                      : new URLSearchParams(location.search).get("start") ===
+                          "stage2"
+                        ? "stage2"
+                        : new URLSearchParams(location.search).get("start") ===
+                            "roommates"
+                          ? "roommates"
+                          : "viewing"
               }
             />
           ) : (
@@ -99,6 +124,17 @@ function StoryPlayer() {
               </button>
             </form>
             <small>名字只会保存在这台设备的浏览器里。</small>
+            <SaveBackup
+              importOnly
+              work={personalizedWork}
+              state={initialRuntime(personalizedWork)}
+              nameKey={playerNameKey()}
+              saveKey={
+                personalizedWork.id +
+                (localReviewSlot() ? ":rc:" + localReviewSlot() : "")
+              }
+              onRestore={() => {}}
+            />
           </section>
         )
       ) : (

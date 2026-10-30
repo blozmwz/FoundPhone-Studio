@@ -1,13 +1,13 @@
-# 礼拜四 · 前两章试玩
+# 礼拜四 · Stage 1＋Stage 2
 
-这是玩家自己的手机。房东突然卖房，好友Yuki帮忙牵线，你重新联系到以前的同学Hendery。
+[打开试玩](https://bdg-bp3.pages.dev/)
 
-[打开试玩](https://blozmwz.github.io/FoundPhone-Studio/)
+这是玩家自己的手机。房东突然卖房，好友 Yuki 帮忙牵线，你重新联系到以前的同学 Hendery。可以继续找房，或开始同住、逐渐熟悉的日常。本版开放至 2026 年 11 月 20 日，Stage 2 最后一句后可继续浏览手机；后续故事和未开放图片不包含在本仓库或构建中。
 
-目前开放重新联系、看房与是否入住。两种选择都能正常结束；入住后的故事仍在打磨，本版不含后续剧情数据和图片。锁屏密码0917，第一次输错会得到提示。
+首次设置名字，锁屏密码 **0917**。点击输入框、模拟键盘、选择回复、形成草稿，再主动发送。日期由玩家继续，不强迫读完全部 App。Threads 是匿名小号 yobpot；Hendery IG 在实际入住后开放，常驻两篇历史照片帖及按日期解锁的 Story。
 
-通过模拟键盘选择回复、形成草稿，再按发送。可翻旧聊天、Threads、备忘录和日历，阅读补充内容不是回复门槛。名字与进度保存在本机浏览器。
+进度默认保存在当前浏览器并自动保存。上一版 Stage 1 入住存档可直接接续合同、搬家及 Stage 2；拒绝路线保留原结局，可返回入住选择。手机外「存档与备份」支持导出、导入，导入前须确认覆盖。换设备或域名请先导出备份；不会跨浏览器自动同步。
 
-本作依据作者设定进行虚构演绎。框架及第三方许可保留，参见LICENSE、NOTICE等原有文件。
+本作依据作者设定进行虚构演绎，不代表现实人物的真实私生活。MIT 和第三方许可见 LICENSE、THIRD_PARTY_LICENSES.txt、BRAND_NOTICE.txt、MYMY_NOTICE.txt。
 
-本地运行：npm ci，然后npm run dev。校验：npm run story:validate、npm run story:test、npm test、npm run build。
+本地运行：`npm ci`、`npm run dev`。检查：`npm run typecheck`、`npm run lint`、`npm test`、`npm run story:validate`、`npm run story:test`、`npm run build`。

@@ -77,6 +77,8 @@ type Order = {
   flavor: string;
   date: string;
   time: string;
+  price?: string;
+  quantity?: number;
 };
 export function Delivery({ items, state, onEvent, onUi, onBack }: Props) {
   const [flavor, setFlavor] = useState(
@@ -100,6 +102,8 @@ export function Delivery({ items, state, onEvent, onUi, onBack }: Props) {
         [
           {
             food,
+            price: item.meta.price,
+            quantity: Number(item.meta.quantity || 1),
             title: item.title,
             flavor: food === "ramen" ? flavor : "",
             date: state.date ?? "",
@@ -111,9 +115,9 @@ export function Delivery({ items, state, onEvent, onUi, onBack }: Props) {
     );
     onEvent("orderFood", food);
     setNotice(
-      state.variables.henderyHome
-        ? "已下单 · 他在家，托他帮忙拿一下"
-        : "已下单 · 到了自己下楼拿",
+      ["ramen", "pizza", "rice"].includes(food) && state.variables.henderyHome
+        ? `${item.title}已下单 · 托他帮忙拿一下`
+        : `${item.title}已下单 · 到了自己下楼拿`,
     );
   }
   return (
@@ -125,41 +129,58 @@ export function Delivery({ items, state, onEvent, onUi, onBack }: Props) {
       <p>今天吃点什么</p>
       <small>游戏内模拟点餐 · 无真实支付</small>
       {notice && <p role="status">{notice}</p>}
-      {items.map((item) => (
-        <article key={item.id}>
-          <h2>{item.title}</h2>
-          <p>{item.body}</p>
-          {item.meta.food === "ramen" && (
-            <label>
-              口味
-              <select
-                aria-label="拉面口味"
-                value={flavor}
-                onChange={(e) => {
-                  setFlavor(e.target.value);
-                  onUi?.("flavor", e.target.value);
-                }}
-              >
-                <option>普通口味</option>
-                <option>辣口味</option>
-              </select>
-            </label>
-          )}
-          <button disabled={!ready} onClick={() => order(item)}>
-            下单 · {item.title}
-          </button>
-        </article>
-      ))}
+      {items
+        .filter((item) => item.meta.authoredOrder !== "true")
+        .map((item) => (
+          <article key={item.id}>
+            <h2>{item.title}</h2>
+            <b className="delivery-price">
+              {item.meta.currency || "$"}
+              {item.meta.price}
+            </b>
+            <p>{item.body}</p>
+            {item.meta.food === "ramen" && (
+              <label>
+                口味
+                <select
+                  aria-label="拉面口味"
+                  value={flavor}
+                  onChange={(e) => {
+                    setFlavor(e.target.value);
+                    onUi?.("flavor", e.target.value);
+                  }}
+                >
+                  <option>普通口味</option>
+                  <option>辣口味</option>
+                </select>
+              </label>
+            )}
+            <button disabled={!ready} onClick={() => order(item)}>
+              下单 · {item.title}
+              {Number(item.meta.quantity || 1) > 1
+                ? " ×" + item.meta.quantity
+                : ""}
+            </button>
+          </article>
+        ))}
       <h2>最近订单</h2>
+      {items
+        .filter((item) => item.meta.authoredOrder === "true")
+        .map((item) => (
+          <p key={item.id}>
+            {item.time} · {item.title} · {item.body}
+          </p>
+        ))}
       {orders.length ? (
         orders.map((o, i) => (
           <p key={i}>
-            {o.date} {o.time} · {o.title} {o.flavor}
+            {o.date} {o.time} · {o.title} {o.flavor}{" "}
+            {o.price ? "$" + o.price : ""}
           </p>
         ))
-      ) : (
+      ) : !items.some((item) => item.meta.authoredOrder === "true") ? (
         <p>还没有订单</p>
-      )}
+      ) : null}
     </section>
   );
 }

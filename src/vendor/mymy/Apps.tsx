@@ -1,3 +1,4 @@
+import { RoommateInstagram } from "../../runtime/RoommateInstagram";
 /* React/data adapters for dudwo5/Mymy UI templates: kt/ktn/KHD/bub,
  * igHome/igProfile/igDM/igSheet, xHome. See NOTICE.txt for permission.
  * Author content, DOM globals, timers and media dependencies are excluded. */
@@ -314,6 +315,13 @@ export function MymyKakao(p: SkinProps) {
   );
 }
 export function MymyInstagram(p: SkinProps) {
+  return p.deferRead ? (
+    <RoommateInstagram {...p} />
+  ) : (
+    <LegacyMymyInstagram {...p} />
+  );
+}
+function LegacyMymyInstagram(p: SkinProps) {
   const [tab, setTab] = useSkinState<string>(p, "mymyTab", "主页"),
     [liked, setLiked] = useSkinState<string[]>(p, "mymyLiked", []),
     [saved, setSaved] = useSkinState<string[]>(p, "mymySaved", []),
@@ -324,8 +332,15 @@ export function MymyInstagram(p: SkinProps) {
     [story, setStory] = useState(0),
     [draft, setDraft] = useState(""),
     [pop, setPop] = useState("");
-  const [profile, setProfile] = useState<Item | null>(null);
+  const [profileHandle, setProfileHandle] = useSkinState<string>(
+    p,
+    "mymyProfileHandle",
+    "",
+  );
   const profiles = p.items.filter((i) => i.meta.profile === "true");
+  const profile = profiles.find((i) => i.meta.handle === profileHandle) ?? null;
+  const setProfile = (item: Item | null) =>
+    setProfileHandle(item?.meta.handle ?? "");
   const posts = p.items.filter(
       (i) =>
         i.folder !== "私信" &&
@@ -347,6 +362,11 @@ export function MymyInstagram(p: SkinProps) {
     );
     return () => clearTimeout(t);
   }, [active, stories.length, p.deferRead]);
+  useEffect(() => {
+    if (!active || seen.includes(active.id)) return;
+    setSeen([...seen, active.id]);
+    read(p, active);
+  }, [active, seen, setSeen, p]);
   const openStory = (i: number) => {
     const m = stories[i];
     setSeen([...new Set([...seen, m.id])]);

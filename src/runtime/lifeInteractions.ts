@@ -16,6 +16,7 @@ export function availableTopics(work: Work, state: Runtime) {
   return (work.data.messages ?? []).filter(
     (m) =>
       m.meta.topic === "true" &&
+      !state.variables["topicUsed-" + m.id] &&
       (!m.meta.requiresRead || state.read.includes(m.meta.requiresRead)) &&
       stage >= Number(m.meta.minStage) &&
       stage <= Number(m.meta.maxStage) &&
@@ -23,6 +24,15 @@ export function availableTopics(work: Work, state: Runtime) {
       !state.completed.includes(m.id + "-start"),
   );
 }
+export function topicReplies(work: Work, state: Runtime, topicId: string) {
+  const topic = availableTopics(work, state).find((m) => m.id === topicId);
+  if (!topic) return [];
+  const alternate = work.data.messages.find(
+    (m) => m.id === topic.meta.alternateReplyId,
+  );
+  return alternate ? [topic, alternate] : [];
+}
+
 export function lifeInteraction(
   work: Work,
   state: Runtime,
@@ -47,7 +57,9 @@ export function lifeInteraction(
   if (!canChatAside(state)) return state;
   if (
     event === "topic" &&
-    !availableTopics(work, state).some((m) => m.id === target)
+    !availableTopics(work, state).some((m) =>
+      topicReplies(work, state, m.id).some((reply) => reply.id === target),
+    )
   )
     return state;
   if (event === "reactMessage") {

@@ -1,7 +1,12 @@
+import {
+  availableThreadContent,
+  recommendedThreads,
+} from "./threadsRecommendations";
 import { newestFirst, storedThread } from "./chronology";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Home,
+  RefreshCw,
   Send,
   Plus,
   Heart,
@@ -36,6 +41,18 @@ export function ThreadsReference(p: SkinProps) {
     [saved, setSaved] = useSkinState<string[]>(p, "threads-saved", []),
     [posts, setPosts] = useSkinState<string[]>(p, "threads-posts", []),
     [replies, setReplies] = useSkinState<string[]>(p, "threads-replies", []);
+  const [feedRound, setFeedRound] = useSkinState<number>(
+    p,
+    "threads-feed-round",
+    0,
+  );
+  const refreshed = useRef(false);
+  useEffect(() => {
+    if (!refreshed.current) {
+      refreshed.current = true;
+      setFeedRound((n) => n + 1);
+    }
+  }, [setFeedRound]);
   const [draft, setDraft] = useState(""),
     [query, setQuery] = useState(""),
     [filter, setFilter] = useState("全部"),
@@ -70,10 +87,13 @@ export function ThreadsReference(p: SkinProps) {
   );
   const feed = newestFirst([
       ...local,
-      ...p.items.filter((i) => i.folder !== "私信" && !i.meta.activityType),
+      ...availableThreadContent(p.items, p.virtualDate, p.virtualTime).filter(
+        (i) => i.folder !== "私信" && !i.meta.activityType,
+      ),
     ]),
     messages = p.items.filter((i) => i.folder === "私信"),
     activities = p.items.filter((i) => i.meta.activityType);
+  const homeFeed = recommendedThreads(feed, feedRound, p.virtualDate || "");
   const toggle = (id: string, items: string[], set: (v: string[]) => void) =>
     set(items.includes(id) ? items.filter((v) => v !== id) : [...items, id]);
   const open = (i: Item) => {
@@ -85,7 +105,7 @@ export function ThreadsReference(p: SkinProps) {
     setSelected(i);
   };
   const card = (i: Item) => (
-    <article className="tr-post" key={i.id}>
+    <article className="tr-post" key={i.id} data-thread-id={i.id}>
       <button className="tr-avatar" onClick={() => setTab("个人主页")}>
         <Avatar name={i.sender} src={i.avatar} />
         <span>+</span>
@@ -228,6 +248,12 @@ export function ThreadsReference(p: SkinProps) {
                     />
                   </svg>
                   <button
+                    aria-label="刷新推荐内容"
+                    onClick={() => setFeedRound((n) => n + 1)}
+                  >
+                    <RefreshCw size={20} />
+                  </button>
+                  <button
                     aria-label="搜索Threads"
                     onClick={() => setTab("搜索")}
                   >
@@ -283,7 +309,7 @@ export function ThreadsReference(p: SkinProps) {
               </nav>
             )}
             {tab === "首页" &&
-              feed
+              (filter === "收藏" ? feed : homeFeed)
                 .filter((i) =>
                   filter === "收藏"
                     ? saved.includes(i.id)
