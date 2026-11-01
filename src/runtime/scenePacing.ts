@@ -14,6 +14,9 @@ export function pendingScene(work: Work, state: Runtime) {
   );
   const date =
     node?.actions.find((a) => a.type === "date")?.value ?? state.date;
+  const time = String(
+    node?.actions.find((a) => a.type === "time")?.value || state.time,
+  );
   if (!node || typeof date !== "string") return null;
   const days = Math.max(
     0,
@@ -23,5 +26,10 @@ export function pendingScene(work: Work, state: Runtime) {
         86400000,
     ),
   );
-  return { id: node.id, date, days };
+  const hour = Number(time.slice(0, 2));
+  const period =
+    hour < 6 ? "凌晨" : hour < 12 ? "上午" : hour < 18 ? "下午" : "晚上";
+  const label =
+    days === 0 ? "当天" + period : days === 1 ? "第二天" : `${days} 天后`;
+  return { id: node.id, date, time, days, label };
 }

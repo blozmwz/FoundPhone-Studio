@@ -33,6 +33,8 @@ import {
 } from "lucide-react";
 import { safeMedia, type Item, type UiValue } from "./schema";
 export type SkinProps = {
+  storyReplies?: (id: string) => { label: string; target: string }[];
+  onStoryAction?: (event: string, target: string) => boolean;
   focusItem?: string;
   deferRead?: boolean;
   onReading?: (id: string) => void;

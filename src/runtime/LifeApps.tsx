@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Item, Runtime, UiValue } from "../schema";
-import { canOrderFood } from "./lifeInteractions";
+import { FILM_TITLES, narrativeFilmOpen } from "./filmCatalogue";
+import { canChatAside, canOrderFood } from "./lifeInteractions";
 import "./life-apps.css";
 
 type Props = {
@@ -18,56 +19,107 @@ export function FilmList({ items, state, onEvent, onUi, onBack }: Props) {
         <h1>电影片单</h1>
       </header>
       <p>有空慢慢看</p>
-      {items.map((film) => {
-        const id = film.meta.film;
-        const saved = state.ui?.netflix?.["want-" + id] === true;
-        const status = state.variables["filmStatus-" + id];
-        return (
-          <article key={id}>
-            <h2>《{film.title}》</h2>
-            <p>
-              {status === "finished"
-                ? "看完了"
-                : status === "unfinished"
-                  ? "没看完 · 下次接着看"
-                  : "还没看"}
-            </p>
-            <div className="life-actions">
-              <button
-                aria-pressed={saved}
-                onClick={() => onUi?.("want-" + id, !saved)}
-              >
-                {saved ? "已想看" : "想看／收藏"}
-              </button>
-              <button
-                disabled={
-                  !state.variables.lifeStage ||
-                  Number(state.variables.lifeStage) >= 6
-                }
-                aria-pressed={state.variables.filmPlan === id}
-                onClick={() => onEvent("planFilm", id)}
-              >
-                {state.variables.filmPlan === id
-                  ? "今晚想看这部"
-                  : "选作今晚电影"}
-              </button>
-            </div>
-            {state.variables["filmReportReady-" + id] === true && (
+      {items
+        .filter(
+          (film) => film.meta.retired !== "true" && FILM_TITLES[film.meta.film],
+        )
+        .map((film) => {
+          const id = film.meta.film;
+          const saved = state.ui?.netflix?.["want-" + id] === true;
+          const status = state.variables["filmStatus-" + id];
+          const replay = state.variables["filmViewingMode-" + id] === "replay";
+          const current = String(state.variables.s3FilmCurrent || "");
+          const watching =
+            status === "watching" ||
+            (state.variables["s3Film-" + current] === id &&
+              state.variables["s3FilmState-" + current] === "watching");
+          const session = ["dec04", "dec22", "jan08"]
+            .filter((k) => state.variables["s3Film-" + k] === id)
+            .at(-1);
+          const unreported =
+            session &&
+            state.variables["s3FilmState-" + session] === "unreported";
+          return (
+            <article key={id}>
+              <h2>《{film.title}》</h2>
+              <p>
+                {replay && !watching ? "重看 · " : ""}
+                {watching
+                  ? replay
+                    ? "重看中"
+                    : "观看中"
+                  : unreported
+                    ? "这次观看待记录"
+                    : status === "finished"
+                      ? "看完了"
+                      : status === "unfinished"
+                        ? "没看完 · 下次接着看"
+                        : "还没看"}
+              </p>
               <div className="life-actions">
-                <button onClick={() => onEvent("filmStatus", id + "-finished")}>
-                  看完
+                <button
+                  aria-pressed={saved}
+                  onClick={() => onUi?.("want-" + id, !saved)}
+                >
+                  {saved ? "已想看" : "想看／收藏"}
                 </button>
                 <button
-                  onClick={() => onEvent("filmStatus", id + "-unfinished")}
+                  disabled={
+                    !state.variables.lifeStage ||
+                    Number(state.variables.lifeStage) >= 6
+                  }
+                  aria-pressed={state.variables.filmPlan === id}
+                  onClick={() => onEvent("planFilm", id)}
                 >
-                  没看完
+                  {state.variables.filmPlan === id
+                    ? "今晚想看这部"
+                    : "选作今晚电影"}
                 </button>
               </div>
-            )}
-          </article>
-        );
-      })}
-      <small>选好后，可以在聊天里约他一起看。</small>
+              {Number(state.variables.lifeStage) >= 3 && (
+                <button
+                  disabled={!canChatAside(state) || narrativeFilmOpen(state)}
+                  onClick={() => onEvent("watchFilm", id)}
+                >
+                  {status === "unfinished"
+                    ? "继续补片"
+                    : status === "finished"
+                      ? "重看"
+                      : watching
+                        ? "重新开始观看"
+                        : "开始观看"}
+                </button>
+              )}
+              {state.variables["filmReportReady-" + id] === true && (
+                <div className="life-actions">
+                  <button
+                    disabled={
+                      narrativeFilmOpen(state) &&
+                      state.variables[
+                        "s3Film-" + String(state.variables.s3FilmCurrent)
+                      ] === id
+                    }
+                    onClick={() => onEvent("filmStatus", id + "-finished")}
+                  >
+                    看完
+                  </button>
+                  <button
+                    disabled={
+                      narrativeFilmOpen(state) &&
+                      state.variables[
+                        "s3Film-" + String(state.variables.s3FilmCurrent)
+                      ] === id
+                    }
+                    onClick={() => onEvent("filmStatus", id + "-unfinished")}
+                  >
+                    没看完
+                  </button>
+                </div>
+              )}
+            </article>
+          );
+        })}
+      <small>收藏想看的电影，记录实际观看进度。</small>
     </section>
   );
 }
@@ -115,9 +167,12 @@ export function Delivery({ items, state, onEvent, onUi, onBack }: Props) {
     );
     onEvent("orderFood", food);
     setNotice(
-      ["ramen", "pizza", "rice"].includes(food) && state.variables.henderyHome
-        ? `${item.title}已下单 · 托他帮忙拿一下`
-        : `${item.title}已下单 · 到了自己下楼拿`,
+      stage >= 3
+        ? `${item.title}已下单`
+        : ["ramen", "pizza", "rice"].includes(food) &&
+            state.variables.henderyHome
+          ? `${item.title}已下单 · 托他帮忙拿一下`
+          : `${item.title}已下单 · 到了自己下楼拿`,
     );
   }
   return (

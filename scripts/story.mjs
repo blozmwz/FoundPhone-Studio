@@ -105,7 +105,8 @@ try {
     await writeFile("public/work.json", JSON.stringify(work, null, 2) + "\n");
     if (
       process.env.FOUNDPHONE_RELEASE_ONLY !== "1" &&
-      raw.variables?.releaseStage2 !== true
+      raw.variables?.releaseStage2 !== true &&
+      raw.variables?.releaseStage3 !== true
     ) {
       const blank = compileStory(
         JSON.parse(await readFile("stories/blank/story.json", "utf8")),

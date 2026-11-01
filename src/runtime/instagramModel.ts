@@ -16,6 +16,7 @@ export function instagramContent(items: Item[], now: number) {
   const ids = new Set(items.map((i) => i.id));
   return items
     .filter((i) => {
+      if (i.meta.assetPending === "true") return false;
       if (i.meta.profile === "true") return true;
       if (i.meta.sourceStory && !ids.has(i.meta.sourceStory)) return false;
       const published = instagramTime(i.time);

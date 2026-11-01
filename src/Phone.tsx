@@ -6,6 +6,10 @@ import { housingCheckpoint } from "./runtime/checkpoint";
 import { lifeInteraction } from "./runtime/lifeInteractions";
 import { FilmList, Delivery } from "./runtime/LifeApps";
 import { storyDatedItem } from "./runtime/storyDates";
+import {
+  instagramInteraction,
+  motorStoryReplies,
+} from "./runtime/instagramInteractions";
 import { pendingScene } from "./runtime/scenePacing";
 import { storyContinuation } from "./runtime/continuation";
 import { RoommateMessages, replyThread } from "./runtime/RoommateMessages";
@@ -648,11 +652,28 @@ function PhoneRuntime({
                   )}
                   creator={creator}
                   state={s}
-                  onStoryEvent={(event, target) =>
-                    update(
-                      lifeInteraction(work, runtimeRef.current, event, target),
-                    )
-                  }
+                  onStoryEvent={(event, target) => {
+                    const before = runtimeRef.current;
+                    const next = lifeInteraction(work, before, event, target);
+                    if (next === before) return;
+                    update(next);
+                  }}
+                  onStoryAction={(event, target) => {
+                    const before = runtimeRef.current;
+                    const next = instagramInteraction(
+                      work,
+                      before,
+                      event,
+                      target,
+                    );
+                    if (next === before) return false;
+                    update(next);
+                    if (event === "igStoryReply") {
+                      open("messages");
+                      setFocusItem(target.split("\t")[1] + "-out-1");
+                    }
+                    return true;
+                  }}
                   onChoose={(target) =>
                     update(choose(work, runtimeRef.current, target))
                   }
@@ -827,7 +848,8 @@ function PhoneRuntime({
           {!creator &&
             !locked &&
             !app &&
-            work.variables.releaseStage2 === true &&
+            (work.variables.releaseStage2 === true ||
+              work.variables.releaseStage3 === true) &&
             s.variables.releaseComplete === true &&
             (s.ui?.release?.updateHintShown === true ? (
               <p className="release-update-hint" role="status">
@@ -863,12 +885,7 @@ function PhoneRuntime({
             >
               <span>这会儿可以先逛逛手机</span>
               <strong>
-                {nextScene.days === 0
-                  ? "当天晚上"
-                  : nextScene.days === 1
-                    ? "第二天"
-                    : `${nextScene.days} 天后`}{" "}
-                · {nextScene.date}
+                {nextScene.label} · {nextScene.date} {nextScene.time}
               </strong>
             </button>
           )}
@@ -890,23 +907,27 @@ function PhoneRuntime({
               <span>{continuation.item.body.slice(0, 42)}</span>
             </button>
           )}
-          {!creator && pendingReply && !locked && app !== "messages" && (
-            <button
-              className="roommate-reply-link"
-              onClick={() => {
-                open("messages");
-                // Give a reopened Messages window an explicit conversation key,
-                // even when its previous exit animation is still mounted.
-                setFocusItem(
-                  work.data.messages.find((m) => m.title === pendingReply)
-                    ?.id ?? "",
-                );
-              }}
-            >
-              {s.variables.initiating ? "找" : "回复"} {pendingReply}
-              {s.variables.initiating ? "聊聊" : ""}
-            </button>
-          )}
+          {!creator &&
+            pendingReply &&
+            !locked &&
+            app !== "messages" &&
+            !(app === "instagram" && readingItem) && (
+              <button
+                className="roommate-reply-link"
+                onClick={() => {
+                  open("messages");
+                  // Give a reopened Messages window an explicit conversation key,
+                  // even when its previous exit animation is still mounted.
+                  setFocusItem(
+                    work.data.messages.find((m) => m.title === pendingReply)
+                      ?.id ?? "",
+                  );
+                }}
+              >
+                {s.variables.initiating ? "找" : "回复"} {pendingReply}
+                {s.variables.initiating ? "聊聊" : ""}
+              </button>
+            )}
           {!creator && !locked && s.ui?.messages?.reunionOpen === true && (
             <button
               className="roommate-reply-link"
@@ -1247,7 +1268,9 @@ function AppContent({
   onReading,
   onOpenContact,
   onStoryEvent,
+  onStoryAction,
 }: {
+  onStoryAction?: (event: string, target: string) => boolean;
   onStoryEvent?: (event: string, target: string) => void;
   onOpenContact?: (id: string) => void;
   onReading?: (id: string) => void;
@@ -1268,7 +1291,9 @@ function AppContent({
   onChoose: (target: string) => void;
 }) {
   const [detail, setDetail] = useState<Item | null>(
-    app.id === "threads" || app.id === "messages"
+    app.id === "threads" ||
+      app.id === "messages" ||
+      (app.id === "instagram" && work.id === "fridge-light-roommates")
       ? null
       : (items.find((i) => i.id === focusItem) ?? null),
   );
@@ -1426,6 +1451,8 @@ function AppContent({
         <div className="catalog-slot" hidden={!!detail}>
           <Suspense fallback={<div className="catalog-loading">正在打开…</div>}>
             <Skin
+              onStoryAction={onStoryAction}
+              storyReplies={(id) => motorStoryReplies(work, state, id)}
               focusItem={focusItem}
               deferRead={work.id === "fridge-light-roommates"}
               onReading={onReading}

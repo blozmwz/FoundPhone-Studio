@@ -5,6 +5,12 @@ import { z } from "zod";
 import { itemSchema, initialRuntime, type Runtime, type Work } from "../schema";
 import { dispatch } from "../engine";
 import { migrateStage2Trim } from "./stage2SaveTrim";
+import { migrateStage3 } from "./stage3SaveMigration";
+import { migrateStage3Polish } from "./stage3PolishMigration";
+import { migrateStage3Assets } from "./stage3AssetMigration";
+import { migrateStage3DailyMedia } from "./stage3DailyMediaMigration";
+import { migrateStage3Release } from "./stage3ReleaseMigration";
+import { migrateStage3Interactions } from "./stage3InteractionMigration";
 import {
   compatibleSaveRevision,
   resumeExtendedRelease,
@@ -100,6 +106,12 @@ export function restoreRuntime(work: Work, input: unknown): Runtime {
     }
   }
   state = migrateStage2Trim(work, state);
+  state = migrateStage3(work, state);
+  state = migrateStage3Assets(work, state);
+  state = migrateStage3Polish(work, state);
+  state = migrateStage3DailyMedia(work, state);
+  state = migrateStage3Interactions(work, state);
+  state = migrateStage3Release(work, state);
   // Stable choice IDs keep unsent drafts valid across a wording-only update.
   state.choices = state.choices.map((choice) => ({
     ...choice,

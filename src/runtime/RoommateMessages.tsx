@@ -1,3 +1,4 @@
+import { SimulatedReplyKeys } from "./SimulatedReplyKeys";
 import { unreadMessageItems } from "./messageRead";
 import { orderedMessages } from "./messageOrder";
 import { availableTopics, topicReplies } from "./lifeInteractions";
@@ -8,9 +9,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Delete,
-  Globe,
-  Mic,
   Plus,
   Search,
   SquarePen,
@@ -318,6 +316,13 @@ export function RoommateMessages({
                           <small>联系人名片</small>
                         </span>
                       </span>
+                    ) : m.meta.shopShare ? (
+                      <span className="rm-contact-card">
+                        <span>
+                          <strong>{m.meta.shopShare}</strong>
+                          <small>{m.meta.shopDescription || "店铺分享"}</small>
+                        </span>
+                      </span>
                     ) : (
                       m.body
                     )}
@@ -472,59 +477,14 @@ export function RoommateMessages({
                   </button>
                 </div>
               )}
-              {["qwertyuiop", "asdfghjkl", "zxcvbnm"].map((row, i) => (
-                <div className={`rm-key-row rm-key-row-${i}`} key={row}>
-                  {i === 2 && (
-                    <button
-                      className="rm-key rm-mod"
-                      aria-label="大写"
-                      onClick={pressKey}
-                    >
-                      <ArrowUp size={21} />
-                    </button>
-                  )}
-                  {[...row].map((k) => (
-                    <button className="rm-key" key={k} onClick={pressKey}>
-                      {k}
-                    </button>
-                  ))}
-                  {i === 2 && (
-                    <button
-                      className="rm-key rm-mod"
-                      aria-label="删除"
-                      onClick={() => {
-                        setSelected("");
-                        onDraft?.("");
-                        setSuggestions(false);
-                      }}
-                    >
-                      <Delete size={22} />
-                    </button>
-                  )}
-                </div>
-              ))}
-              <div className="rm-key-row">
-                <button className="rm-key rm-mod" onClick={pressKey}>
-                  123
-                </button>
-                <button className="rm-key rm-mod" onClick={pressKey}>
-                  ☺
-                </button>
-                <button className="rm-key rm-space" onClick={pressKey}>
-                  空格
-                </button>
-                <button className="rm-key rm-mod" onClick={pressKey}>
-                  换行
-                </button>
-              </div>
-              <div className="rm-keyboard-foot">
-                <button aria-label="切换语言" onClick={pressKey}>
-                  <Globe size={27} />
-                </button>
-                <button aria-label="听写" onClick={pressKey}>
-                  <Mic size={26} />
-                </button>
-              </div>
+              <SimulatedReplyKeys
+                onPress={pressKey}
+                onDelete={() => {
+                  setSelected("");
+                  onDraft?.("");
+                  setSuggestions(false);
+                }}
+              />
             </div>
           )}
         </>

@@ -21,3 +21,6 @@ public/blank-work.json
 *.key
 *.bundle
 
+
+# Local dependency symlink is not a release asset.
+node_modules

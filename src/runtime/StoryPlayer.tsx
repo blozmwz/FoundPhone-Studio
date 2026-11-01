@@ -4,6 +4,7 @@ import { readSavedRuntime } from "../persistence";
 import { localReviewSlot, playerNameKey } from "./reviewSlot";
 import { ReleaseReview } from "./ReleaseReview";
 import { CheckpointPhone } from "./CheckpointPhone";
+import { personalizeWork } from "./personalizeWork";
 import { useEffect, useState, type FormEvent } from "react";
 import { createRoot } from "react-dom/client";
 import { Phone } from "../Phone";
@@ -83,9 +84,7 @@ function StoryPlayer() {
     setPlayerName(name);
   };
   const personalizedWork =
-    work && playerName
-      ? { ...work, phone: { ...work.phone, owner: playerName } }
-      : work;
+    work && playerName ? personalizeWork(work, playerName) : work;
   return (
     <main className="story-runtime">
       {personalizedWork ? (
@@ -98,6 +97,11 @@ function StoryPlayer() {
               "viewing",
               "roommates",
               "stage2",
+              "stage2tail",
+              "stage3",
+              "stage3review",
+              "stage3motor",
+              "stage3ramen",
               "pizza",
               "instagram",
               "menu",
@@ -108,21 +112,42 @@ function StoryPlayer() {
             <CheckpointPhone
               work={personalizedWork}
               start={
-                new URLSearchParams(location.search).get("start") === "menu"
-                  ? "menu"
+                new URLSearchParams(location.search).get("start") ===
+                "stage3review"
+                  ? "stage3review"
                   : new URLSearchParams(location.search).get("start") ===
-                      "instagram"
-                    ? "instagram"
+                      "stage2tail"
+                    ? "stage2tail"
                     : new URLSearchParams(location.search).get("start") ===
-                        "pizza"
-                      ? "pizza"
+                        "stage3motor"
+                      ? "stage3motor"
                       : new URLSearchParams(location.search).get("start") ===
-                          "stage2"
-                        ? "stage2"
+                          "stage3ramen"
+                        ? "stage3ramen"
                         : new URLSearchParams(location.search).get("start") ===
-                            "roommates"
-                          ? "roommates"
-                          : "viewing"
+                            "menu"
+                          ? "menu"
+                          : new URLSearchParams(location.search).get(
+                                "start",
+                              ) === "instagram"
+                            ? "instagram"
+                            : new URLSearchParams(location.search).get(
+                                  "start",
+                                ) === "pizza"
+                              ? "pizza"
+                              : new URLSearchParams(location.search).get(
+                                    "start",
+                                  ) === "stage3"
+                                ? "stage3"
+                                : new URLSearchParams(location.search).get(
+                                      "start",
+                                    ) === "stage2"
+                                  ? "stage2"
+                                  : new URLSearchParams(location.search).get(
+                                        "start",
+                                      ) === "roommates"
+                                    ? "roommates"
+                                    : "viewing"
               }
             />
           ) : (

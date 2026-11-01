@@ -8,6 +8,7 @@ import {
 import {
   ArrowLeft,
   Bookmark,
+  Bell,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -37,10 +38,14 @@ import {
 } from "./instagramModel";
 import "./instagram.css";
 import { InstagramCarousel, AlbumBadge } from "./InstagramCarousel";
-type Sheet = { kind: "comments" | "share" | "likes"; item?: Item } | null;
+import { InstagramReplyComposer } from "./InstagramReplyComposer";
+type Sheet = {
+  kind: "comments" | "share" | "likes" | "activity" | "storyActivity";
+  item?: Item;
+} | null;
 export function RoommateInstagram(p: SkinProps) {
   const [storedTab, setTab] = useSkinState<string>(p, "mymyTab", "主页");
-  const tab = ["主页", "搜索", "收藏", "个人主页"].includes(storedTab)
+  const tab = ["主页", "搜索", "收藏", "个人主页", "私信"].includes(storedTab)
     ? storedTab
     : "主页";
   const [profileHandle, setProfileHandle] = useSkinState<string>(
@@ -67,7 +72,19 @@ export function RoommateInstagram(p: SkinProps) {
     "igExpandedCaptions",
     [],
   );
+  const [replyContext, setReplyContext] = useSkinState<string>(
+    p,
+    "igReplyContext",
+    "",
+  );
+  const [replyDraft, setReplyDraft] = useSkinState<string>(
+    p,
+    "igReplyDraft",
+    "",
+  );
+  const [replyFor, setReplyFor] = useState("");
   const [query, setQuery] = useState("");
+  const [dmHandle, setDMHandle] = useSkinState<string>(p, "igDMHandle", "");
   const [sheet, setSheet] = useState<Sheet>(null);
   const [comment, setComment] = useState("");
   const [notice, setNotice] = useState("");
@@ -106,9 +123,40 @@ export function RoommateInstagram(p: SkinProps) {
         i.meta.profile !== "true" &&
         i.meta.story !== "true" &&
         i.folder !== "私信" &&
-        i.meta.albumOnly !== "true",
+        i.meta.albumOnly !== "true" &&
+        i.meta.activity !== "true",
     )
     .sort((a, b) => b.time.localeCompare(a.time));
+  const activities = available.filter((i) => i.meta.activity === "true");
+  const directMessages = available.filter(
+    (i) => i.folder === "私信" && i.meta.dm === "true",
+  );
+  const privateThread =
+    tab === "私信" && dmHandle
+      ? directMessages.filter((i) => i.meta.handle === dmHandle)
+      : [];
+  const privateSignature = privateThread.map((i) => i.id).join("|");
+  const sheetItem = available.find((i) => i.id === sheet?.item?.id);
+  const replyItem = available.find((i) => i.id === replyFor);
+  const replyChoices = p.storyReplies?.(replyFor) || [];
+  function beginReply(item: Item) {
+    if (replyContext !== (item.meta.storyGroup || item.id)) {
+      setReplyDraft("");
+      setReplyContext(item.meta.storyGroup || item.id);
+    }
+    setReplyFor(item.id);
+  }
+  function sendReply(target: string) {
+    if (!replyItem || !replyChoices.some((c) => c.target === target)) return;
+    const sent = p.onStoryAction?.(
+      "igStoryReply",
+      replyItem.id + "\t" + target,
+    );
+    if (sent) {
+      setReplyDraft("");
+      setReplyFor("");
+    }
+  }
   const activeStories = currentInstagramStories(available, now);
   const selected = posts.find((i) => i.id === selectedId);
   const profile = profiles.find((i) => i.meta.handle === profileHandle);
@@ -140,26 +188,40 @@ export function RoommateInstagram(p: SkinProps) {
     ? "post:" + selected.id
     : tab === "个人主页"
       ? "profile:" + accountHandle
-      : tab;
+      : tab === "私信"
+        ? "dm:" + dmHandle
+        : tab;
   const ack = useCallback((item: Item) => {
     if (seenRef.current.has(item.id)) return;
     seenRef.current.add(item.id);
     callbacks.current.setSeen([...seenRef.current]);
     callbacks.current.p.onRead(item.id);
   }, []);
+  function openPrivateThread(item: Item) {
+    remember();
+    setSelectedId("");
+    setSheet(null);
+    setDMHandle(handle(item));
+    setTab("私信");
+  }
+  useEffect(() => {
+    privateThread.forEach(ack);
+    // Only the open correspondent is read, never every inbox conversation.
+  }, [privateSignature, ack]);
   useLayoutEffect(() => {
     if (body.current) body.current.scrollTop = positions.current[routeKey] ?? 0;
   }, [routeKey]);
   useEffect(() => {
     if (active) ack(active);
-    p.onReading?.(active?.id || selected?.id || "");
+    p.onReading?.(active?.id || selected?.id || privateThread.at(-1)?.id || "");
     return () => p.onReading?.("");
-  }, [active, selected, p.onReading, ack]);
+  }, [active, selected, privateSignature, p.onReading, ack]);
   useEffect(() => {
     progressRef.current = 0;
     setProgress(0);
   }, [active?.id]);
   const closeStory = () => {
+    setReplyFor("");
     setStoryIds([]);
     setStoryIndex(0);
     setPaused(false);
@@ -176,7 +238,7 @@ export function RoommateInstagram(p: SkinProps) {
   const moveRef = useRef(moveStory);
   moveRef.current = moveStory;
   useEffect(() => {
-    if (!active || paused) return;
+    if (!active || paused || replyFor) return;
     const duration = Math.max(
       IG_STORY_MS,
       Math.min(15000, active.body.length * 180),
@@ -193,12 +255,13 @@ export function RoommateInstagram(p: SkinProps) {
       }
     }, 100);
     return () => window.clearInterval(timer);
-  }, [active, paused]);
+  }, [active, paused, replyFor]);
   function remember() {
     if (body.current) positions.current[routeKey] = body.current.scrollTop;
     p.onUi?.("igScrollPositions", JSON.stringify(positions.current));
   }
   function navigate(next: string, account = "") {
+    setNotice("");
     remember();
     setSelectedId("");
     setProfileHandle(account);
@@ -212,7 +275,16 @@ export function RoommateInstagram(p: SkinProps) {
     setSelectedId(item.id);
   }
   function openStories(items: Item[], isArchive = false) {
-    if (!items.length) return;
+    items = items.filter(
+      (item) =>
+        activeStories.some((i) => i.id === item.id) ||
+        Boolean(item.meta.highlight),
+    );
+    if (!items.length) {
+      setNotice("这条快拍已过期");
+      return;
+    }
+    setNotice("");
     remember();
     setArchive(isArchive);
     setStoryIndex(0);
@@ -230,10 +302,31 @@ export function RoommateInstagram(p: SkinProps) {
     if (item.meta.profile === "true") {
       setTab("个人主页");
       setProfileHandle(handle(item));
+    } else if (item.folder === "私信" && item.meta.dm === "true") {
+      openPrivateThread(item);
     } else if (item.meta.story === "true") {
+      if (
+        !activeStories.some((i) => i.id === item.id) &&
+        !item.meta.highlight
+      ) {
+        setNotice("这条快拍已过期");
+        return;
+      }
       setArchive(!activeStories.some((i) => i.id === item.id));
       setStoryIndex(0);
-      setStoryIds([item.id]);
+      setStoryIds(
+        item.meta.storyGroup
+          ? available
+              .filter((i) => i.meta.storyGroup === item.meta.storyGroup)
+              .sort(
+                (a, b) => Number(a.meta.storyOrder) - Number(b.meta.storyOrder),
+              )
+              .map((i) => i.id)
+          : [item.id],
+      );
+    } else if (item.meta.activity === "true") {
+      ack(item);
+      setSheet({ kind: "activity" });
     } else {
       ack(item);
       setSelectedId(item.id);
@@ -370,13 +463,20 @@ export function RoommateInstagram(p: SkinProps) {
           aria-label={
             selected
               ? "返回Instagram动态"
-              : tab === "个人主页" && profile
-                ? "返回Instagram首页"
-                : "关闭当前App"
+              : tab === "私信"
+                ? dmHandle
+                  ? "返回Instagram私信列表"
+                  : "返回Instagram首页"
+                : tab === "个人主页" && profile
+                  ? "返回Instagram首页"
+                  : "关闭当前App"
           }
           onClick={() => {
             if (selected) setSelectedId("");
-            else if (tab === "个人主页" && profile) navigate("主页");
+            else if (tab === "私信") {
+              if (dmHandle) setDMHandle("");
+              else navigate("主页");
+            } else if (tab === "个人主页" && profile) navigate("主页");
             else {
               remember();
               p.onBack();
@@ -388,12 +488,36 @@ export function RoommateInstagram(p: SkinProps) {
         <strong className={tab === "主页" && !selected ? "rig-wordmark" : ""}>
           {selected
             ? "帖子"
-            : tab === "个人主页"
-              ? accountHandle
-              : tab === "主页"
-                ? "Instagram"
-                : tab}
+            : tab === "私信" && dmHandle
+              ? profiles.find((i) => handle(i) === dmHandle)?.sender || dmHandle
+              : tab === "个人主页"
+                ? accountHandle
+                : tab === "主页"
+                  ? "Instagram"
+                  : tab}
         </strong>
+        <button
+          aria-label="Instagram私信"
+          onClick={() => {
+            remember();
+            setSelectedId("");
+            setDMHandle("");
+            setTab("私信");
+          }}
+        >
+          <Send size={23} />
+        </button>
+        {!!activities.length && (
+          <button
+            aria-label="Instagram通知"
+            onClick={() => {
+              activities.forEach(ack);
+              setSheet({ kind: "activity" });
+            }}
+          >
+            <Bell size={23} />
+          </button>
+        )}
         <button
           aria-label="查看赞过的帖子"
           onClick={() => setSheet({ kind: "likes" })}
@@ -413,6 +537,50 @@ export function RoommateInstagram(p: SkinProps) {
       >
         {selected ? (
           post(selected, true)
+        ) : tab === "私信" ? (
+          <section
+            className="rig-direct-messages"
+            aria-label={
+              dmHandle
+                ? "与 " + dmHandle + " 的Instagram私信"
+                : "Instagram私信列表"
+            }
+          >
+            {dmHandle
+              ? privateThread.map((item) => (
+                  <article key={item.id} data-dm-id={item.id}>
+                    <small>
+                      {instagramDate(item, now, true)} · 回复了你的快拍
+                    </small>
+                    <div className="rig-direct-bubble">
+                      <Avatar name={item.sender} src={avatar(item)} />
+                      <p>{item.body}</p>
+                    </div>
+                  </article>
+                ))
+              : [...new Set(directMessages.map(handle))].map((h) => {
+                  const item = directMessages
+                    .filter((i) => handle(i) === h)
+                    .at(-1)!;
+                  return (
+                    <button
+                      className="rig-sheet-row"
+                      key={h}
+                      onClick={() => openPrivateThread(item)}
+                    >
+                      <Avatar name={item.sender} src={avatar(item)} />
+                      <span>
+                        <strong>{item.sender}</strong>
+                        <small>{item.body}</small>
+                      </span>
+                      {!seen.includes(item.id) && (
+                        <span className="rig-dm-unread" aria-label="未读私信" />
+                      )}
+                    </button>
+                  );
+                })}
+            {!directMessages.length && <p className="rig-empty">还没有私信</p>}
+          </section>
         ) : tab === "个人主页" ? (
           <>
             <div className="rig-profile">
@@ -460,7 +628,7 @@ export function RoommateInstagram(p: SkinProps) {
               <strong>{profile?.sender || p.owner || "我"}</strong>
               <p>{profile?.meta.bio || profile?.body || ""}</p>
             </div>
-            {profile && (
+            {profile && accountHandle !== ownHandle && (
               <div className="rig-profile-buttons">
                 <button
                   aria-pressed={!unfollowed.includes(accountHandle)}
@@ -661,7 +829,11 @@ export function RoommateInstagram(p: SkinProps) {
                 ? "Instagram评论"
                 : sheet.kind === "share"
                   ? "分享帖子"
-                  : "赞过的帖子"
+                  : sheet.kind === "activity"
+                    ? "Instagram通知"
+                    : sheet.kind === "storyActivity"
+                      ? "快拍互动"
+                      : "赞过的帖子"
             }
             onClick={(e) => e.stopPropagation()}
           >
@@ -672,7 +844,11 @@ export function RoommateInstagram(p: SkinProps) {
                   ? "评论"
                   : sheet.kind === "share"
                     ? "分享"
-                    : "赞过的帖子"}
+                    : sheet.kind === "activity"
+                      ? "Instagram通知"
+                      : sheet.kind === "storyActivity"
+                        ? "快拍互动"
+                        : "赞过的帖子"}
               </b>
               <button
                 aria-label="关闭面板"
@@ -684,21 +860,103 @@ export function RoommateInstagram(p: SkinProps) {
                 <X size={22} />
               </button>
             </header>
-            {sheet.kind === "comments" && sheet.item && (
+            {sheet.kind === "activity" && (
+              <div className="rig-activity-list">
+                {activities.map((item) => (
+                  <button
+                    className="rig-sheet-row"
+                    key={item.id}
+                    onClick={() => {
+                      const story = available.find(
+                        (i) => i.id === item.meta.sourceStory,
+                      );
+                      if (!story) return;
+                      ack(item);
+                      setSheet(null);
+                      if (story.meta.story === "true")
+                        openStories(
+                          [story],
+                          !activeStories.some((i) => i.id === story.id),
+                        );
+                      else openPost(story);
+                    }}
+                  >
+                    <Avatar name={item.sender} src={avatar(item)} />
+                    <span>
+                      {item.body}
+                      <small>{instagramDate(item, now, true)}</small>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {sheet.kind === "storyActivity" && sheetItem && (
+              <div className="rig-comment-list">
+                {activities
+                  .filter((i) => i.meta.sourceStory === sheetItem.id)
+                  .map((item) => (
+                    <p key={item.id}>
+                      <Heart size={20} />
+                      <span>{item.body}</span>
+                    </p>
+                  ))}
+                {sheetItem.comments.map((c, n) => (
+                  <p key={n}>
+                    <Avatar name={c.split(/[：:]/)[0]} />
+                    <span>{c}</span>
+                  </p>
+                ))}
+                {directMessages
+                  .filter((i) => i.meta.sourceStory === sheetItem.id)
+                  .map((item) => (
+                    <button
+                      className="rig-sheet-row"
+                      key={item.id}
+                      onClick={() => openPrivateThread(item)}
+                    >
+                      查看{item.sender}的私信回复
+                    </button>
+                  ))}
+              </div>
+            )}
+            {sheet.kind === "comments" && sheetItem && (
               <>
                 <div className="rig-comment-list">
                   {[
-                    ...sheet.item.comments,
+                    ...sheetItem!.comments,
                     ...comments
                       .filter((c) => c.startsWith(sheet.item!.id + "\t"))
                       .map((c) => c.split("\t").slice(1).join("\t")),
                   ].map((c, n) => (
                     <p key={n}>
-                      <Avatar name={c.split(/[：:]/)[0]} />
+                      {profiles.some(
+                        (i) =>
+                          i.sender === c.split(/[：:]/)[0] ||
+                          handle(i) === c.split(/[：:]/)[0],
+                      ) ? (
+                        <button
+                          aria-label={
+                            "查看评论者 " + c.split(/[：:]/)[0] + " 主页"
+                          }
+                          onClick={() => {
+                            const a = profiles.find(
+                              (i) =>
+                                i.sender === c.split(/[：:]/)[0] ||
+                                handle(i) === c.split(/[：:]/)[0],
+                            )!;
+                            setSheet(null);
+                            navigate("个人主页", handle(a));
+                          }}
+                        >
+                          <Avatar name={c.split(/[：:]/)[0]} />
+                        </button>
+                      ) : (
+                        <Avatar name={c.split(/[：:]/)[0]} />
+                      )}
                       <span>{c}</span>
                     </p>
                   ))}
-                  {!sheet.item.comments.length &&
+                  {!sheetItem!.comments.length &&
                     !comments.some((c) =>
                       c.startsWith(sheet.item!.id + "\t"),
                     ) && <p className="rig-empty-small">还没有评论</p>}
@@ -868,7 +1126,11 @@ export function RoommateInstagram(p: SkinProps) {
                   <strong>{handle(active)}</strong>
                   <small>
                     {instagramDate(active, now, archive)}
-                    {archive ? " · 精选" : ""}
+                    {archive
+                      ? active.meta.ownStory === "true"
+                        ? " · 存档"
+                        : " · 精选"
+                      : ""}
                   </small>
                 </span>
               </button>
@@ -886,6 +1148,30 @@ export function RoommateInstagram(p: SkinProps) {
           {active.media && <p className="rig-story-caption">{active.body}</p>}
           {paused && <span className="rig-story-paused">已暂停</span>}
           <div className="rig-story-bottom">
+            {active.meta.ownStory === "true" ? (
+              <button
+                className="rig-story-reply"
+                onClick={() => {
+                  const item = active;
+                  closeStory();
+                  activities
+                    .filter((i) => i.meta.sourceStory === item.id)
+                    .forEach(ack);
+                  setSheet({ kind: "storyActivity", item });
+                }}
+              >
+                查看快拍互动
+              </button>
+            ) : (
+              !!p.storyReplies?.(active.id).length && (
+                <button
+                  className="rig-story-reply"
+                  onClick={() => beginReply(active)}
+                >
+                  回复快拍
+                </button>
+              )
+            )}
             <button
               aria-label="上一条快拍"
               disabled={storyIndex === 0}
@@ -905,6 +1191,25 @@ export function RoommateInstagram(p: SkinProps) {
             </button>
           </div>
         </div>
+      )}
+      {replyFor && replyChoices.length > 0 && (
+        <InstagramReplyComposer
+          context={replyItem?.meta.ownPost === "true" ? "评论" : "快拍"}
+          choices={replyChoices}
+          draft={
+            replyContext === (replyItem?.meta.storyGroup || replyFor)
+              ? replyDraft
+              : ""
+          }
+          onDraft={setReplyDraft}
+          onSend={sendReply}
+          onClose={() => setReplyFor("")}
+        />
+      )}
+      {notice && !sheet && (
+        <p role="status" className="rig-toast">
+          {notice}
+        </p>
       )}
     </div>
   );

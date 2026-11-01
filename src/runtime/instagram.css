@@ -847,3 +847,101 @@
 .roommate-ig .catalog-avatar img {
   object-position: 50% 35%;
 }
+
+.rig-reply-composer.roommate-messages {
+  position: absolute;
+  inset: auto 0 0;
+  height: auto;
+  z-index: 80;
+  border-radius: 16px 16px 0 0;
+  background: var(--rm-bg, #fff);
+  color: #111;
+  box-shadow: 0 -12px 45px #0004;
+}
+.rig-reply-composer > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+}
+.rig-reply-composer > header button {
+  padding: 3px;
+  color: inherit;
+}
+.rig-story-bottom .rig-story-reply {
+  border: 1px solid #ffffff90;
+  border-radius: 24px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-right: auto;
+}
+.rig-activity-list .rig-sheet-row {
+  width: 100%;
+  text-align: left;
+  gap: 10px;
+  line-height: 1.5;
+}
+.rig-activity-list small {
+  display: block;
+  color: #777;
+  font-size: 12px;
+}
+.rig-reply-link {
+  color: #2379db;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.rig-direct-messages {
+  padding: 14px 16px;
+}
+.rig-direct-messages article {
+  margin: 12px 0 22px;
+}
+.rig-direct-messages article > small {
+  display: block;
+  color: #777;
+  text-align: center;
+  margin-bottom: 14px;
+  font-size: 11px;
+}
+.rig-direct-bubble {
+  display: flex;
+  align-items: end;
+  gap: 9px;
+}
+.rig-direct-bubble p {
+  padding: 12px 16px;
+  background: #f1f1f1;
+  border-radius: 18px;
+  font-size: 14px;
+}
+.rig-direct-messages .rig-sheet-row > span {
+  display: grid;
+  gap: 5px;
+  text-align: left;
+}
+.rig-direct-messages .rig-sheet-row small {
+  color: #777;
+}
+.rig-dm-unread {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0095f6;
+  margin-left: auto;
+}
+.rig-toast {
+  position: absolute;
+  z-index: 50;
+  bottom: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 14px;
+  background: rgba(25, 25, 25, 0.9);
+  color: white;
+  padding: 10px 15px;
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+}

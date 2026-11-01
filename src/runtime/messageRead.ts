@@ -56,6 +56,23 @@ export function reconcileReadNotices(work: Work, state: Runtime): Runtime {
   const unreadIds = new Set(unreadMessages(work, state).map((i) => i.id));
   const notifications = state.notifications.filter((text) => {
     const notice = notificationContent(text, work.apps);
+    if (notice.appId === "instagram") {
+      const candidates = (work.data.instagram || []).filter(
+        (item) =>
+          item.id.startsWith("s3-") &&
+          item.meta.albumOnly !== "true" &&
+          item.meta.profile !== "true" &&
+          visible(item, state) &&
+          (item.body === notice.body ||
+            (item.title && notice.body.includes(item.title))),
+      );
+      const exact = candidates.filter((item) => item.body === notice.body);
+      const matching = exact.length ? exact : candidates;
+      return (
+        !matching.length ||
+        matching.some((item) => !state.read.includes(item.id))
+      );
+    }
     if (notice.appId !== "messages") return true;
     const thread = messages.filter(
       (m) => m.title === notice.title && !m.outgoing,
