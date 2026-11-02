@@ -278,7 +278,8 @@ export function RoommateInstagram(p: SkinProps) {
     items = items.filter(
       (item) =>
         activeStories.some((i) => i.id === item.id) ||
-        Boolean(item.meta.highlight),
+        Boolean(item.meta.highlight) ||
+        (isArchive && item.meta.historyArchive === "true"),
     );
     if (!items.length) {
       setNotice("这条快拍已过期");
@@ -307,7 +308,8 @@ export function RoommateInstagram(p: SkinProps) {
     } else if (item.meta.story === "true") {
       if (
         !activeStories.some((i) => i.id === item.id) &&
-        !item.meta.highlight
+        !item.meta.highlight &&
+        item.meta.historyArchive !== "true"
       ) {
         setNotice("这条快拍已过期");
         return;
@@ -641,6 +643,31 @@ export function RoommateInstagram(p: SkinProps) {
                 </button>
               </div>
             )}
+            {accountHandle === "i_m_hendery" &&
+              available.some(
+                (i) =>
+                  i.meta.historyArchive === "true" &&
+                  !activeStories.some((a) => a.id === i.id),
+              ) && (
+                <div className="rig-profile-buttons">
+                  <button
+                    onClick={() =>
+                      openStories(
+                        available
+                          .filter((i) => i.meta.historyArchive === "true")
+                          .sort(
+                            (a, b) =>
+                              Number(a.meta.storyOrder) -
+                              Number(b.meta.storyOrder),
+                          ),
+                        true,
+                      )
+                    }
+                  >
+                    查看12月27日摩托快拍
+                  </button>
+                </div>
+              )}
             {!!highlights.length && (
               <div className="rig-highlights" aria-label="精选快拍">
                 {highlights.map((name) => {
@@ -1127,7 +1154,8 @@ export function RoommateInstagram(p: SkinProps) {
                   <small>
                     {instagramDate(active, now, archive)}
                     {archive
-                      ? active.meta.ownStory === "true"
+                      ? active.meta.ownStory === "true" ||
+                        active.meta.historyArchive === "true"
                         ? " · 存档"
                         : " · 精选"
                       : ""}

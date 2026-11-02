@@ -1,4 +1,4 @@
-《礼拜四》当前公开至 Stage 3。试玩：https://bdg-bp3.pages.dev/ 。版本 `stage123-20261102-r1` / `1503`。原玩家自动存档保留，Stage 2 入住结束后可继续12月4日。更新与存档说明见 [发布记录](docs/STAGE_3_RELEASE.md)。
+《礼拜四》当前公开至 Stage 3。试玩：https://bdg-bp3.pages.dev/ 。版本 `stage123-20261102-r2` / `1504`。原玩家自动存档保留，Stage 2 入住结束后可继续12月4日。更新与存档说明见 [发布记录](docs/STAGE_3_RELEASE.md)。
 
 # 礼拜四 · Stage 1＋Stage 2
 

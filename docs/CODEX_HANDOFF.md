@@ -1,3 +1,7 @@
+# 最新公开修复：1504 / stage123-20261102-r2
+
+摩托 Story依赖修复、旧档历史查看、帖子点赞和照片联动见 [STAGE_3_MEDIA_FIX.md](STAGE_3_MEDIA_FIX.md)。只到Stage3，存档不重置。
+
 # 当前公开版本：Stage 1—3 / 1503 / stage123-20261102-r1
 
 发布范围、存档兼容和本轮修复见 [STAGE_3_RELEASE.md](STAGE_3_RELEASE.md)。完整作者稿在本地独立保留，不向本仓库上传 Stage 4—5。

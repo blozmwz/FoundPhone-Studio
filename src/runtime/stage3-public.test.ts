@@ -31,7 +31,7 @@ it.each(["actual-draft", "actual-sending", "end-a", "end-b", "refused"])(
   (name) => {
     const old = (oldInputs[name] as { state: Runtime }).state;
     let s = restoreRuntime(release, old);
-    expect(s.revision).toBe(1503);
+    expect(s.revision).toBe(1504);
     expect(s.completed).toEqual(old.completed);
     expect(s.read).toEqual(old.read);
     expect(s.unlocked).toEqual(old.unlocked);

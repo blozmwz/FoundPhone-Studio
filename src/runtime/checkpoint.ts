@@ -240,7 +240,11 @@ function stage3MediaCheckpoint(work: Work, scene: string): Runtime {
   let state = stage3Checkpoint(work);
   for (let turn = 0; turn < 400; turn++) {
     state = advance(work, state, 120000);
-    if (state.completed.includes(scene) && state.choices.length) return state;
+    if (
+      state.completed.includes(scene) &&
+      (scene === "s3-dec27" || state.choices.length)
+    )
+      return state;
     if (state.choices.length)
       state = choose(work, state, state.choices[0].target);
     else if (pendingScene(work, state))

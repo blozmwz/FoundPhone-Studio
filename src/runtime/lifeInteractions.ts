@@ -33,6 +33,10 @@ export function availableTopics(work: Work, state: Runtime) {
       m.meta.retired !== "true" &&
       !state.variables["topicUsed-" + m.id] &&
       (!m.meta.requiresRead || state.read.includes(m.meta.requiresRead)) &&
+      (!m.meta.requiresAnyRead ||
+        m.meta.requiresAnyRead
+          .split(",")
+          .some((id) => state.read.includes(id))) &&
       stage >= Number(m.meta.minStage) &&
       stage <= Number(m.meta.maxStage) &&
       (m.meta.avatar !== "true" || state.variables.avatarViewed === true) &&
