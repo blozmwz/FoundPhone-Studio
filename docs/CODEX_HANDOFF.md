@@ -1,3 +1,7 @@
+# 旧存档黑屏紧急修复：1505 / stage123-20261102-r3
+
+原因、严格迁移映射、原始备份、历史版本验证与设备限制见 [SAVE_MIGRATION_HOTFIX.md](SAVE_MIGRATION_HOTFIX.md)。不新增剧情，公开仍到Stage3，正常进度保留。
+
 # 最新公开修复：1504 / stage123-20261102-r2
 
 摩托 Story依赖修复、旧档历史查看、帖子点赞和照片联动见 [STAGE_3_MEDIA_FIX.md](STAGE_3_MEDIA_FIX.md)。只到Stage3，存档不重置。

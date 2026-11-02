@@ -74,7 +74,7 @@ it.each(Object.entries(old))(
   "real public1503 %s recovers media without replaying choices or conversations",
   (name, save) => {
     const s = restoreRuntime(work, save);
-    expect(s.revision).toBe(1504);
+    expect(s.revision).toBe(1505);
     expect(s.completed).toEqual(save.completed);
     expect(s.read).toEqual(save.read);
     expect(s.scheduled).toEqual(save.scheduled);

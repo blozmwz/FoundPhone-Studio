@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Runtime, Work } from "../schema";
 import {
@@ -7,7 +7,12 @@ import {
   encodeBackup,
   MAX_SAVE_BYTES,
 } from "./saveBackup";
-import { replaceRuntime, readSavedRuntime } from "../persistence";
+import {
+  replaceRuntime,
+  readSavedRuntime,
+  readMigrationBackup,
+  preserveMigrationBackup,
+} from "../persistence";
 export function SaveBackup({
   work,
   state,
@@ -31,6 +36,20 @@ export function SaveBackup({
     typeof decodeBackup
   > | null>(null);
   const [busy, setBusy] = useState(false);
+  const [migrationBackup, setMigrationBackup] =
+    useState<Awaited<ReturnType<typeof readMigrationBackup>>>();
+  useEffect(() => {
+    if (!open && !embedded) return;
+    let active = true;
+    void readMigrationBackup(saveKey)
+      .then((value) => {
+        if (active) setMigrationBackup(value);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [open, embedded, saveKey]);
   const input = useRef<HTMLInputElement>(null);
   const content = (
     <aside className={`save-backup-tools ${embedded ? "embedded" : ""}`}>
@@ -53,6 +72,20 @@ export function SaveBackup({
               >
                 导出存档
               </button>
+              {migrationBackup && (
+                <button
+                  onClick={() =>
+                    downloadBackup(
+                      encodeBackup(
+                        migrationBackup.state,
+                        migrationBackup.playerName || work.phone.owner,
+                      ),
+                    )
+                  }
+                >
+                  导出更新前存档
+                </button>
+              )}
             </>
           )}
           <button
@@ -140,6 +173,12 @@ export function SaveBackup({
                     },
                   },
                 };
+                await preserveMigrationBackup(
+                  saveKey,
+                  pending.originalState,
+                  work.updatedAt,
+                  pending.playerName,
+                );
                 await replaceRuntime(
                   saveKey,
                   current?.state ?? state,

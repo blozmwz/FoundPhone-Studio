@@ -33,7 +33,11 @@ export function decodeBackup(work: Work, text: string) {
   }
   const result = backupSchema.safeParse(value);
   if (!result.success) throw Error("存档格式不完整或不受支持，未覆盖进度。");
-  return { ...result.data, state: restoreRuntime(work, result.data.state) };
+  return {
+    ...result.data,
+    originalState: result.data.state,
+    state: restoreRuntime(work, result.data.state),
+  };
 }
 export function downloadBackup(text: string) {
   const url = URL.createObjectURL(

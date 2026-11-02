@@ -221,7 +221,8 @@ export function RoommateMessages({
             <button
               className="rm-video"
               aria-label="视频通话"
-              onClick={() => onRead(thread)}
+              disabled
+              title="暂未开放视频通话"
             >
               <Video size={25} />
             </button>

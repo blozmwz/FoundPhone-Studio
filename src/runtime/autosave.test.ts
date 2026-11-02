@@ -16,7 +16,7 @@ function saved(final = false) {
   return s;
 }
 function future(): Work {
-  return { ...structuredClone(work), updatedAt: 1505 };
+  return { ...structuredClone(work), updatedAt: 1506 };
 }
 it("accepts a declared additive revision without clearing choices, chat, drafts or timer progress", () => {
   const old = saved();
@@ -25,7 +25,7 @@ it("accepts a declared additive revision without clearing choices, chat, drafts 
     profile: { playerName: "小林" },
   };
   const next = restoreRuntime(future(), old);
-  expect(next.revision).toBe(1505);
+  expect(next.revision).toBe(1506);
   expect(next.completed).toEqual(old.completed);
   expect(next.unlocked).toEqual(old.unlocked);
   expect(next.read).toEqual(old.read);
@@ -98,5 +98,5 @@ it("a later public stage still migrates the original Stage1 demo into rental rat
   expect(restored.endings).toEqual([]);
   expect(restored.variables.pendingScene).toBe("scene-viewing-contract");
   expect(restored.read).toEqual(old.read);
-  expect(restored.revision).toBe(1505);
+  expect(restored.revision).toBe(1506);
 });

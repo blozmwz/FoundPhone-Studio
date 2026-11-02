@@ -2,7 +2,18 @@ import Dexie, { type Table } from "dexie";
 import type { Work, Runtime } from "./schema";
 class Database extends Dexie {
   works!: Table<Work, string>;
-  saves!: Table<{ id: string; state: Runtime }, string>;
+  saves!: Table<
+    {
+      id: string;
+      state: Runtime;
+      playerName?: string;
+      sourceRevision?: number;
+      targetRevision?: number;
+      createdAt?: string;
+      backupKey?: string;
+    },
+    string
+  >;
   constructor() {
     super("foundphone-studio");
     this.version(1).stores({ works: "id,updatedAt", saves: "id" });
@@ -38,6 +49,74 @@ export async function readSavedRuntime(id: string) {
     /* Fall back to committed data. */
   }
   return db.saves.get(id);
+}
+
+export async function preserveMigrationBackup(
+  id: string,
+  state: Runtime,
+  targetRevision: number,
+  playerName: string,
+) {
+  const raw = JSON.stringify(state);
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(raw),
+  );
+  const hash = Array.from(new Uint8Array(digest), (x) =>
+    x.toString(16).padStart(2, "0"),
+  ).join("");
+  const key = `${id}:before-migration:${state.revision}:${targetRevision}:${hash}`;
+  await db.transaction("rw", db.saves, async () => {
+    let backup = await db.saves.get(key);
+    if (!backup) {
+      backup = {
+        id: key,
+        state,
+        playerName,
+        sourceRevision: state.revision,
+        targetRevision,
+        createdAt: new Date().toISOString(),
+      };
+      await db.saves.add(backup);
+    }
+    await db.saves.put({
+      ...backup,
+      id: id + ":before-migration",
+      backupKey: key,
+    });
+  });
+}
+export async function commitMigratedRuntime(
+  id: string,
+  before: Runtime,
+  after: Runtime,
+) {
+  await pendingWrites.get(id);
+  const expected = JSON.stringify(before),
+    key = "foundphone-pending:" + id;
+  await db.transaction("rw", db.saves, async () => {
+    const stored = await db.saves.get(id);
+    let journal: string | null = null;
+    try {
+      journal = localStorage.getItem(key);
+    } catch {
+      /* committed row remains authoritative */
+    }
+    const latest = journal || (stored ? JSON.stringify(stored.state) : "");
+    if (latest !== expected)
+      throw Error("其他页面的进度已变化，原存档已保留，请刷新后继续。");
+    // Do not place a migrated journal before this transaction commits. A failed
+    // write must leave both the old DB row and its old synchronous journal intact.
+    await db.saves.put({ id, state: after });
+  });
+  try {
+    if (localStorage.getItem(key) === expected) localStorage.removeItem(key);
+  } catch {
+    /* DB committed */
+  }
+}
+export function readMigrationBackup(id: string) {
+  return db.saves.get(id + ":before-migration");
 }
 
 const replacingSaves = new Set<string>();

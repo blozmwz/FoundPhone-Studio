@@ -1,6 +1,6 @@
 // Produce a physically limited public source, never upload the author story.
-export const STAGE3_REVISION = 1504;
-export const STAGE3_BUILD = "stage123-20261102-r2";
+export const STAGE3_REVISION = 1505;
+export const STAGE3_BUILD = "stage123-20261102-r3";
 export function stage3ReleaseStory(full, previousPublic) {
   const story = structuredClone(full);
   story.revision = STAGE3_REVISION;

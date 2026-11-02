@@ -1,5 +1,5 @@
 import { reconcileReadNotices, unreadMessages } from "./runtime/messageRead";
-import { restoreRuntime } from "./runtime/saveMigration";
+import { restoreWithBackup } from "./runtime/restoreWithBackup";
 import { SaveBackup } from "./runtime/SaveBackupPanel";
 import { downloadBackup, encodeBackup } from "./runtime/saveBackup";
 import { housingCheckpoint } from "./runtime/checkpoint";
@@ -83,6 +83,8 @@ import {
   persistRuntime,
   readSavedRuntime,
   replaceRuntime,
+  preserveMigrationBackup,
+  commitMigratedRuntime,
 } from "./persistence";
 export function AppIcon({
   id,
@@ -248,21 +250,35 @@ function PhoneRuntime({
     let active = true;
     if (creator || external) return;
     void readSavedRuntime(saveKey)
-      .then((saved) => {
+      .then(async (saved) => {
         if (!active) return;
         try {
           const value = withPlayerName(
             saved
-              ? restoreRuntime(work, saved.state)
+              ? (await restoreWithBackup(
+                  work,
+                  work.phone.owner,
+                  {
+                    read: async () => saved,
+                    backup: (state, target, name) =>
+                      preserveMigrationBackup(saveKey, state, target, name),
+                    commit: (before, after) =>
+                      commitMigratedRuntime(saveKey, before, after),
+                  },
+                  () => active,
+                ))!
               : dispatch(work, initialRuntime(work), "start"),
           );
+          if (!active) return;
           runtimeRef.current = value;
           setOwn(value);
           setReady(true);
-          void persistRuntime(saveKey, value).catch(() =>
-            setLoadError("存档失败，请导出备份。"),
-          );
+          if (!saved)
+            void persistRuntime(saveKey, value).catch(() =>
+              setLoadError("存档失败，请导出备份。"),
+            );
         } catch (e) {
+          if (!active) return;
           setBlockedSave(saved?.state ?? null);
           setLoadError(
             e instanceof Error ? e.message : "存档读取失败，原进度保留。",
@@ -298,6 +314,15 @@ function PhoneRuntime({
   }, [creator, ready, work.id, work.updatedAt]);
   const event = (event: string, target: string) => {
     if (!creator) {
+      if (
+        event === "read" &&
+        roommateStory &&
+        ![
+          ...Object.values(work.data).flat(),
+          ...Object.values(runtimeRef.current.messages).flat(),
+        ].some((item) => item.id === target)
+      )
+        return;
       if (
         event === "continueScene" &&
         pendingScene(work, runtimeRef.current)?.id !== target

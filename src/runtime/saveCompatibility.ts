@@ -22,7 +22,7 @@ export function compatibleSaveRevision(work: Work, saved: Runtime) {
 }
 // Compatibility is an author declaration, checked against the saved active
 // anchors. A structural change still needs an explicit migration, never a reset.
-export function validateSaveAnchors(work: Work, state: Runtime) {
+export function saveAnchorIssues(work: Work, state: Runtime) {
   const nodes = new Set(work.nodes.map((node) => node.id));
   const records = new Set([
     ...Object.values(work.data)
@@ -33,13 +33,29 @@ export function validateSaveAnchors(work: Work, state: Runtime) {
       .map((item) => item.id),
   ]);
   const pending = String(state.variables.pendingScene || "");
-  if (
-    state.choices.some((choice) => !nodes.has(choice.target)) ||
-    state.scheduled?.some((job) => !nodes.has(job.nodeId)) ||
-    (pending && !nodes.has(pending)) ||
-    [...state.read, ...state.unlocked].some((id) => !records.has(id))
-  )
-    throw Error("这次剧情结构变化需要迁移，原存档已保留，未重新开始。");
+  return {
+    choices: state.choices
+      .filter((c) => !nodes.has(c.target))
+      .map((c) => c.target),
+    scheduled: (state.scheduled || [])
+      .filter((j) => !nodes.has(j.nodeId))
+      .map((j) => j.nodeId),
+    pending: pending && !nodes.has(pending) ? [pending] : [],
+    read: state.read.filter((id) => !records.has(id)),
+    unlocked: state.unlocked.filter((id) => !records.has(id)),
+  };
+}
+export class SaveAnchorError extends Error {
+  readonly code = "SAVE_ANCHOR_MIGRATION_REQUIRED";
+  constructor(readonly details: ReturnType<typeof saveAnchorIssues>) {
+    super("这次剧情结构变化需要迁移，原存档已保留，未重新开始。");
+    this.name = "SaveAnchorError";
+  }
+}
+export function validateSaveAnchors(work: Work, state: Runtime) {
+  const issues = saveAnchorIssues(work, state);
+  if (Object.values(issues).some((ids) => ids.length))
+    throw new SaveAnchorError(issues);
 }
 export function resumeExtendedRelease(work: Work, state: Runtime) {
   const next = work.variables.resumeAfterRelease;

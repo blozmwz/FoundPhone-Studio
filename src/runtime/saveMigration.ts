@@ -1,3 +1,4 @@
+import { repairLegacySaveAnchors } from "./legacySaveAnchors";
 import { reconcileReadNotices } from "./messageRead";
 import { reconcileAsideTimestamps } from "./asideTimestamps";
 import { backfillApprovedPosts } from "../story-engine/recordTimestamp";
@@ -76,6 +77,7 @@ export function restoreRuntime(work: Work, input: unknown): Runtime {
     variables: { ...saved.variables },
     revision: work.updatedAt,
   };
+  state = repairLegacySaveAnchors(work, state);
   if (publicUpgrade) {
     // Only the old demo stop is retired; a genuine rejection stays an ending.
     state.endings = state.endings.filter(
@@ -123,7 +125,7 @@ export function restoreRuntime(work: Work, input: unknown): Runtime {
   }));
   state.variables = { ...work.variables, ...state.variables };
   resumeExtendedRelease(work, state);
-  if (saved.revision !== work.updatedAt) validateSaveAnchors(work, state);
+  validateSaveAnchors(work, state);
   return reconcileReadNotices(
     work,
     backfillApprovedPosts(work, reconcileAsideTimestamps(work, state)),

@@ -3,7 +3,7 @@
   "id": "fridge-light-roommates",
   "title": "礼拜四",
   "description": "《礼拜四》Stage 1—3，至2027年1月20日课堂聊天结束。",
-  "revision": 1504,
+  "revision": 1505,
   "phone": {
     "owner": "你",
     "date": "2026-09-17",
@@ -9888,7 +9888,7 @@
     "s3ReleaseRevision": 1,
     "s3MotorStorySeen": false,
     "publicDemo": true,
-    "releaseBuild": "stage123-20261102-r2",
+    "releaseBuild": "stage123-20261102-r3",
     "releaseStage2": false,
     "releaseStage3": true,
     "releaseComplete": false,
