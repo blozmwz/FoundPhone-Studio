@@ -14,6 +14,6 @@ jobs:
         with:
           node-version: 24
       - run: node scripts/build-frozen-release.mjs
-      - run: node --test server/analytics/worker.test.mjs
+      - run: node --test server/analytics/*.test.mjs
 # Cloudflare Pages bdg deploys main through its existing Git integration.
 # No second hosting target or author/test preview is deployed here.

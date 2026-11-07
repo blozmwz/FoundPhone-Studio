@@ -4,3 +4,8 @@
   Cache-Control: no-cache
 /release.json
   Cache-Control: no-store
+
+/sw.js
+  Cache-Control: no-cache
+/sw-refresh.js
+  Cache-Control: no-cache

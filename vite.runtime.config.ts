@@ -23,6 +23,7 @@ export default defineConfig(({ command }) => ({
       workbox: {
         clientsClaim: true,
         importScripts: ["./sw-refresh.js"],
+        navigateFallbackDenylist: [/^\/admin(?:\/|\?|$)/, /^\/api(?:\/|\?|$)/, /^\/cdn-cgi(?:\/|\?|$)/],
         globIgnores: ["**/work.json"],
         runtimeCaching: [
           {

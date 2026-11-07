@@ -4,10 +4,10 @@
   "authorRevision": 36,
   "sourceSha256": "970ba005b39c12e7076cc79e44101fb1e6dc290e1069cd210dedc0461584ca5d",
   "workSha256": "9e3d8adbb76923a8826f28dfb503541d260ec683d6838295438dc0be9e72a81e",
-  "scope": "five chapters, early/A/B endings and reunion; author-only statistics read verification; collection disabled",
+  "scope": "five chapters unchanged; authenticated statistics; admin and login bypass game cache; collection disabled",
   "analyticsEnabled": false,
-  "analyticsBackend": "readonly-r42",
-  "bundleSha256": "18030a027845ff74b197fc52a21bfd28486503be223167d3aa165808bd7ca351",
+  "analyticsBackend": "readonly-r43",
+  "bundleSha256": "8b8173affb034977550b2687d2108435bd7107c81f715cc0b0b573198fbd2c28",
   "files": [
     {
       "path": "BRAND_NOTICE.txt",
@@ -31,8 +31,8 @@
     },
     {
       "path": "_headers",
-      "bytes": 115,
-      "sha256": "a5584da3e523f3a7664a650cef6a1075058aa9d343c2fc00e1a8fbbc03b7d1e1"
+      "bytes": 190,
+      "sha256": "ca5371c8ceaa81d3c03aa9054dff5aab978a6a83e4050bdc8403b67cf97ab369"
     },
     {
       "path": "_routes.json",
@@ -41,8 +41,8 @@
     },
     {
       "path": "_worker.js",
-      "bytes": 17931,
-      "sha256": "42e962e70958e5e4e851b7d53e64fda1ebeb4edd210e8182bb5b4cedaa8606a1"
+      "bytes": 19110,
+      "sha256": "a0e0243fbb1f3b299fb89128be111e43c8c50b94d747aa71cae4a00b63e24975"
     },
     {
       "path": "assets/Apps-B51rK8Au.js",
@@ -521,8 +521,8 @@
     },
     {
       "path": "release.json",
-      "bytes": 442,
-      "sha256": "7eb188da095b427043086d19fc461493059ab20fa9377f32a4cb968a62b57c69"
+      "bytes": 440,
+      "sha256": "deccf89b0de16c969481443276dca748bd7a1503407af10c8a7b0b119f53992f"
     },
     {
       "path": "sw-refresh.js",
@@ -531,8 +531,8 @@
     },
     {
       "path": "sw.js",
-      "bytes": 6040,
-      "sha256": "6ba3223350b82016212fc2e62c192bd02eafe9cd14e744f81dcf6b3f6eb00883"
+      "bytes": 6119,
+      "sha256": "7af481773b26591366e3d91507972700eab27a19686e966d8bfdfd42bb15ba26"
     },
     {
       "path": "work.json",

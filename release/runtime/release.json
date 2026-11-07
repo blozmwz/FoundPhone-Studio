@@ -4,7 +4,7 @@
   "authorRevision": 36,
   "sourceSha256": "970ba005b39c12e7076cc79e44101fb1e6dc290e1069cd210dedc0461584ca5d",
   "workSha256": "9e3d8adbb76923a8826f28dfb503541d260ec683d6838295438dc0be9e72a81e",
-  "scope": "five chapters, early/A/B endings and reunion; author-only statistics read verification; collection disabled",
+  "scope": "five chapters unchanged; authenticated statistics; admin and login bypass game cache; collection disabled",
   "analyticsEnabled": false,
-  "analyticsBackend": "readonly-r42"
+  "analyticsBackend": "readonly-r43"
 }
