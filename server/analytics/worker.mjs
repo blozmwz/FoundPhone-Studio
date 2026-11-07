@@ -6,7 +6,8 @@ const KINDS=new Set(['view','start','resume','chapter_reach','chapter_complete',
 const FIELDS=new Set(['id','visitor','session','run','mode','kind','chapter','ending','build','minute','ms']);
 const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','X-Frame-Options':'DENY'};
 function json(value,status=200){return new Response(JSON.stringify(value),{status,headers:{...headers,'Content-Type':'application/json; charset=utf-8'}});}
-function configured(env){return env.ANALYTICS_ENABLED==='1'&&env.ANALYTICS_DB&&/^https:\/\/[a-z0-9-]+\.cloudflareaccess\.com$/.test(env.CF_ACCESS_ISSUER||'')&&/^[a-zA-Z0-9_-]{20,200}$/.test(env.CF_ACCESS_AUD||'')&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(env.ANALYTICS_OWNER_EMAIL||'')&&env.ANALYTICS_ORIGIN==='https://bdg-bp3.pages.dev';}
+function accessConfigured(env){return env.ANALYTICS_DB&&/^https:\/\/[a-z0-9-]+\.cloudflareaccess\.com$/.test(env.CF_ACCESS_ISSUER||'')&&/^[a-zA-Z0-9_-]{20,200}$/.test(env.CF_ACCESS_AUD||'')&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(env.ANALYTICS_OWNER_EMAIL||'')&&env.ANALYTICS_ORIGIN==='https://bdg-bp3.pages.dev';}
+function configured(env){return env.ANALYTICS_ENABLED==='1'&&accessConfigured(env);}
 export function validateEvent(e,now=Date.now()){
  if(!e||typeof e!=='object'||Array.isArray(e)||Object.keys(e).some(k=>!FIELDS.has(k)))return false;
  if(![e.id,e.visitor,e.session,e.run].every(x=>typeof x==='string'&&UUID.test(x)))return false;
@@ -21,7 +22,7 @@ export function validateEvent(e,now=Date.now()){
 const cache=new Map();
 function bytes(s){if(!/^[A-Za-z0-9_-]+$/.test(s))throw Error('encoding');return Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));}
 export async function verifyAccess(request,env,fetcher=fetch,now=Date.now()){
- if(!configured(env))return false;
+ if(!accessConfigured(env))return false;
  const cookie=request.headers.get('Cookie')?.split(';').map(s=>s.trim()).find(s=>s.startsWith('CF_Authorization='))?.slice(17);
  const token=request.headers.get('Cf-Access-Jwt-Assertion')||cookie||'';
  if(token.length>8192)return false;
@@ -65,7 +66,7 @@ export async function summary(db,days=30,now=Date.now()){
 export async function handle(request,env){
  const url=new URL(request.url),admin=url.pathname==='/admin'||url.pathname.startsWith('/admin/');
  if(admin){
-  if(!configured(env))return json({error:'统计后台尚未配置，保持关闭'},503);
+  if(!accessConfigured(env))return json({error:'统计后台尚未配置，保持关闭'},503);
   if(!await verifyAccess(request,env))return json({error:'请通过 Cloudflare Access 使用作者账号登录'},403);
   if(request.method!=='GET')return json({error:'method'},405);
   if(url.pathname==='/admin/api/summary'){const days=Number(url.searchParams.get('days')||30);if(![7,30,90,180].includes(days))return json({error:'days'},400);return json(await summary(env.ANALYTICS_DB,days));}

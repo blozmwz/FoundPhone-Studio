@@ -4,9 +4,10 @@
   "authorRevision": 36,
   "sourceSha256": "970ba005b39c12e7076cc79e44101fb1e6dc290e1069cd210dedc0461584ca5d",
   "workSha256": "9e3d8adbb76923a8826f28dfb503541d260ec683d6838295438dc0be9e72a81e",
-  "scope": "five chapters, early/A/B endings and reunion; statistics paused; admin unavailable",
+  "scope": "five chapters, early/A/B endings and reunion; author-only statistics read verification; collection disabled",
   "analyticsEnabled": false,
-  "bundleSha256": "365a58eb8f7feeaab0a27463d686d15d692deb7bdde62219656e89ac0b7998e9",
+  "analyticsBackend": "readonly-r42",
+  "bundleSha256": "18030a027845ff74b197fc52a21bfd28486503be223167d3aa165808bd7ca351",
   "files": [
     {
       "path": "BRAND_NOTICE.txt",
@@ -40,8 +41,8 @@
     },
     {
       "path": "_worker.js",
-      "bytes": 494,
-      "sha256": "08cb8c68aba75c4638b2022e8627c4767be2e51a1736ea0e3b85a300cc0c53b6"
+      "bytes": 17931,
+      "sha256": "42e962e70958e5e4e851b7d53e64fda1ebeb4edd210e8182bb5b4cedaa8606a1"
     },
     {
       "path": "assets/Apps-B51rK8Au.js",
@@ -520,8 +521,8 @@
     },
     {
       "path": "release.json",
-      "bytes": 379,
-      "sha256": "fd26f20c04564b1cbe42d521978e7dde6d15c2b8c1363d7eb759729785e66c63"
+      "bytes": 442,
+      "sha256": "7eb188da095b427043086d19fc461493059ab20fa9377f32a4cb968a62b57c69"
     },
     {
       "path": "sw-refresh.js",
