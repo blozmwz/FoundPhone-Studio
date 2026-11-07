@@ -1,3 +1,5 @@
+import {messageSessionBreak} from './messageSeparation';
+import { PhotoViewer } from './PhotoViewer';
 import { SimulatedReplyKeys } from "./SimulatedReplyKeys";
 import { unreadMessageItems } from "./messageRead";
 import { orderedMessages } from "./messageOrder";
@@ -15,7 +17,7 @@ import {
   UserRound,
   Video,
 } from "lucide-react";
-import type { Item, Runtime, Work } from "../schema";
+import { safeMedia, type Item, type Runtime, type Work } from "../schema";
 import "./roommate.css";
 import { messagePacing } from "../story-engine/messagePacing";
 
@@ -57,8 +59,13 @@ export function RoommateMessages({
   onReaction?: (id: string, reaction: string) => void;
   onBack: () => void;
 }) {
-  const pending = replyThread(work, state.choices);
+  const pending = state.variables.s29PhotoReady ? "Hendery" : replyThread(work, state.choices);
   const [thread, setThread] = useState(initialThread || pending);
+  const [photoPicker, setPhotoPicker] = useState(false);
+  const [viewedPhoto,setViewedPhoto]=useState<Item|null>(null);
+  const mealPhotos = work.data.photos.filter(i => i.meta.sourceEvent === "s29-meal-start" && state.unlocked.includes(i.id) && safeMedia(i.media));
+  const photoReady = thread === "Hendery" && state.variables.s29PhotoReady === true;
+  const photoDraft = photoReady ? mealPhotos.find(i => i.id === state.variables.s29SelectedPhoto) : undefined;
   const [query, setQuery] = useState("");
   const [keyboard, setKeyboard] = useState(
     Boolean(state.ui?.messages?.replyDraft),
@@ -80,6 +87,7 @@ export function RoommateMessages({
   );
   const scroll = useRef<HTMLDivElement>(null);
   const followBottom = useRef(true);
+  const followAfterSend = useRef(false);
   const lastThread = useRef("");
   const readCallback = useRef(onRead);
   readCallback.current = onRead;
@@ -108,8 +116,15 @@ export function RoommateMessages({
   useEffect(() => {
     const area = scroll.current;
     if (!area || !thread) return;
-    if (lastThread.current !== thread || followBottom.current)
+    if (
+      lastThread.current !== thread ||
+      followBottom.current ||
+      followAfterSend.current
+    ) {
       area.scrollTop = area.scrollHeight;
+      followBottom.current = true;
+      followAfterSend.current = false;
+    }
     lastThread.current = thread;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -144,7 +159,7 @@ export function RoommateMessages({
     : [];
   const choices = ordinary.length ? ordinary : topics;
   const choice = choices.find((c) => c.target === selected);
-  const scheduledMessage = state.scheduled?.some(
+  const scheduledMessage = (state.variables.s45Typing === true && thread === "Hendery") || state.scheduled?.some(
     (s) =>
       s.due - (state.elapsedMs ?? 0) <= messagePacing.typingWindowMs &&
       work.nodes
@@ -166,7 +181,16 @@ export function RoommateMessages({
     if (choices.length) setSuggestions(true);
   }
   function send() {
+    if (photoDraft) {
+      followAfterSend.current = true; followBottom.current = true;
+      onStoryEvent?.("mealPhotoSent", photoDraft.id); setPhotoPicker(false); setKeyboard(false); return;
+    }
     if (!choice) return;
+    // Sending multiple bubbles can move the viewport by more than the follow
+    // threshold before the effect runs. Keep this explicit player intention;
+    // ordinary incoming messages still respect scrolling up to read history.
+    followAfterSend.current = true;
+    followBottom.current = true;
     onDraft?.("");
     if (choice.target.startsWith("topic:"))
       onStoryEvent?.("topic", choice.target.slice(6));
@@ -186,6 +210,7 @@ export function RoommateMessages({
       className="roommate-messages"
       data-thread={thread}
       data-keyboard={keyboard}
+      data-photo={photoReady}
     >
       {thread ? (
         <>
@@ -243,11 +268,11 @@ export function RoommateMessages({
               const previous = list[i - 1],
                 next = list[i + 1];
               const stamp =
-                !previous || m.time.slice(0, 10) !== previous.time.slice(0, 10);
+                messageSessionBreak(previous?.time,m.time);
               const tail =
                 !next ||
                 m.outgoing !== next.outgoing ||
-                m.time.slice(0, 10) !== next.time.slice(0, 10);
+                messageSessionBreak(m.time,next.time);
               return (
                 <div
                   className={`rm-message ${m.outgoing ? "rm-outgoing" : ""}`}
@@ -261,7 +286,7 @@ export function RoommateMessages({
                           <br />
                         </>
                       )}
-                      {m.time.slice(0, 10)} {m.time.slice(11, 16)}
+                      {!previous||m.time.slice(0,10)!==previous.time.slice(0,10)?m.time.slice(0,10)+' ':''}{m.time.slice(11,16)}
                     </time>
                   )}
                   <button
@@ -293,6 +318,7 @@ export function RoommateMessages({
                       if (held.current) return;
                       onRead(m.id);
                       if (m.meta.contactId) onOpenContact?.(m.meta.contactId);
+                      if(m.kind==="image"&&safeMedia(m.media))setViewedPhoto(m);
                     }}
                   >
                     {m.meta.contactId ? (
@@ -317,6 +343,10 @@ export function RoommateMessages({
                           <small>联系人名片</small>
                         </span>
                       </span>
+                    ) : m.meta.simulatedVideo === "true" ? (
+                      <span className="rm-contact-card" aria-label="模拟视频分享卡片"><Video size={34}/><span><strong>视频</strong><small>搞笑短视频</small></span></span>
+                    ) : m.kind === "image" && safeMedia(m.media) ? (
+                      <img className="rm-attachment-photo" width={180} height={200} src={safeMedia(m.media)} alt="发送的照片"/>
                     ) : m.meta.shopShare ? (
                       <span className="rm-contact-card">
                         <span>
@@ -351,14 +381,14 @@ export function RoommateMessages({
             <button
               className="rm-plus"
               aria-label="附件"
-              onClick={showKeyboard}
+              onClick={() => photoReady ? setPhotoPicker(true) : showKeyboard()}
             >
               <Plus size={24} />
             </button>
             <button
-              className={`rm-compose-field ${choice ? "has-draft" : ""}`}
+              className={`rm-compose-field ${choice || photoDraft ? "has-draft" : ""}`}
               aria-label="输入消息"
-              onClick={showKeyboard}
+              onClick={() => photoReady ? setPhotoPicker(true) : showKeyboard()}
               onKeyDown={(e) => {
                 if (e.key.length === 1) {
                   e.preventDefault();
@@ -367,15 +397,25 @@ export function RoommateMessages({
                 }
               }}
             >
-              <span>{choice?.label ?? (suggestions ? "…" : "iMessage")}</span>
-              {!choice && <AudioLines size={20} />}
+              <span>{photoDraft ? "照片" : photoReady ? "选择照片" : choice?.label ?? (suggestions ? "…" : "iMessage")}</span>
+              {!choice && state.variables.s45ReunionComplete === true && thread === "Hendery" ? <i className="reunion-caret" aria-label="等待输入"/> : !choice && <AudioLines size={20} />}
             </button>
-            {choice && (
+            {(choice || photoDraft) && (
               <button className="rm-send" aria-label="发送消息" onClick={send}>
                 <ArrowUp size={22} />
               </button>
             )}
           </div>
+          {photoReady && <div className="rm-draft-tools rm-photo-tools">
+            <button onClick={() => setPhotoPicker(true)}>选择要发送的照片</button>
+            {photoDraft && <button onClick={() => onStoryEvent?.("clearMealPhoto", photoDraft.id)}>删除照片草稿</button>}
+          </div>}
+          {photoPicker && photoReady && <div className="rm-photo-picker" role="dialog" aria-label="选择饭后照片">
+            <button onClick={() => setPhotoPicker(false)}>关闭相册</button>
+            {mealPhotos.map(i => <button key={i.id} aria-label={"选择照片："+i.title} onClick={() => {
+              onStoryEvent?.("selectMealPhoto", i.id); setPhotoPicker(false);
+            }}><img src={safeMedia(i.media)} alt={i.title}/></button>)}
+          </div>}
           {choice && (
             <div className="rm-draft-tools">
               <button
@@ -556,6 +596,7 @@ export function RoommateMessages({
           </div>
         </>
       )}
+      {viewedPhoto && <PhotoViewer src={viewedPhoto.media} title="发送的照片" onClose={()=>setViewedPhoto(null)}/>}
     </div>
   );
 }

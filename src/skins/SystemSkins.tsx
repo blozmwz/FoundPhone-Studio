@@ -215,7 +215,7 @@ export function PhotosSkin(p: Props) {
           <>
             <SearchBox value={q} set={setQ} />
             <div className="photo-mosaic">
-              {list.map((i) => (
+              {newestFirst(list).map((i) => (
                 <button
                   aria-label={`查看${i.title}`}
                   key={i.id}

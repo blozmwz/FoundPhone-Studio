@@ -1,4 +1,7 @@
+import {migrateReview39} from './review39Migration';
+import { migrateStage45 } from "./stage45";
 import { repairLegacySaveAnchors } from "./legacySaveAnchors";
+import { migrateStage3Motor } from "./stage3MotorMigration";
 import { reconcileReadNotices } from "./messageRead";
 import { reconcileAsideTimestamps } from "./asideTimestamps";
 import { backfillApprovedPosts } from "../story-engine/recordTimestamp";
@@ -116,10 +119,12 @@ export function restoreRuntime(work: Work, input: unknown): Runtime {
   state = migrateStage3Interactions(work, state);
   state = migrateStage3Release(work, state);
   state = repairStage3Media(work, state);
+  state = migrateStage3Motor(work, state);
+  state = migrateReview39(work,migrateStage45(work, state, saved.revision));
   // Stable choice IDs keep unsent drafts valid across a wording-only update.
   state.choices = state.choices.map((choice) => ({
     ...choice,
-    label:
+    label: choice.target === "life-film1-pick-send-2" && state.variables.s45LegacyFirstChoice === true ? "今晚看《重庆森林》吧" :
       work.nodes.find((node) => node.id === choice.target)?.label ??
       choice.label,
   }));

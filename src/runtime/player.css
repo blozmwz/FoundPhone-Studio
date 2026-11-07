@@ -285,3 +285,32 @@
     font-size: 16px;
   }
 }
+
+/* Opening and ending share the same quiet palette and paragraph fade. */
+.story-welcome{box-sizing:border-box;background:#151519;color:#eeeef2;border-color:#ffffff0c;box-shadow:none;padding:48px 32px 36px;animation:welcome-appear .65s ease-out both;}
+.story-welcome h1{color:#eeeef2;font-size:28px;font-weight:500;margin:0 0 22px;}
+.story-welcome>p{color:#c2c2c9;font-size:14px;line-height:1.8;}
+.story-welcome label{color:#dedee5;}
+.story-welcome input{color:#eeeef2;background:#ffffff08;font-size:16px;}
+.story-welcome input:focus{border-color:#b9bac5;box-shadow:0 0 0 3px #b9bac51a;}
+.story-welcome form button{justify-content:center;background:#eeedf3;color:#252530;font-size:14px;font-weight:500;}
+.story-welcome>small{line-height:1.8;color:#9999a5;}
+@keyframes welcome-appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.story-welcome{animation:none;}}
+.ending-music-controls{position:absolute;z-index:150;top:18px;right:20px;display:flex;gap:8px;align-items:center;}
+.ending-music-controls button{border:1px solid #ffffff35;border-radius:18px;padding:6px 12px;color:#eeeef2;background:#25252b;font-size:12px;}
+.ending-music-review{box-sizing:border-box;max-width:640px;margin:0 auto;padding:42px 24px;background:#151519;color:#eeeef2;min-height:100dvh;font:15px/1.8 -apple-system,BlinkMacSystemFont,sans-serif;}
+.ending-music-review h1{font-size:25px;font-weight:500;}.ending-music-review p{color:#c2c2c9;}
+.ending-music-review audio{width:100%;margin:18px 0;}
+.ending-music-review button,.ending-music-review input{padding:10px 14px;border-radius:10px;border:1px solid #ffffff30;margin:6px;background:#28282e;color:#eeeef2;font:inherit;}
+.ending-music-review label{display:block;}.ending-music-review input{width:100px;}.ending-music-review a{color:#adc9f5;}
+
+body.ending-audition{background:#151519;}
+
+.story-runtime:has(.story-welcome){display:grid;grid-template-rows:1fr auto;justify-items:center;align-items:center;gap:28px;height:auto;min-height:100dvh;overflow:visible;padding:max(30px,env(safe-area-inset-top)) 16px max(24px,calc(env(safe-area-inset-bottom) + 20px));box-sizing:border-box;background:#151519;}
+.story-welcome-intro{margin:0 0 26px;color:#c2c2c9;font-size:14px;line-height:1.9;}
+.story-welcome-intro p{margin:0 0 6px;}
+.story-author{color:#9898a3;font:12px/1.8 -apple-system,BlinkMacSystemFont,sans-serif;text-align:center;letter-spacing:.06em;}
+
+.ending-music-controls button{display:grid;place-items:center;width:36px;height:36px;padding:0;border-radius:50%;color:#eeeef2;background:#25252b99;}
+.ending-music-controls button:focus-visible{outline:2px solid #b9bac5;outline-offset:3px;}

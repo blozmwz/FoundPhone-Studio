@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import type { Runtime, Work } from "../schema";
 import {
@@ -21,6 +21,7 @@ export function SaveBackup({
   importOnly = false,
   embedded = false,
   onRestart,
+  chapters,
 }: {
   work: Work;
   state: Runtime;
@@ -29,6 +30,7 @@ export function SaveBackup({
   importOnly?: boolean;
   embedded?: boolean;
   onRestart?: () => Promise<void>;
+  chapters?: ReactNode;
 }) {
   const [open, setOpen] = useState(false),
     [error, setError] = useState("");
@@ -104,13 +106,13 @@ export function SaveBackup({
                 try {
                   await onRestart();
                 } catch {
-                  setError("重新开始未完成，原进度已保留，请重试。");
+                  setError("从头重玩未完成，原进度已保留，请重试。");
                 } finally {
                   setBusy(false);
                 }
               }}
             >
-              重新开始
+              从头重玩
             </button>
           )}
           <input
@@ -135,6 +137,7 @@ export function SaveBackup({
               }
             }}
           />
+          {chapters}
           {error && <p role="alert">{error}</p>}
         </section>
       )}

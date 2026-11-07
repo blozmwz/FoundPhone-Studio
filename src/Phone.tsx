@@ -1,4 +1,17 @@
-import { reconcileReadNotices, unreadMessages } from "./runtime/messageRead";
+import { rotateAnonymousRun } from './runtime/anonymousAnalytics';
+import { useAnonymousAnalytics } from './runtime/useAnonymousAnalytics';
+import {newPlaythrough} from './runtime/newPlaythrough';
+import {migrateReview39} from './runtime/review39Migration';
+import { EndingPage } from './runtime/EndingPage';
+import { withJourney } from './runtime/journeyProgress';
+import { EndingLockControl } from './runtime/EndingLockControl';
+import { FinalRouteReplay, captureFinalFork } from './runtime/FinalRouteReplay';
+import { localAutoReviewTickMs } from './runtime/localAutoReview';
+import { BackgroundMusic, MusicApp, MusicMini, EndingMusicControls } from "./runtime/BackgroundMusic";
+import { ChapterProgress, captureChapter } from "./runtime/ChapterProgress";
+import { migrateStage45 } from "./runtime/stage45";
+import { beginEndingLock, canLockForEnding, completeEndingLock, canCloseReunion, closeReunion, reopenReunion,beginFinalClose,completeFinalClose,reviewEnding,beginReunionReview } from "./runtime/lateEnding";
+import { reconcileReadNotices, unreadMessages, visibleMessages } from "./runtime/messageRead";
 import { restoreWithBackup } from "./runtime/restoreWithBackup";
 import { SaveBackup } from "./runtime/SaveBackupPanel";
 import { downloadBackup, encodeBackup } from "./runtime/saveBackup";
@@ -82,7 +95,6 @@ import { dispatch, choose, visible, advance } from "./engine";
 import {
   persistRuntime,
   readSavedRuntime,
-  replaceRuntime,
   preserveMigrationBackup,
   commitMigratedRuntime,
 } from "./persistence";
@@ -132,11 +144,23 @@ export function AppIcon({
 type PhoneProps = Omit<Parameters<typeof PhoneRuntime>[0], "deviceLayout">;
 export function Phone(props: PhoneProps) {
   const deviceLayout = useDeviceLayout(props.work, props.creator);
+  const normalScope = props.saveKey || props.work.id;
+  const [activeScope, setActiveScope] = useState(() => {
+    try { const key = localStorage.getItem(normalScope + ":chapter-active");
+      return key?.startsWith(normalScope + ":chapter-replay:") ? key : normalScope;
+    } catch { return normalScope; }
+  });
+  const replay = activeScope !== normalScope;
   return (
-    <PhoneRuntime
-      {...props}
-      work={deviceLayout.work}
-      deviceLayout={deviceLayout}
+    <PhoneRuntime key={activeScope} {...props}
+      runtime={replay ? undefined : props.runtime}
+      onRuntime={replay ? undefined : props.onRuntime}
+      saveKey={activeScope} normalScope={normalScope} onReplay={(scope)=>{
+        if(scope!==normalScope)rotateAnonymousRun(scope);
+        if(scope===normalScope && props.onRuntime)void readSavedRuntime(normalScope).then(row=>{if(row)props.onRuntime?.(row.state);setActiveScope(scope);});
+        else setActiveScope(scope);
+      }}
+      work={deviceLayout.work} deviceLayout={deviceLayout}
     />
   );
 }
@@ -152,6 +176,8 @@ function PhoneRuntime({
   onRuntime,
   saveKey = work.id,
   nameKey,
+  normalScope = saveKey,
+  onReplay,
 }: {
   deviceLayout: ReturnType<typeof useDeviceLayout>;
   work: Work;
@@ -164,6 +190,8 @@ function PhoneRuntime({
   onRuntime?: (s: Runtime) => void;
   saveKey?: string;
   nameKey?: string;
+  normalScope?: string;
+  onReplay?: (scope: string) => void;
 }) {
   const [app, setApp] = useState("");
   const [focusItem, setFocusItem] = useState("");
@@ -201,6 +229,7 @@ function PhoneRuntime({
   const [ready, setReady] = useState(creator || !!external);
   const [loadError, setLoadError] = useState("");
   const [blockedSave, setBlockedSave] = useState<Runtime | null>(null);
+  const existingForAnalytics=useRef(false);
   const [endingDismissed, setEndingDismissed] = useState(false);
   useEffect(() => {
     const el = shell.current;
@@ -227,20 +256,20 @@ function PhoneRuntime({
     };
   }, [creator, ready]);
   const s = external ?? own;
+  useAnonymousAnalytics(work,s,ready,saveKey,normalScope,existingForAnalytics.current,creator||!!external);
   const runtimeRef = useRef(s);
   runtimeRef.current = s;
-  const withPlayerName = (next: Runtime): Runtime => ({
-    ...next,
-    ui: {
-      ...next.ui,
-      profile: { ...next.ui?.profile, playerName: work.phone.owner },
-    },
-  });
+  const withPlayerName = (next:Runtime):Runtime => {
+    const value=work.id==='fridge-light-roommates'?reconcileReadNotices(work,withJourney(next)):next;
+    return {...value,ui:{...value.ui,profile:{...value.ui?.profile,playerName:work.phone.owner}}};
+  };
   const update = (next: Runtime) => {
-    next = withPlayerName(next);
+    next = withPlayerName(migrateReview39(work,migrateStage45(work, next)));
     runtimeRef.current = next;
+    if (!creator) void captureFinalFork(saveKey,next).catch(()=>setLoadError("分岔回看点未能保存，当前进度仍自动保存。"));
     setOwn(next);
     onRuntime?.(next);
+    if (!creator && work.id==='fridge-light-roommates') void captureChapter(normalScope,next,saveKey!==normalScope).catch(() => setLoadError("章节检查点未能保存，当前进度仍自动保存。"));
     if (!creator && !external)
       void persistRuntime(saveKey, next).catch(() =>
         setLoadError("存档失败，请导出备份并检查浏览器存储权限。"),
@@ -270,6 +299,7 @@ function PhoneRuntime({
               : dispatch(work, initialRuntime(work), "start"),
           );
           if (!active) return;
+          existingForAnalytics.current=!!saved;
           runtimeRef.current = value;
           setOwn(value);
           setReady(true);
@@ -299,7 +329,11 @@ function PhoneRuntime({
     if (creator || !ready) return;
     const interval = setInterval(() => {
       const previous = runtimeRef.current;
-      const next = advance(work, previous, 1000);
+      // Only the isolated, local visible-review window can adjust its clock.
+      // Timed nodes still run through advance; no unlock/read/choice is injected.
+      const tickMs = localAutoReviewTickMs();
+      if (!tickMs) return;
+      const next = advance(work, previous, tickMs);
       runtimeRef.current = next;
       const changed =
         next.time !== previous.time ||
@@ -312,6 +346,31 @@ function PhoneRuntime({
     }, 1000);
     return () => clearInterval(interval);
   }, [creator, ready, work.id, work.updatedAt]);
+  useEffect(() => {
+    if (s.ui?.messages?.reunionPhase !== "dark") return;
+    setLocked(true); setApp(""); setPinOpen(false);
+    const timer = setTimeout(() => update(lifeInteraction(work, runtimeRef.current, "reunionLock", "quiet")), 900);
+    return () => clearTimeout(timer);
+  }, [s.ui?.messages?.reunionPhase]);
+  useEffect(() => {
+    const phase = s.ui?.messages?.endingPhase;
+    if (phase === "reading") { setLocked(false); setApp(""); return; }
+    if (phase !== "dark") return;
+    setLocked(true); setApp(""); setPinOpen(false);
+    const timer = setTimeout(() => update(completeEndingLock(work, runtimeRef.current)), 1300);
+    return () => clearTimeout(timer);
+  }, [s.ui?.messages?.endingPhase]);
+  useEffect(()=>{
+    if(s.ui?.messages?.finalPhase!=='dark')return;
+    setApp('');setKeyboard(false);setBanner('');
+    const timer=setTimeout(()=>update(completeFinalClose(runtimeRef.current)),1000);
+    return()=>clearTimeout(timer);
+  },[s.ui?.messages?.finalPhase]);
+  useEffect(()=>{
+    if(!ready||locked||s.ui?.messages?.reviewReunion!==true)return;
+    const current=runtimeRef.current;update({...current,ui:{...current.ui,messages:{...current.ui?.messages,reviewReunion:false}}});
+    open('messages');setFocusItem('s45-reunion-invite-2');
+  },[ready,locked,s.ui?.messages?.reviewReunion]);
   const event = (event: string, target: string) => {
     if (!creator) {
       if (
@@ -357,7 +416,8 @@ function PhoneRuntime({
       if (!recent.includes(id) && id !== app) appSnapshots.current.delete(id);
   };
   const leaveApp = () => {
-    if (work.id === "fridge-light-roommates" && readingItem)
+    if (work.id === "fridge-light-roommates" && readingItem &&
+        !work.data.threads?.some(i => i.id === readingItem && i.meta.coreRead === "true"))
       event("read", readingItem);
     setApp("");
     setFocusItem("");
@@ -375,7 +435,14 @@ function PhoneRuntime({
   };
   const openNotice = (text: string) => {
     const notice = notificationContent(text, work.apps);
-    const items = (work.data[notice.appId] ?? []).filter((i) =>
+    if (notice.appId === "messages") {
+      const incoming = visibleMessages(work, runtimeRef.current).filter((m) => !m.outgoing && m.title === notice.title);
+      const item = unreadMessages(work, runtimeRef.current, notice.title).at(-1) ?? incoming.at(-1);
+      open("messages");
+      if (item) setFocusItem(item.id);
+      return;
+    }
+    const items = (work.data[notice.appId] ?? []).map(item => storyDatedItem(item, runtimeRef.current)).filter((i) =>
       visible(i, runtimeRef.current),
     );
     const item = items.find(
@@ -413,7 +480,8 @@ function PhoneRuntime({
   const roommateStory = work.id === "fridge-light-roommates";
   const continuation = storyContinuation(work, s);
   const nextScene = pendingScene(work, s);
-  const pendingReply = roommateStory ? replyThread(work, s.choices) : "";
+  const unreadItems = roommateStory ? unreadMessages(work, s) : undefined;
+  const pendingReply = roommateStory ? (s.variables.s29PhotoReady ? "Hendery" : replyThread(work, s.choices)) : "";
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
   const plugin = getApp(app);
   useEffect(() => {
@@ -442,24 +510,21 @@ function PhoneRuntime({
     const timer = setTimeout(() => setBanner(""), 4500);
     return () => clearTimeout(timer);
   }, [banner]);
-  const dismissNotice = (index: number) =>
+  const dismissNotice = (indices: number[]) =>
     update({
       ...runtimeRef.current,
       notifications: runtimeRef.current.notifications.filter(
-        (_, i) => i !== index,
+        (_, i) => !indices.includes(i),
       ),
     });
   const photoWallpaper = work.phone.wallpaper.startsWith("data:image/")
     ? safeMedia(work.phone.wallpaper)
     : "";
   async function restartStory() {
-    if (!confirm("重新开始当前故事？名字会保留，当前剧情进度将清除。")) return;
-    const next = dispatch(work, initialRuntime(work), "start");
-    await replaceRuntime(saveKey, runtimeRef.current, next);
-    update(next);
-    setApp("");
-    setLocked(true);
-    setEndingDismissed(false);
+    if(!onReplay||!confirm("沿用当前名字开启独立新周目？原进度和已解锁记录保留，可随时返回原进度。这不会清除存档。"))return;
+    const previous=runtimeRef.current;await persistRuntime(saveKey,previous);await preserveMigrationBackup(saveKey,previous,work.updatedAt,work.phone.owner);
+    const fresh=newPlaythrough(work,previous,normalScope);await persistRuntime(fresh.id,fresh.state);
+    localStorage.setItem(normalScope+":chapter-active",fresh.id);onReplay(fresh.id);
   }
   const saveControls = !creator ? (
     <SaveBackup
@@ -469,6 +534,7 @@ function PhoneRuntime({
       saveKey={saveKey}
       nameKey={nameKey}
       onRestart={restartStory}
+      chapters={onReplay ? <ChapterProgress work={work} state={s} scope={saveKey} normalScope={normalScope} replay={saveKey !== normalScope} onReplay={onReplay}/> : undefined}
     />
   ) : undefined;
   if (!ready)
@@ -500,6 +566,10 @@ function PhoneRuntime({
       style={{ "--phone-scale": deviceScale } as CSSProperties}
       className={`phone-shell ios18 ${roommateStory ? "roommate-phone" : ""} ${work.phone.theme === "dark" ? "dark-phone" : ""}`}
     >
+      <BackgroundMusic endingRoute={String(s.variables.s28EndingPending||s.variables.s45Ending||'')} endingVisible={['dark','reading'].includes(String(s.ui?.messages?.endingPhase))&&s.ui?.messages?.reunionOpen!==true&&s.ui?.messages?.reunionEndCard!==true&&s.ui?.messages?.finalPhase!=='dark'} scope={saveKey} saved={s.ui?.music || {}} commit={(key,value)=>{
+        const current=runtimeRef.current;
+        update({...current,ui:{...current.ui,music:{...current.ui?.music,[key]:value}}});
+      }}>
       <KeyboardContext.Provider value={setKeyboard}>
         <div
           style={
@@ -626,6 +696,7 @@ function PhoneRuntime({
                 }
                 time={displayTime}
                 notices={s.notifications}
+                unreadItems={unreadItems}
                 onDismiss={dismissNotice}
                 pinOpen={pinOpen}
                 setPinOpen={setPinOpen}
@@ -808,6 +879,7 @@ function PhoneRuntime({
                   {work.phone.notifications && s.notifications.length ? (
                     <SystemNotifications
                       notices={s.notifications}
+                      unreadItems={unreadItems}
                       apps={work.apps}
                       onOpen={(text) => {
                         setPanel("");
@@ -914,7 +986,7 @@ function PhoneRuntime({
               </strong>
             </button>
           )}
-          {!creator && !locked && continuation && !readingItem && !banner && (
+          {!creator && !locked && app !== "settings" && continuation && !readingItem && !banner && (
             <button
               className={`roommate-continuation ${app ? "in-app" : ""}`}
               aria-label={`打开未读内容：${continuation.item.title}`}
@@ -936,6 +1008,7 @@ function PhoneRuntime({
             pendingReply &&
             !locked &&
             app !== "messages" &&
+            app !== "settings" &&
             !(app === "instagram" && readingItem) && (
               <button
                 className="roommate-reply-link"
@@ -953,78 +1026,42 @@ function PhoneRuntime({
                 {s.variables.initiating ? "聊聊" : ""}
               </button>
             )}
-          {!creator && !locked && s.ui?.messages?.reunionOpen === true && (
-            <button
-              className="roommate-reply-link"
-              onClick={() => {
-                const current = runtimeRef.current;
-                update({
-                  ...current,
-                  ui: {
-                    ...current.ui,
-                    messages: { ...current.ui?.messages, reunionOpen: false },
-                  },
-                });
-              }}
-            >
-              返回结局
-            </button>
-          )}
-          {!creator &&
-            s.endings.length > 0 &&
-            !endingDismissed &&
-            !locked &&
-            s.ui?.messages?.reunionOpen !== true && (
-              <div className="story-overlay ending">
-                <span className="eyebrow">ENDING · {s.endings.length}</span>
-                <h2>故事在这里停泊。</h2>
-                <p>{s.endings[s.endings.length - 1]}</p>
-                {s.variables.lifeEnding === "quiet" && (
-                  <button
-                    onClick={() => {
-                      update(
-                        lifeInteraction(
-                          work,
-                          runtimeRef.current,
-                          "reunion",
-                          "quiet",
-                        ),
-                      );
-                      open("messages");
-                      setFocusItem(
-                        work.data.messages.find(
-                          (m) => m.id === "life-reunion-1",
-                        )?.id ?? "",
-                      );
-                    }}
-                  >
-                    几年后 · 打开消息
-                  </button>
-                )}
-                {roommateStory && (
-                  <button
-                    onClick={() => {
-                      if (
-                        !confirm(
-                          "返回入住选择？此选择之后的剧情会重置，名字保留。",
-                        )
-                      )
-                        return;
-                      update(housingCheckpoint(work, s));
-                      setApp("");
-                    }}
-                  >
-                    返回是否入住的选择
-                  </button>
-                )}
-                <button
-                  onClick={() => {
-                    setEndingDismissed(true);
-                    setApp("");
-                  }}
-                >
-                  返回手机
-                </button>
+          {!creator && !locked && !app && canCloseReunion(s) && !s.ui?.messages?.reunionEndCard &&
+            <EndingLockControl onLock={() => {
+              setKeyboard(false); setApp(""); setBanner("");
+              update(closeReunion(runtimeRef.current));
+            }}/>}
+          {!creator && s.ui?.messages?.endingPhase==='reading' && s.ui?.messages?.reunionOpen!==true && !s.ui?.messages?.reunionEndCard && <EndingMusicControls/>}
+          {!creator && s.ui?.messages?.reunionEndCard === true && <div className="reunion-end-card" role="region" aria-label="礼拜四完">
+            <h2>礼拜四</h2><p>完</p><p>感谢游玩</p>
+            <button onClick={() => {
+              update(reopenReunion(runtimeRef.current)); setLocked(false);
+              open("messages"); setFocusItem(runtimeRef.current.variables.s45ReunionStarted ? "s45-reunion-invite-2" : "");
+            }}>回看手机</button>
+            <button onClick={() => {
+              update(reviewEnding(runtimeRef.current));setEndingDismissed(false);setLocked(false);setApp('');
+            }}>回看结局</button>
+          </div>}
+          {!creator && !locked && !app && canLockForEnding(s) && <EndingLockControl soundtrack onLock={() => {
+            setBanner(""); update(beginEndingLock(runtimeRef.current));
+          }}/>}
+          {!creator && !locked && s.endings.length > 0 && s.ui?.messages?.endingPhase === "browse" && s.ui?.messages?.reunionOpen !== true && <button className="story-lock-hint" onClick={() => {
+            const current = runtimeRef.current; setEndingDismissed(false); update({ ...current, ui: { ...current.ui, messages: { ...current.ui?.messages, endingPhase: "reading" } } });
+          }}>查看结局</button>}
+          {!creator && s.endings.length>0 && !endingDismissed &&
+            s.ui?.messages?.endingPhase!=='browse' && !locked &&
+            s.ui?.messages?.reunionOpen!==true && !s.ui?.messages?.reunionEndCard &&
+            s.ui?.messages?.finalPhase!=='dark' && (
+              s.variables.s45Ending==='A'||s.variables.s45Ending==='B' ?
+              <EndingPage key={String(s.variables.s45Ending)} body={s.endings[s.endings.length-1]} route={s.variables.s45Ending}
+                read={s.ui?.messages?.['endingRead:'+s.variables.s45Ending]===true}
+                onRead={()=>{const current=runtimeRef.current;update({...current,ui:{...current.ui,messages:{...current.ui?.messages,['endingRead:'+current.variables.s45Ending]:true}}});}}
+                onFinish={()=>{setApp('');update(beginFinalClose(runtimeRef.current,runtimeRef.current.variables.s45Ending==='A'?'A':'B'));}}
+                onReunion={()=>{update(beginReunionReview(runtimeRef.current));setLocked(true);setApp('');}}
+                other={<FinalRouteReplay work={work} state={s} scope={saveKey} normalScope={normalScope} onReplay={onReplay}/>}/>
+              : <div className="story-overlay ending"><h2>什么都没有发生</h2><p>{s.endings[s.endings.length-1].split('\n').slice(1).join('\n').trim()}</p>
+                {roommateStory&&<button onClick={()=>{if(!confirm('返回入住选择？此选择之后的剧情会重置，名字保留。'))return;update(housingCheckpoint(work,s));setApp('');}}>返回是否入住的选择</button>}
+                <button onClick={()=>{setEndingDismissed(true);setApp('');}}>返回手机</button>
               </div>
             )}
           {!creator && s.incomingCall && (
@@ -1210,10 +1247,17 @@ function PhoneRuntime({
               setPanel("");
             }}
           />
+          {!creator && !locked && app !== "music" && <MusicMini open={()=>open("music")}/>}
+          {s.ui?.messages?.reunionPhase === "dark" && <div className="reunion-blackout" aria-label="锁屏过渡"/>}
+          {(s.ui?.messages?.endingPhase === "dark" || s.ui?.messages?.finalPhase === "dark") && <div className="ending-blackout" aria-label="锁上手机过渡"/>}
+          {saveKey !== normalScope && onReplay && !locked && <button className="chapter-return" onClick={()=>{
+            localStorage.removeItem(normalScope+":chapter-active"); onReplay(normalScope);
+          }}>返回原进度</button>}
           <div className="screen-dimmer" />
           <div className="hardware-reflection" />
         </div>
       </KeyboardContext.Provider>
+      </BackgroundMusic>
     </div>
   );
 }
@@ -1369,6 +1413,7 @@ function AppContent({
     } else if (thread) setThread("");
     else onBack();
   };
+  if (work.id === "fridge-light-roommates" && !creator && app.id === "music") return <MusicApp back={onBack}/>;
   if (
     work.id === "fridge-light-roommates" &&
     !creator &&

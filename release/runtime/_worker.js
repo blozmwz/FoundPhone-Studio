@@ -1,0 +1,2 @@
+// Statistics paused for the full-game release. Never reads bindings or writes D1.
+export default {async fetch(request){const p=new URL(request.url).pathname;const body=p==='/api/analytics/config'?{enabled:false,schema:1}:p==='/api/analytics/events'?{accepted:0}:{error:'Not available'};return new Response(JSON.stringify(body),{status:p.startsWith('/admin')?403:200,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});}};

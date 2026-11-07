@@ -31,7 +31,7 @@ export function InstagramReplyComposer({
       aria-label={context + "回复键盘"}
     >
       <header>
-        <strong>{context === "评论" ? "回复评论" : "回复快拍"}</strong>
+        <strong>{context === "评论" ? "回复评论" : context === "私信" ? "回复私信" : "回复快拍"}</strong>
         <button aria-label={"收起" + context + "回复"} onClick={onClose}>
           <X size={20} />
         </button>

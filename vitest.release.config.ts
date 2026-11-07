@@ -1,0 +1,1 @@
+import{defineConfig}from'vitest/config';export default defineConfig({test:{include:["src/browserCrypto.test.ts", "src/engine.test.ts", "src/scheduler.test.ts", "src/apps.test.ts", "src/skins.test.ts", "src/runtime/musicQueue.test.ts", "src/runtime/anonymousAnalytics.test.ts", "src/runtime/endingMusic.test.ts", "src/runtime/fullReleaseCompatibility.test.ts"],testTimeout:15000}});

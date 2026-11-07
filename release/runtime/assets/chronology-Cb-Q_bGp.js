@@ -1,0 +1,1 @@
+function n(t){return[...t].sort((e,r)=>{const i=r.time.replace("T"," ").localeCompare(e.time.replace("T"," "));return i||Number(r.meta?.timelineOrder||0)-Number(e.meta?.timelineOrder||0)})}function o(t){try{const e=JSON.parse(t);if(typeof e.body=="string"&&typeof e.time=="string")return{body:e.body,time:e.time}}catch{}return{body:t,time:""}}export{n,o as s};

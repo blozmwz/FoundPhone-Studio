@@ -1,0 +1,4 @@
+import {expect,it,vi} from 'vitest';
+import {sha256,sha256Fallback,randomId} from './browserCrypto';
+it.each(['','abc','礼拜四', 'a'.repeat(55),'a'.repeat(64),'a'.repeat(100000)])('LAN fallback SHA256 matches native vector %#',async text=>{const bytes=new TextEncoder().encode(text);expect(sha256Fallback(bytes)).toBe(Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join(''));});
+it('HTTP LAN hash and IDs work without SubtleCrypto or randomUUID',async()=>{const random=globalThis.crypto.getRandomValues.bind(globalThis.crypto);vi.stubGlobal('crypto',{getRandomValues:random});try{expect(await sha256(new TextEncoder().encode('abc'))).toBe('ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');const a=randomId(),b=randomId();expect(a).toMatch(/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/);expect(a).not.toBe(b);}finally{vi.unstubAllGlobals();}});

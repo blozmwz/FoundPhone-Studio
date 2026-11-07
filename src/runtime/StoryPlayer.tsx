@@ -1,9 +1,8 @@
+import { beginAnonymousVisit } from './useAnonymousAnalytics';
 import { SaveBackup } from "./SaveBackupPanel";
 import { initialRuntime } from "../schema";
 import { readSavedRuntime } from "../persistence";
-import { localReviewSlot, playerNameKey } from "./reviewSlot";
-import { ReleaseReview } from "./ReleaseReview";
-import { CheckpointPhone } from "./CheckpointPhone";
+import { localReviewSlot, playerNameKey, localOpeningReview } from "./reviewSlot";
 import { personalizeWork } from "./personalizeWork";
 import { useEffect, useState, type FormEvent } from "react";
 import { createRoot } from "react-dom/client";
@@ -26,9 +25,9 @@ function StoryPlayer() {
   useEffect(() => {
     const abort = new AbortController();
     fetch(
-      new URLSearchParams(location.search).get("preview") === "test"
+      import.meta.env.DEV && new URLSearchParams(location.search).get("preview") === "test"
         ? "./test-work.json"
-        : new URLSearchParams(location.search).get("template") === "blank"
+        : import.meta.env.DEV && new URLSearchParams(location.search).get("template") === "blank"
           ? "./blank-work.json"
           : "./work.json",
       { signal: abort.signal, cache: "no-store" },
@@ -42,6 +41,7 @@ function StoryPlayer() {
         document.title =
           w.title === "捡手机" ? "捡手机" : w.title + " · 捡手机";
         setWork(w);
+        void beginAnonymousVisit(w);
       })
       .catch((e) => {
         if (e.name !== "AbortError") setError(String(e));
@@ -52,7 +52,7 @@ function StoryPlayer() {
     if (!work || playerName) return;
     let active = true;
     const slot = localReviewSlot();
-    void readSavedRuntime(work.id + (slot ? ":rc:" + slot : ""))
+    void readSavedRuntime(work.id + (localOpeningReview() ? ":opening-review:"+localOpeningReview() : slot ? ":rc:" + slot : ""))
       .then((saved) => {
         const name = saved?.state.ui?.profile?.playerName;
         if (active && typeof name === "string" && name.trim()) {
@@ -89,75 +89,12 @@ function StoryPlayer() {
     <main className="story-runtime">
       {personalizedWork ? (
         playerName ? (
-          localReviewSlot() &&
-          personalizedWork.variables.releaseStage2 === true ? (
-            <ReleaseReview work={personalizedWork} slot={localReviewSlot()} />
-          ) : ["127.0.0.1", "localhost", "[::1]"].includes(location.hostname) &&
-            [
-              "viewing",
-              "roommates",
-              "stage2",
-              "stage2tail",
-              "stage3",
-              "stage3review",
-              "stage3motor",
-              "stage3ramen",
-              "pizza",
-              "instagram",
-              "menu",
-            ].includes(
-              new URLSearchParams(location.search).get("start") ?? "",
-            ) &&
-            personalizedWork.id === "fridge-light-roommates" ? (
-            <CheckpointPhone
-              work={personalizedWork}
-              start={
-                new URLSearchParams(location.search).get("start") ===
-                "stage3review"
-                  ? "stage3review"
-                  : new URLSearchParams(location.search).get("start") ===
-                      "stage2tail"
-                    ? "stage2tail"
-                    : new URLSearchParams(location.search).get("start") ===
-                        "stage3motor"
-                      ? "stage3motor"
-                      : new URLSearchParams(location.search).get("start") ===
-                          "stage3ramen"
-                        ? "stage3ramen"
-                        : new URLSearchParams(location.search).get("start") ===
-                            "menu"
-                          ? "menu"
-                          : new URLSearchParams(location.search).get(
-                                "start",
-                              ) === "instagram"
-                            ? "instagram"
-                            : new URLSearchParams(location.search).get(
-                                  "start",
-                                ) === "pizza"
-                              ? "pizza"
-                              : new URLSearchParams(location.search).get(
-                                    "start",
-                                  ) === "stage3"
-                                ? "stage3"
-                                : new URLSearchParams(location.search).get(
-                                      "start",
-                                    ) === "stage2"
-                                  ? "stage2"
-                                  : new URLSearchParams(location.search).get(
-                                        "start",
-                                      ) === "roommates"
-                                    ? "roommates"
-                                    : "viewing"
-              }
-            />
-          ) : (
-            <Phone work={personalizedWork} />
-          )
+            <Phone work={personalizedWork} saveKey={localOpeningReview()?personalizedWork.id+":opening-review:"+localOpeningReview():undefined} />
         ) : (
+          <>
           <section className="story-welcome">
-            <span className="story-welcome-kicker">A PHONE, A STORY</span>
             <h1>{personalizedWork.title}</h1>
-            <p>先留下一个称呼，这是你的手机。</p>
+            {typeof personalizedWork.variables.openingIntro==='string'&&personalizedWork.variables.openingIntro.trim()&&<div className="story-welcome-intro">{personalizedWork.variables.openingIntro.split('\n').map((line,i)=><p key={i}>{line}</p>)}</div>}
             <form onSubmit={startWithName}>
               <label htmlFor="player-name">你的名字</label>
               <input
@@ -170,7 +107,7 @@ function StoryPlayer() {
                 autoFocus
               />
               <button type="submit" disabled={!nameInput.trim()}>
-                拿起手机 <span aria-hidden="true">↗</span>
+                开启手机
               </button>
             </form>
             <small>名字只会保存在这台设备的浏览器里。</small>
@@ -181,10 +118,12 @@ function StoryPlayer() {
               nameKey={playerNameKey()}
               saveKey={
                 personalizedWork.id +
-                (localReviewSlot() ? ":rc:" + localReviewSlot() : "")
+                (localOpeningReview()?":opening-review:"+localOpeningReview():localReviewSlot() ? ":rc:" + localReviewSlot() : "")
               }
             />
           </section>
+          {typeof personalizedWork.variables.authorCredit==='string'&&<footer className="story-author">{personalizedWork.variables.authorCredit}</footer>}
+          </>
         )
       ) : (
         <p role="status">{error || "正在打开手机…"}</p>

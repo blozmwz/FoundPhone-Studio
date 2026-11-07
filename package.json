@@ -6,9 +6,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "npm run story:build && vite --config vite.runtime.config.ts --host 127.0.0.1",
-    "build": "npm run story:build && tsc -b && vite build --config vite.runtime.config.ts && node scripts/package-runtime.mjs",
+    "build": "node scripts/build-frozen-release.mjs",
     "typecheck": "tsc -b",
-    "test": "vitest run",
+    "test": "vitest run --config vitest.release.config.ts && node --test server/analytics/worker.test.mjs",
     "lint": "eslint src",
     "preview": "vite preview --host 127.0.0.1",
     "test:e2e": "node node_modules/@playwright/test/cli.js test",
@@ -16,7 +16,8 @@
     "story:validate": "node scripts/story.mjs validate",
     "story:build": "node scripts/story.mjs build",
     "story:preview": "npm run dev",
-    "story:test": "node scripts/story.mjs test"
+    "story:test": "node scripts/story.mjs test",
+    "build:source": "npm run story:build && tsc -b && vite build --config vite.runtime.config.ts && node scripts/package-runtime.mjs"
   },
   "dependencies": {
     "@tiptap/react": "^3.0.0",

@@ -27,42 +27,21 @@ export function FilmList({ items, state, onEvent, onUi, onBack }: Props) {
           const id = film.meta.film;
           const saved = state.ui?.netflix?.["want-" + id] === true;
           const status = state.variables["filmStatus-" + id];
-          const replay = state.variables["filmViewingMode-" + id] === "replay";
           const current = String(state.variables.s3FilmCurrent || "");
           const watching =
             status === "watching" ||
             (state.variables["s3Film-" + current] === id &&
               state.variables["s3FilmState-" + current] === "watching");
-          const session = ["dec04", "dec22", "jan08"]
-            .filter((k) => state.variables["s3Film-" + k] === id)
-            .at(-1);
-          const unreported =
-            session &&
-            state.variables["s3FilmState-" + session] === "unreported";
           return (
             <article key={id}>
               <h2>《{film.title}》</h2>
-              <p>
-                {replay && !watching ? "重看 · " : ""}
-                {watching
-                  ? replay
-                    ? "重看中"
-                    : "观看中"
-                  : unreported
-                    ? "这次观看待记录"
-                    : status === "finished"
-                      ? "看完了"
-                      : status === "unfinished"
-                        ? "没看完 · 下次接着看"
-                        : "还没看"}
-              </p>
+              <div className="life-actions film-marks" aria-label="影片标记">
+                <button aria-pressed={status==='finished'||state.variables['filmPreviousStatus-'+id]==='finished'}
+                  disabled={status!=='finished'&&(state.variables['filmReportReady-'+id]!==true||narrativeFilmOpen(state))}
+                  onClick={()=>onEvent('filmStatus',id+'-finished')}>看过</button>
+                <button aria-pressed={saved} onClick={()=>onUi?.('want-'+id,!saved)}>想看</button>
+              </div>
               <div className="life-actions">
-                <button
-                  aria-pressed={saved}
-                  onClick={() => onUi?.("want-" + id, !saved)}
-                >
-                  {saved ? "已想看" : "想看／收藏"}
-                </button>
                 <button
                   disabled={
                     !state.variables.lifeStage ||
@@ -90,36 +69,11 @@ export function FilmList({ items, state, onEvent, onUi, onBack }: Props) {
                         : "开始观看"}
                 </button>
               )}
-              {state.variables["filmReportReady-" + id] === true && (
-                <div className="life-actions">
-                  <button
-                    disabled={
-                      narrativeFilmOpen(state) &&
-                      state.variables[
-                        "s3Film-" + String(state.variables.s3FilmCurrent)
-                      ] === id
-                    }
-                    onClick={() => onEvent("filmStatus", id + "-finished")}
-                  >
-                    看完
-                  </button>
-                  <button
-                    disabled={
-                      narrativeFilmOpen(state) &&
-                      state.variables[
-                        "s3Film-" + String(state.variables.s3FilmCurrent)
-                      ] === id
-                    }
-                    onClick={() => onEvent("filmStatus", id + "-unfinished")}
-                  >
-                    没看完
-                  </button>
-                </div>
-              )}
+
             </article>
           );
         })}
-      <small>收藏想看的电影，记录实际观看进度。</small>
+      <small>选片不等于看完；实际看完后再标记「看过」。</small>
     </section>
   );
 }

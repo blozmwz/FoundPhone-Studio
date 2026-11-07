@@ -1,5 +1,6 @@
 import Dexie, { type Table } from "dexie";
 import type { Work, Runtime } from "./schema";
+import { sha256 } from "./browserCrypto";
 class Database extends Dexie {
   works!: Table<Work, string>;
   saves!: Table<
@@ -58,13 +59,7 @@ export async function preserveMigrationBackup(
   playerName: string,
 ) {
   const raw = JSON.stringify(state);
-  const digest = await crypto.subtle.digest(
-    "SHA-256",
-    new TextEncoder().encode(raw),
-  );
-  const hash = Array.from(new Uint8Array(digest), (x) =>
-    x.toString(16).padStart(2, "0"),
-  ).join("");
+  const hash = await sha256(new TextEncoder().encode(raw));
   const key = `${id}:before-migration:${state.revision}:${targetRevision}:${hash}`;
   await db.transaction("rw", db.saves, async () => {
     let backup = await db.saves.get(key);

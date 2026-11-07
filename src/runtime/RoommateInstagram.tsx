@@ -1,3 +1,4 @@
+import { PhotoViewer } from './PhotoViewer';
 import {
   useCallback,
   useEffect,
@@ -39,6 +40,8 @@ import {
 import "./instagram.css";
 import { InstagramCarousel, AlbumBadge } from "./InstagramCarousel";
 import { InstagramReplyComposer } from "./InstagramReplyComposer";
+import { authoredReplyOptions, authoredReplySelection, instagramWithReplies } from './authoredInstagramReplies';
+import { instagramCommentRows, encodeComment } from "./instagramComments";
 type Sheet = {
   kind: "comments" | "share" | "likes" | "activity" | "storyActivity";
   item?: Item;
@@ -87,7 +90,9 @@ export function RoommateInstagram(p: SkinProps) {
   const [dmHandle, setDMHandle] = useSkinState<string>(p, "igDMHandle", "");
   const [sheet, setSheet] = useState<Sheet>(null);
   const [comment, setComment] = useState("");
+  const [commentParent,setCommentParent]=useState<{post:string;id:string;text:string}|null>(null);
   const [notice, setNotice] = useState("");
+  const [viewedPhoto,setViewedPhoto]=useState<Item|null>(null);
   const [storyIds, setStoryIds] = useState<string[]>([]);
   const [storyIndex, setStoryIndex] = useState(0);
   const [archive, setArchive] = useState(false);
@@ -115,7 +120,7 @@ export function RoommateInstagram(p: SkinProps) {
   callbacks.current = { p, setSeen };
   for (const id of seen) seenRef.current.add(id);
   const now = instagramNow(p.virtualDate, p.virtualTime);
-  const available = instagramContent(p.items, now);
+  const available = instagramWithReplies(instagramContent(p.items, now),p.ui,p.owner||"我");
   const profiles = available.filter((i) => i.meta.profile === "true");
   const posts = available
     .filter(
@@ -149,7 +154,7 @@ export function RoommateInstagram(p: SkinProps) {
   function sendReply(target: string) {
     if (!replyItem || !replyChoices.some((c) => c.target === target)) return;
     const sent = p.onStoryAction?.(
-      "igStoryReply",
+      replyItem.meta.replyOptions ? "igConversationReply" : "igStoryReply",
       replyItem.id + "\t" + target,
     );
     if (sent) {
@@ -395,6 +400,7 @@ export function RoommateInstagram(p: SkinProps) {
             detail={detail}
             p={p}
             onOpen={() => openPost(item)}
+            onView={setViewedPhoto}
           />
         </div>
         <div className="rig-post-actions">
@@ -558,6 +564,13 @@ export function RoommateInstagram(p: SkinProps) {
                       <Avatar name={item.sender} src={avatar(item)} />
                       <p>{item.body}</p>
                     </div>
+                    {authoredReplySelection(item,p.ui)>0 && <>
+                      <p className="rig-own-reply">{authoredReplyOptions(item)[authoredReplySelection(item,p.ui)-1]?.label}</p>
+                      <div className="rig-direct-bubble"><p>{authoredReplyOptions(item)[authoredReplySelection(item,p.ui)-1]?.response}</p></div>
+                    </>}
+                    {!!p.storyReplies?.(item.id).length && <button className="rig-authored-reply" onClick={()=>beginReply(item)}>回复{item.sender}</button>}
+                    <div hidden>
+                    </div>
                   </article>
                 ))
               : [...new Set(directMessages.map(handle))].map((h) => {
@@ -643,9 +656,9 @@ export function RoommateInstagram(p: SkinProps) {
                 </button>
               </div>
             )}
-            {accountHandle === "i_m_hendery" &&
-              available.some(
+            {available.some(
                 (i) =>
+                  handle(i) === accountHandle &&
                   i.meta.historyArchive === "true" &&
                   !activeStories.some((a) => a.id === i.id),
               ) && (
@@ -654,17 +667,16 @@ export function RoommateInstagram(p: SkinProps) {
                     onClick={() =>
                       openStories(
                         available
-                          .filter((i) => i.meta.historyArchive === "true")
+                          .filter((i) => handle(i) === accountHandle && i.meta.historyArchive === "true")
                           .sort(
                             (a, b) =>
-                              Number(a.meta.storyOrder) -
-                              Number(b.meta.storyOrder),
+                              a.time.localeCompare(b.time) || Number(a.meta.storyOrder) - Number(b.meta.storyOrder),
                           ),
                         true,
                       )
                     }
                   >
-                    查看12月27日摩托快拍
+                    {available.some(i => handle(i) === accountHandle && i.meta.authorMediaRule) ? '查看过往快拍' : '查看12月27日摩托快拍'}
                   </button>
                 </div>
               )}
@@ -949,13 +961,11 @@ export function RoommateInstagram(p: SkinProps) {
             {sheet.kind === "comments" && sheetItem && (
               <>
                 <div className="rig-comment-list">
-                  {[
-                    ...sheetItem!.comments,
-                    ...comments
+                  {instagramCommentRows(sheetItem, comments
                       .filter((c) => c.startsWith(sheet.item!.id + "\t"))
-                      .map((c) => c.split("\t").slice(1).join("\t")),
-                  ].map((c, n) => (
-                    <p key={n}>
+                      .map((c) => c.split("\t").slice(1).join("\t")))
+                    .map(({ text: c, id, replies }) => (
+                    <div key={id} className="rig-comment-thread" data-comment-id={id}><p>
                       {profiles.some(
                         (i) =>
                           i.sender === c.split(/[：:]/)[0] ||
@@ -981,30 +991,27 @@ export function RoommateInstagram(p: SkinProps) {
                         <Avatar name={c.split(/[：:]/)[0]} />
                       )}
                       <span>{c}</span>
-                    </p>
+                    </p><button className="comment-reply-action" onClick={()=>setCommentParent({post:sheetItem.id,id,text:c})}>回复这条评论</button>
+                      {replies.map(reply => <div className="rig-comment-reply" key={reply.id} data-comment-id={reply.id} data-reply-to={reply.replyToId}><details><summary>回复 @{reply.replyTo}</summary><p>{reply.replyToText}</p></details><p>{reply.text}</p><button className="comment-reply-action" onClick={()=>setCommentParent({post:sheetItem.id,id:reply.id,text:reply.text})}>回复这条评论</button></div>)}
+                    </div>
                   ))}
                   {!sheetItem!.comments.length &&
                     !comments.some((c) =>
                       c.startsWith(sheet.item!.id + "\t"),
                     ) && <p className="rig-empty-small">还没有评论</p>}
                 </div>
+                {!!p.storyReplies?.(sheetItem.id).length && <button className="rig-authored-reply" onClick={()=>beginReply(sheetItem)}>回复{sheetItem.meta.replyAuthor||"这条评论"}</button>}
                 <form
                   className="rig-comment-form"
                   onSubmit={(e) => {
                     e.preventDefault();
                     if (comment.trim()) {
-                      setComments([
-                        ...comments,
-                        sheet.item!.id +
-                          "\t" +
-                          (p.owner || "我") +
-                          "：" +
-                          comment.trim(),
-                      ]);
+                      setComments([...comments,encodeComment(sheetItem.id,p.owner||"机主",comment.trim(),commentParent?.post===sheetItem.id?commentParent.id:undefined)]);setCommentParent(null);
                       setComment("");
                     }
                   }}
                 >
+                  {commentParent?.post===sheetItem.id&&<span className="comment-reply-context">回复：{commentParent.text}<button type="button" onClick={()=>setCommentParent(null)}>取消回复</button></span>}
                   <input
                     aria-label="添加评论"
                     placeholder="添加评论…"
@@ -1222,7 +1229,7 @@ export function RoommateInstagram(p: SkinProps) {
       )}
       {replyFor && replyChoices.length > 0 && (
         <InstagramReplyComposer
-          context={replyItem?.meta.ownPost === "true" ? "评论" : "快拍"}
+          context={replyItem?.folder === "私信" ? "私信" : replyItem?.meta.replyOptions || replyItem?.meta.ownPost === "true" ? "评论" : "快拍"}
           choices={replyChoices}
           draft={
             replyContext === (replyItem?.meta.storyGroup || replyFor)
@@ -1239,6 +1246,7 @@ export function RoommateInstagram(p: SkinProps) {
           {notice}
         </p>
       )}
+      {viewedPhoto && <PhotoViewer src={viewedPhoto.media} title={viewedPhoto.title} onClose={()=>setViewedPhoto(null)}/>}
     </div>
   );
 }

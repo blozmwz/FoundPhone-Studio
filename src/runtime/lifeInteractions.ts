@@ -1,4 +1,5 @@
 import { catalogueInteraction } from "./filmCatalogue";
+import { hasUnfinishedSharedFilm } from "./stage45";
 import { dispatch, visible } from "../engine";
 import { nextAsideTimestamp } from "./asideTimestamps";
 import type { Runtime, Work } from "../schema";
@@ -22,7 +23,7 @@ export function canOrderFood(state: Runtime) {
     [1, 2].some((option) =>
       state.completed.includes(`viewing-rent-send-${option}-continue`),
     );
-  return confirmed && stage > 0 && stage < 5 && canChatAside(state);
+  return confirmed && stage > 0 && stage < 6 && state.variables.s45Departed !== true && canChatAside(state);
 }
 export function availableTopics(work: Work, state: Runtime) {
   if (!canChatAside(state) || state.variables.s3LunchOrdering) return [];
@@ -59,6 +60,21 @@ export function lifeInteraction(
   target: string,
 ) {
   if (work.id !== "fridge-light-roommates") return state;
+  if (["selectMealPhoto", "clearMealPhoto", "mealPhotoSent"].includes(event)) {
+    const photo = work.data.photos.find(i => i.id === target && i.meta.sourceEvent === "s29-meal-start");
+    if (!photo || !visible(photo, state) || !photo.media || state.variables.s29PhotoReady !== true ||
+        state.choices.length || state.scheduled?.length || state.endings.length) return state;
+    if (event === "mealPhotoSent" && state.variables.s29SelectedPhoto !== target) return state;
+    return dispatch(work, state, event, target);
+  }
+  if (event === "reunionLock") {
+    if (state.variables.s45Ending !== "B") return state;
+    const next = dispatch(work, state, event, target);
+    if (!state.variables.s45ReunionStarted)
+      next.variables.s45ReunionUnfinished = hasUnfinishedSharedFilm(state);
+    next.ui = { ...next.ui, messages: { ...next.ui?.messages, reunionOpen: true, reunionPhase: "awake" } };
+    return next;
+  }
   if (event === "reunion") {
     if (state.variables.lifeEnding !== "quiet") return state;
     const next = dispatch(work, state, event, target);

@@ -945,3 +945,16 @@
   white-space: nowrap;
   pointer-events: none;
 }
+.rig-comment-thread .rig-comment-reply{margin-left:42px;padding-left:12px;border-left:1px solid #ddd;font-size:13px;}
+.roommate-ig .rig-post-image{aspect-ratio:auto;height:330px;max-height:46vh;}
+.rig-authored-reply{margin:10px 16px;padding:9px 14px;border:1px solid #ddd;border-radius:18px;background:white;color:#1675db;}
+.rig-own-reply{margin:10px 12px 10px 55px;padding:10px 14px;white-space:pre-line;border-radius:18px;background:#daeaff;}
+.rig-direct-bubble p{white-space:pre-line;}
+.rig-comment-thread span{white-space:pre-line;}
+/* Explicit comment context is shared with Threads; no relationship by layout alone. */
+.comment-reply-action {border:0;background:none;color:#777;font-size:12px;padding:3px 0;cursor:pointer;}
+.comment-reply-context {flex:0 0 100%;font-size:12px;color:#666;overflow-wrap:anywhere;}
+.comment-reply-context button {border:0;background:none;color:#007aff;margin-left:8px;}
+.rig-comment-form:has(.comment-reply-context),.tr-reply:has(.comment-reply-context){flex-wrap:wrap;}
+.rig-comment-reply details,.tr-comment-reply details {font-size:12px;color:#777;}
+.rig-comment-reply details p,.tr-comment-reply details p {padding:6px;border-left:2px solid #ddd;}

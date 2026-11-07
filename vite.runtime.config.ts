@@ -1,4 +1,5 @@
 import { localIconPlugin } from "./scripts/local-icon-plugin";
+import { bundledMusicPlugin } from "./scripts/bundled-music-plugin";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
@@ -6,6 +7,7 @@ export default defineConfig(({ command }) => ({
   base: "./",
   optimizeDeps: { entries: ["index.html"] },
   plugins: [
+    bundledMusicPlugin(),
     localIconPlugin(command),
     react(),
     VitePWA({

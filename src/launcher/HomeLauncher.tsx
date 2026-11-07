@@ -15,6 +15,7 @@ import { motion } from "motion/react";
 import { AppDock } from "../vendor/ios-web/Launcher";
 import { category } from "../apps";
 import type { Work } from "../schema";
+import { randomId } from "../browserCrypto";
 import {
   homeEntries,
   packHome,
@@ -487,7 +488,7 @@ export function HomeLauncher(p: Props) {
     }
     p.change((l) => {
       const widget = {
-        id: "widget-" + crypto.randomUUID(),
+        id: "widget-" + randomId(),
         type: widgetType,
         size,
       };

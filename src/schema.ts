@@ -1,5 +1,6 @@
 import { z } from "zod";
-export const uid = () => crypto.randomUUID();
+import { randomId } from "./browserCrypto";
+export const uid = randomId;
 export const itemSchema = z.object({
   id: z.string(),
   title: z.string().max(1000),
@@ -121,7 +122,8 @@ export const workSchema = z.object({
     )
     .max(100),
   data: z.record(z.string(), z.array(itemSchema).max(20000)),
-  nodes: z.array(nodeSchema).max(2000),
+  // Keep retired stable nodes for old saves while local author scenes expand.
+  nodes: z.array(nodeSchema).max(3000),
   variables: z.record(
     z.string(),
     z.union([z.string(), z.number(), z.boolean()]),

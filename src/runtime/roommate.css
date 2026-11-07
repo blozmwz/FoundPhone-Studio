@@ -543,6 +543,15 @@
   box-shadow: 0 3px 20px #0002;
   border: 0;
 }
+/* Incoming banners leave the conversation's back button and header usable. */
+.phone-shell.roommate-phone:has(.roommate-messages) .device-banner {
+  top: 156px;
+  animation: chat-banner-enter 0.2s ease-out;
+}
+@keyframes chat-banner-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 .phone-shell.roommate-phone.dark-phone .roommate-messages {
   --rm-bg: #000;
   --rm-text: #f5f5f7;
@@ -672,3 +681,13 @@
 .rm-avatar-view > img { width:100%; object-fit:contain; }
 .rm-avatar-view > button { align-self:flex-end; margin-right:20px; background:none; color:white; border:0; padding:12px; }
 button.rm-avatar { padding:0; border:0; cursor:pointer; }
+.rm-attachment-photo{display:block;width:180px;height:240px;object-fit:contain;border-radius:12px;}
+.rm-photo-picker{position:absolute;inset:120px 12px 45px;z-index:80;background:#fff;border:1px solid #ddd;border-radius:18px;padding:16px;overflow-y:auto;}
+.rm-photo-picker button{display:block;margin:8px 0;border:0;background:none;}
+.rm-photo-picker img{width:100%;max-height:400px;object-fit:contain;}
+.roommate-messages[data-photo="true"] .rm-composer{padding-bottom:8px;}
+.rm-photo-tools{padding-bottom:38px;flex-shrink:0;}
+.rm-attachment-photo{width:180px;height:200px;object-fit:contain;}
+.phone-photo-viewer{position:absolute;inset:0;z-index:220;background:#080808;display:flex;align-items:center;justify-content:center;padding:58px 8px 35px;box-sizing:border-box;}
+.phone-photo-viewer img{display:block;width:100%;height:100%;object-fit:contain;}
+.phone-photo-viewer>button{position:absolute;right:18px;top:38px;border:0;border-radius:18px;padding:9px 16px;background:#333;color:#fff;}

@@ -34,6 +34,7 @@ import type { SkinProps } from "../AppSkins";
 import { Avatar, Media } from "./shared";
 import { makeItem, type Item } from "../schema";
 import { useSkinState } from "../skinState";
+import { instagramCommentRows as commentRows, encodeComment } from "../runtime/instagramComments";
 import "./threads-reference.css";
 export function ThreadsReference(p: SkinProps) {
   const [tab, setTab] = useSkinState<string>(p, "threads-tab", "首页"),
@@ -47,12 +48,15 @@ export function ThreadsReference(p: SkinProps) {
     0,
   );
   const refreshed = useRef(false);
+  const coreEnd = useRef<HTMLDivElement>(null);
+  const [coreReached, setCoreReached] = useState("");
   useEffect(() => {
     if (!refreshed.current) {
       refreshed.current = true;
       setFeedRound((n) => n + 1);
     }
   }, [setFeedRound]);
+  const [replyTarget,setReplyTarget]=useState<{id:string;text:string}|null>(null);
   const [draft, setDraft] = useState(""),
     [query, setQuery] = useState(""),
     [filter, setFilter] = useState("全部"),
@@ -69,8 +73,20 @@ export function ThreadsReference(p: SkinProps) {
     p.onReading?.(selected?.id ?? "");
     return () => p.onReading?.("");
   }, [selected?.id, p.onReading]);
+  // Only the explicitly authored core record requires reaching its end.
+  // Opening a card, returning home, or refreshing must not count as reading it.
+  useEffect(() => {
+    if (!selected || selected.meta.coreRead !== "true" || !coreEnd.current) return;
+    const id = selected.id;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setCoreReached(id);
+    }, { root: coreEnd.current.closest(".tr-scroll"), threshold: 1 });
+    observer.observe(coreEnd.current);
+    return () => observer.disconnect();
+  }, [selected?.id, selected?.meta.coreRead]);
   function closePost() {
-    if (selected && p.deferRead && selected.meta.local !== "true")
+    if (selected && p.deferRead && selected.meta.local !== "true" &&
+      (selected.meta.coreRead !== "true" || coreReached === selected.id))
       p.onRead(selected.id);
     setSelected(null);
   }
@@ -102,7 +118,7 @@ export function ThreadsReference(p: SkinProps) {
       return;
     }
     if (!p.deferRead && i.meta.local !== "true") p.onRead(i.id);
-    setSelected(i);
+    setReplyTarget(null);setDraft("");setSelected(i);
   };
   const card = (i: Item) => (
     <article className="tr-post" key={i.id} data-thread-id={i.id}>
@@ -121,7 +137,7 @@ export function ThreadsReference(p: SkinProps) {
           <button
             aria-label="帖子选项"
             onClick={() => {
-              setSelected(i);
+              setReplyTarget(null);setDraft("");setSelected(i);
               setOptions(true);
             }}
           >
@@ -181,20 +197,15 @@ export function ThreadsReference(p: SkinProps) {
             </header>
             {card(selected)}
             <div className="tr-comments">
-              {[
-                ...selected.comments,
-                ...replies
-                  .filter((v) => v.startsWith(selected.id + "\t"))
-                  .map(
-                    (v) =>
-                      `${accountName}：${v.split("\t").slice(1).join("\t")}`,
-                  ),
-              ].map((c, n) => (
-                <p key={n}>{c}</p>
-              ))}
+              {commentRows(selected,replies.filter(v=>v.startsWith(selected.id+"\t")).map(v=>v.split("\t").slice(1).join("\t")),accountName).map(row=>(
+                <div key={row.id} data-comment-id={row.id}><p>{row.text}</p><button className="comment-reply-action" onClick={()=>setReplyTarget({id:row.id,text:row.text})}>回复这条评论</button>
+                 {row.replies.map(reply=><div className="tr-comment-reply" key={reply.id} data-comment-id={reply.id} data-reply-to={reply.replyToId}><details><summary>回复 @{reply.replyTo}</summary><p>{reply.replyToText}</p></details><p>{reply.text}</p><button className="comment-reply-action" onClick={()=>setReplyTarget({id:reply.id,text:reply.text})}>回复这条评论</button></div>)}
+                </div>))}
             </div>
+            <div ref={coreEnd} aria-hidden="true" style={{ height: 1 }} />
             {p.deferRead && (
-              <button className="tr-finish-reading" onClick={closePost}>
+              <button className="tr-finish-reading" onClick={closePost}
+                disabled={selected.meta.coreRead === "true" && coreReached !== selected.id}>
                 读完，返回动态
               </button>
             )}
@@ -203,11 +214,12 @@ export function ThreadsReference(p: SkinProps) {
               onSubmit={(e) => {
                 e.preventDefault();
                 if (draft.trim()) {
-                  setReplies([...replies, selected.id + "\t" + draft.trim()]);
+                  setReplies([...replies,encodeComment(selected.id,accountName,draft.trim(),replyTarget?.id)]);setReplyTarget(null);
                   setDraft("");
                 }
               }}
             >
+              {replyTarget&&<span className="comment-reply-context">回复：{replyTarget.text}<button type="button" onClick={()=>setReplyTarget(null)}>取消回复</button></span>}
               <input
                 aria-label="Threads回复"
                 placeholder="回复串文"

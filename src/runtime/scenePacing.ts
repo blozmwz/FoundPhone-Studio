@@ -12,8 +12,11 @@ export function pendingScene(work: Work, state: Runtime) {
   const node = work.nodes.find(
     (n) => n.id === id && n.event === "continueScene",
   );
-  const date =
+  let date =
     node?.actions.find((a) => a.type === "date")?.value ?? state.date;
+  if (["s45-departure", "s45-arrival"].includes(String(id)) && typeof state.variables.s45MoveDate === "string") date = state.variables.s45MoveDate;
+  if (["s45-apr08-film", "s45-apr08-after"].includes(String(id))) date = state.variables.s45MoveDate === "2027-04-15" ? "2027-04-14" : "2027-04-11";
+  if (id === "s28-drinks") date = state.variables.s45MoveDate === "2027-04-15" ? "2027-04-12" : "2027-04-10";
   const time = String(
     node?.actions.find((a) => a.type === "time")?.value || state.time,
   );

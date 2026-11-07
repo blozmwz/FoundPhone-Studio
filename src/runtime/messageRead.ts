@@ -2,7 +2,7 @@ import { orderedMessages } from "./messageOrder";
 import { storyDatedItem } from "./storyDates";
 import type { Item, Runtime, Work } from "../schema";
 import { visible } from "../engine";
-import { notificationContent } from "../SystemNotifications";
+import { notificationContent, notificationKey } from "../notifications";
 export function incomingUnread(
   item: Item,
   state: Runtime,
@@ -52,10 +52,38 @@ export function unreadMessages(work: Work, state: Runtime, thread?: string) {
 }
 export function reconcileReadNotices(work: Work, state: Runtime): Runtime {
   if (work.id !== "fridge-light-roommates") return state;
-  const messages = visibleMessages(work, state);
+  const messages = visibleMessages(work, state).map(item => storyDatedItem(item, state));
   const unreadIds = new Set(unreadMessages(work, state).map((i) => i.id));
+  const completed = new Set(state.completed);
+  const read = new Set(state.read);
+  const records = new Map(
+    Object.entries(work.data).flatMap(([app, items]) =>
+      items.filter((item) => visible(item, state)).map((item) => [item.id, { app, item }] as const),
+    ),
+  );
+  const related = new Map<string, Set<string>>();
+  for (const node of work.nodes) {
+    if (!completed.has(node.id)) continue;
+    for (const action of node.actions) {
+      if (action.type !== "notification") continue;
+      const text = String(action.value);
+      const key = notificationKey(text, work.apps);
+      const app = notificationContent(text, work.apps).appId;
+      if (app === "messages") continue;
+      for (const unlock of node.actions) {
+        if (unlock.type !== "unlock" || records.get(unlock.key)?.app !== app) continue;
+        const ids = related.get(key) ?? new Set<string>();
+        ids.add(unlock.key);
+        related.set(key, ids);
+      }
+    }
+  }
   const notifications = state.notifications.filter((text) => {
     const notice = notificationContent(text, work.apps);
+    const linked = related.get(notificationKey(text, work.apps));
+    // Generic social/notes reminders can refer to several completed events.
+    // Dismiss only after their actual records have been read, never on App open.
+    if (linked?.size) return [...linked].some((id) => !read.has(id));
     if (notice.appId === "instagram") {
       const candidates = (work.data.instagram || []).filter(
         (item) =>
@@ -78,13 +106,13 @@ export function reconcileReadNotices(work: Work, state: Runtime): Runtime {
       (m) => m.title === notice.title && !m.outgoing,
     );
     if (!thread.length) return true;
-    const matching = thread.filter((m) => m.body === notice.body);
+    const matching = thread.filter((m) => m.body.trim() === notice.body);
     if (matching.length) return matching.some((m) => unreadIds.has(m.id));
     // Summary notices stay until this sender has no unread delivered bubbles.
-    return (
-      thread.some((m) => unreadIds.has(m.id)) ||
-      Boolean(state.scheduled?.length)
-    );
+    return thread.some((m) => unreadIds.has(m.id));
+  }).filter((text, index, all) => {
+    const key = notificationKey(text, work.apps);
+    return !all.slice(index + 1).some((next) => notificationKey(next, work.apps) === key);
   });
   return notifications.length === state.notifications.length
     ? state

@@ -484,3 +484,5 @@
   color: #666;
   font-size: 13px;
 }
+.tr-comments .tr-comment-reply{margin-left:26px;border-left:2px solid #e5e5e5;padding-left:12px;font-size:13px;}
+.tr-finish-reading:disabled{opacity:.4;cursor:default;}

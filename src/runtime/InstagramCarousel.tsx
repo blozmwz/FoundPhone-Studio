@@ -19,12 +19,14 @@ export function InstagramCarousel({
   detail,
   p,
   onOpen,
+  onView,
 }: {
   item: Item;
   available: Item[];
   detail: boolean;
   p: SkinProps;
   onOpen: () => void;
+  onView?: (item: Item) => void;
 }) {
   const slides = instagramSlides(item, available);
   const [stored, setStored] = useSkinState<number>(p, "igSlide:" + item.id, 0);
@@ -60,11 +62,9 @@ export function InstagramCarousel({
       }}
     >
       {detail ? (
-        <img
-          src={safeMedia(current.media)}
-          alt={`${item.title} · 第${index + 1}张`}
-          draggable={false}
-        />
+        <button className="rig-carousel-open" aria-label={"查看完整原图："+item.title} onClick={()=>onView?.(current)}>
+          <img src={safeMedia(current.media)} alt={`${item.title} · 第${index + 1}张`} draggable={false}/>
+        </button>
       ) : (
         <button
           className="rig-carousel-open"

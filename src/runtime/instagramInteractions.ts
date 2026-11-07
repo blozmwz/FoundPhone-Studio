@@ -1,9 +1,14 @@
+import { authoredReplyOptions, authoredReplyKey } from './authoredInstagramReplies';
 import { choose, visible } from "../engine";
 import { safeMedia, type Runtime, type Work } from "../schema";
 import { currentInstagramStories, instagramNow } from "./instagramModel";
 
 export function motorStoryReplies(work: Work, state: Runtime, id: string) {
   const item = work.data.instagram?.find((item) => item.id === id);
+  if (item && item.meta.replyOptions && visible(item,state) &&
+      !state.ui?.instagram?.[authoredReplyKey(id)]) {
+    return authoredReplyOptions(item).map((r,index)=>({label:r.label,target:id+':reply:'+(index+1)}));
+  }
   if (
     !item ||
     item.meta.motorInvite !== "true" ||
@@ -33,6 +38,13 @@ export function instagramInteraction(
   target: string,
 ) {
   if (work.id !== "fridge-light-roommates") return state;
+  if (event === "igConversationReply") {
+    const [id,reply]=target.split("\t");
+    const choices=motorStoryReplies(work,state,id);
+    const index=choices.findIndex(c=>c.target===reply);
+    if(index<0)return state;
+    return {...state,ui:{...state.ui,instagram:{...state.ui?.instagram,[authoredReplyKey(id)]:index+1}}};
+  }
   if (event === "igStoryReply") {
     const [id, reply] = target.split("\t");
     if (

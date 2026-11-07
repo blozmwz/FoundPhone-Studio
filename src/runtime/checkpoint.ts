@@ -264,3 +264,79 @@ function stage3MediaCheckpoint(work: Work, scene: string): Runtime {
   }
   throw Error("Stage3 图片试玩节点未能到达：" + scene);
 }
+
+// Replay entry points reproduce the already chosen opening history, never infer
+// a different major branch. Real captured chapter snapshots take precedence.
+export function chapterCheckpoint(work: Work, chapter: number, previous?: Runtime): Runtime {
+  if (chapter === 1) return dispatch(work, initialRuntime(work), 'start');
+  const stops: Record<number, (s: Runtime) => boolean> = {
+    2: s => Boolean(s.choices.some(c => c.target === 'life-arrived-send-1')),
+    3: s => s.variables.pendingScene === 's3-dec04',
+    4: s => s.variables.pendingScene === 's45-jan28',
+    5: s => s.variables.pendingScene === 's45-mar01',
+  };
+  let state = dispatch(work, initialRuntime(work), 'start');
+  for (let turn=0; turn<1600; turn++) {
+    state=advance(work,state,30000);
+    if(stops[chapter]?.(state)) return {...state,notifications:[]};
+    if(state.scheduled?.length) continue;
+    if(state.choices.length) {
+      const selected=state.choices.find(c=>previous?.completed.includes(c.target));
+      const stay=state.choices.find(c=>c.target==='choose-house-stay');
+      state=choose(work,state,selected?.target||stay?.target||state.choices[0].target);
+    } else if(pendingScene(work,state)) state=dispatch(work,state,'continueScene',pendingScene(work,state)!.id);
+    else {
+      const next=storyContinuation(work,state);
+      if(!next) throw Error('章节入口未接通：'+chapter+JSON.stringify({date:state.date,pending:state.variables.pendingScene,await:state.variables.s3Awaiting,side:state.variables.sideBusy,end:state.endings,tail:state.completed.slice(-6)}));
+      state=dispatch(work,state,'read',next.item.id);
+    }
+  }
+  throw Error('章节入口未能到达');
+}
+export function stage3TailCheckpoint(work:Work){
+ let state=chapterCheckpoint(work,3);
+ for(let turn=0;turn<900;turn++) {
+  state=advance(work,state,30000);
+  if(state.choices.some(c=>c.target==='s3-class-memory-r4-send-1')) return {...state,notifications:[]};
+  if(state.scheduled?.length)continue;
+  if(state.choices.length) state=choose(work,state,state.choices[0].target);
+  else if(pendingScene(work,state)) state=dispatch(work,state,'continueScene',pendingScene(work,state)!.id);
+  else {const n=storyContinuation(work,state);if(!n)throw Error('Stage3末尾未能到达');state=dispatch(work,state,'read',n.item.id);}
+ }
+ throw Error('Stage3末尾未能到达');
+}
+export function stage4Checkpoint(work:Work){return chapterCheckpoint(work,4);}
+export function stage5Checkpoint(work:Work){return chapterCheckpoint(work,5);}
+export function stage4WalkCheckpoint(work:Work){
+ return chapterCheckpoint(work,4,{...initialRuntime(work),completed:['s3-motor-invite-send-2']});
+}
+
+// Local ending review replays the existing engine into a separate checkpoint.
+// It never imports a user's save or unlocks arbitrary records.
+export function endingCheckpoint(work:Work,route:'A'|'B'|'fork',beforeLock=false):Runtime {
+ let state=chapterCheckpoint(work,5);
+ for(let i=0;i<1300;i++){
+  if(beforeLock && state.variables.s28CanLock===true && !state.scheduled?.length && !state.choices.length)return state;
+  if(route==='fork'&&state.choices.some(c=>c.target==='s28-main-choice-send-1'))return state;
+  if(state.endings.length)return {...state,ui:{...state.ui,messages:{...state.ui?.messages,endingPhase:'reading'}}};
+  if(state.scheduled?.length)state=advance(work,state,30000);
+  else if(state.choices.length){const major=state.choices.find(c=>c.target==='s28-main-choice-send-'+(route==='B'?2:1));state=choose(work,state,major?.target||state.choices[0].target);}
+  else if(state.variables.s29PhotoReady){state=lifeInteraction(work,state,'selectMealPhoto','s29-photo-meal');state=lifeInteraction(work,state,'mealPhotoSent','s29-photo-meal');}
+  else if(state.variables.s28CanLock===true){state=dispatch(work,state,'endingPhoneLocked',String(state.variables.s28EndingPending));}
+  else if(pendingScene(work,state))state=dispatch(work,state,'continueScene',pendingScene(work,state)!.id);
+  else{const next=storyContinuation(work,state);if(!next)throw Error('结局审阅入口未接通');state=dispatch(work,state,'read',next.item.id);}
+ }
+ throw Error('结局审阅入口未能到达');
+}
+export const endingACheckpoint=(w:Work)=>endingCheckpoint(w,'A');
+export const endingBCheckpoint=(w:Work)=>endingCheckpoint(w,'B');
+export const endingForkCheckpoint=(w:Work)=>endingCheckpoint(w,'fork');
+
+export const endingLockACheckpoint=(w:Work)=>endingCheckpoint(w,'A',true);
+export const endingLockBCheckpoint=(w:Work)=>endingCheckpoint(w,'B',true);
+export function endingReunionLockCheckpoint(work:Work):Runtime{
+ let s=lifeInteraction(work,endingCheckpoint(work,'B'),'reunionLock','quiet');
+ s=advance(work,s,30000);s=dispatch(work,s,'read','s45-reunion-open-3');
+ s=advance(work,choose(work,s,'s45-reunion-reply-send-1'),30000);
+ s=dispatch(work,s,'read','s45-reunion-invite-2');s=advance(work,s,7000);return {...s,ui:{...s.ui,messages:{...s.ui?.messages,endingPhase:'reunion'}}};
+}

@@ -147,7 +147,9 @@ export function migrateStage3Interactions(work: Work, saved: Runtime): Runtime {
     !state.scheduled.length &&
     !state.variables.sideBusy
   )
-    state = dispatch(work, state, "stage3RideYuki", "s3-yuki-ride-start");
+    if (work.variables.s3MotorStoryRevision === 1)
+      state.variables.pendingScene = "s3-motor-yuki-later";
+    else state = dispatch(work, state, "stage3RideYuki", "s3-yuki-ride-start");
   state.variables.s3InteractionRevision = 1;
   return state;
 }
