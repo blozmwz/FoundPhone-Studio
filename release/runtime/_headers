@@ -9,3 +9,7 @@
   Cache-Control: no-cache
 /sw-refresh.js
   Cache-Control: no-cache
+
+/private-replay*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: private, no-store

@@ -7,7 +7,7 @@
   "scope": "five chapters unchanged; authenticated statistics; admin and login bypass game cache; collection disabled",
   "analyticsEnabled": false,
   "analyticsBackend": "readonly-r43",
-  "bundleSha256": "8b8173affb034977550b2687d2108435bd7107c81f715cc0b0b573198fbd2c28",
+  "bundleSha256": "2b7c1d4604dbe21f1dc574e338769e629a76a5d3ed24514fcf1964d8192f5ebd",
   "files": [
     {
       "path": "BRAND_NOTICE.txt",
@@ -31,8 +31,13 @@
     },
     {
       "path": "_headers",
-      "bytes": 190,
-      "sha256": "ca5371c8ceaa81d3c03aa9054dff5aab978a6a83e4050bdc8403b67cf97ab369"
+      "bytes": 277,
+      "sha256": "db08180ec33f8bccb2dbebe1931567575f56bd86f7f91ba36b82cb1a43393db5"
+    },
+    {
+      "path": "_redirects",
+      "bytes": 27,
+      "sha256": "47adc2c66466a9dccd1a4e5413c1c3788ee8e57dbef8fb3900463cc77bc78478"
     },
     {
       "path": "_routes.json",
@@ -515,6 +520,21 @@
       "sha256": "dbc0c63a1fca0e8095a811e3882e88dcddd09cac2cc6ca4fbd8f4c18eb85209e"
     },
     {
+      "path": "private-replay-seed.json",
+      "bytes": 543573,
+      "sha256": "9430808012e4ec499d57bf42489c9e17a403f812e5eb6cad918b1cd603ae6c9b"
+    },
+    {
+      "path": "private-replay.html",
+      "bytes": 2260,
+      "sha256": "796f1615bae766f9d5f95aa41ab66382d946b755dee5862bf5a2e308226cf021"
+    },
+    {
+      "path": "private-replay.js",
+      "bytes": 3235,
+      "sha256": "de5f8e79a5a0a63757d49daba5b1ebe108b6bb68c6fcfef86858f1097d89d8fe"
+    },
+    {
       "path": "registerSW.js",
       "bytes": 136,
       "sha256": "e12c8db54e3cc247034427f2b661b305a78fea7e7cdec1eac179fecec3da0fc7"
@@ -531,8 +551,8 @@
     },
     {
       "path": "sw.js",
-      "bytes": 6119,
-      "sha256": "7af481773b26591366e3d91507972700eab27a19686e966d8bfdfd42bb15ba26"
+      "bytes": 6174,
+      "sha256": "3d01c8872f8b79adfc834dd27d4e8bf3858de9586e891f0de3d727e8fa5930d8"
     },
     {
       "path": "work.json",
