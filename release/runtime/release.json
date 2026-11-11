@@ -7,5 +7,5 @@
   "scope": "five chapters unchanged; authenticated statistics; admin and login bypass game cache; collection disabled",
   "analyticsEnabled": false,
   "analyticsBackend": "readonly-r43",
-  "privateCollection": "r45"
+  "privateCollection": "r46"
 }
