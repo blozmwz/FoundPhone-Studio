@@ -7,7 +7,8 @@
   "scope": "five chapters unchanged; authenticated statistics; admin and login bypass game cache; collection disabled",
   "analyticsEnabled": false,
   "analyticsBackend": "readonly-r43",
-  "bundleSha256": "2b7c1d4604dbe21f1dc574e338769e629a76a5d3ed24514fcf1964d8192f5ebd",
+  "privateCollection": "r45",
+  "bundleSha256": "8bf821c1f7ae99f4e4fb207fc89df9f5d506b85a794b7cbe84e37cb70449764b",
   "files": [
     {
       "path": "BRAND_NOTICE.txt",
@@ -31,8 +32,8 @@
     },
     {
       "path": "_headers",
-      "bytes": 277,
-      "sha256": "db08180ec33f8bccb2dbebe1931567575f56bd86f7f91ba36b82cb1a43393db5"
+      "bytes": 418,
+      "sha256": "9a6a53bbd1a405fc50996a578d7ed3e78862ff4732357410e4bfab206bcd2b58"
     },
     {
       "path": "_redirects",
@@ -520,19 +521,49 @@
       "sha256": "dbc0c63a1fca0e8095a811e3882e88dcddd09cac2cc6ca4fbd8f4c18eb85209e"
     },
     {
+      "path": "private-collection-index.json",
+      "bytes": 472291,
+      "sha256": "eb3ae56381c496d4162f057b231362ba78eb859ba8e4c33f626af51ba1b2c97d"
+    },
+    {
+      "path": "private-collection-pool.json",
+      "bytes": 4240860,
+      "sha256": "cfe015c7103833e2857fd681bd90f2d741271fd3305ecbdaa691d5ff5d8064da"
+    },
+    {
+      "path": "private-collection.webmanifest",
+      "bytes": 375,
+      "sha256": "4819c7fc1c24555f07d3feca3c74ba534f6cd6b38cdfea69464e77aeee69e532"
+    },
+    {
+      "path": "private-icon-180.png",
+      "bytes": 4462,
+      "sha256": "048075510f26dcfc5d3c4c88cd5f16fe9fb1dfc0d9001aeedc9216aefb9df7c1"
+    },
+    {
+      "path": "private-icon-192.png",
+      "bytes": 4456,
+      "sha256": "e680885a5278c25d2878b602ef8a9c1a26ddabf5c0585c300e8c2185ebff5755"
+    },
+    {
+      "path": "private-icon-512.png",
+      "bytes": 16815,
+      "sha256": "ab19dc89d5f4b8417d5a237ddd416809aaf2b3972a90216f20d34afac11e68ac"
+    },
+    {
       "path": "private-replay-seed.json",
       "bytes": 543573,
       "sha256": "9430808012e4ec499d57bf42489c9e17a403f812e5eb6cad918b1cd603ae6c9b"
     },
     {
       "path": "private-replay.html",
-      "bytes": 2260,
-      "sha256": "796f1615bae766f9d5f95aa41ab66382d946b755dee5862bf5a2e308226cf021"
+      "bytes": 4921,
+      "sha256": "7ca54821ff50ea577f1ab003b6ad358f7cd733101bbaf9fd680ae06fdd9a41a8"
     },
     {
       "path": "private-replay.js",
-      "bytes": 3235,
-      "sha256": "de5f8e79a5a0a63757d49daba5b1ebe108b6bb68c6fcfef86858f1097d89d8fe"
+      "bytes": 11084,
+      "sha256": "e9f3c741f27624f787f4cf37f94ee6a19e2880b5113c81e25d6201f3dcdfbe71"
     },
     {
       "path": "registerSW.js",
@@ -541,8 +572,8 @@
     },
     {
       "path": "release.json",
-      "bytes": 440,
-      "sha256": "deccf89b0de16c969481443276dca748bd7a1503407af10c8a7b0b119f53992f"
+      "bytes": 470,
+      "sha256": "e429740c43306df822dc9726bcd52c210c41e3516d8763f85c75dbdcb97ade50"
     },
     {
       "path": "sw-refresh.js",
@@ -551,8 +582,8 @@
     },
     {
       "path": "sw.js",
-      "bytes": 6174,
-      "sha256": "3d01c8872f8b79adfc834dd27d4e8bf3858de9586e891f0de3d727e8fa5930d8"
+      "bytes": 6169,
+      "sha256": "2682ac96c2840320af895d24bcf0f5a4c8ec127883e7c2f43beaf2c88fb98a0b"
     },
     {
       "path": "work.json",

@@ -6,5 +6,6 @@
   "workSha256": "9e3d8adbb76923a8826f28dfb503541d260ec683d6838295438dc0be9e72a81e",
   "scope": "five chapters unchanged; authenticated statistics; admin and login bypass game cache; collection disabled",
   "analyticsEnabled": false,
-  "analyticsBackend": "readonly-r43"
+  "analyticsBackend": "readonly-r43",
+  "privateCollection": "r45"
 }

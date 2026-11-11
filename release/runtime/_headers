@@ -13,3 +13,9 @@
 /private-replay*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: private, no-store
+
+/private-collection*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: private, no-store
+/private-icon-*
+  X-Robots-Tag: noindex, nofollow
